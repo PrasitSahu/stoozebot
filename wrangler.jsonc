@@ -1,0 +1,21 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "stoozebot",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-02-28",
+	"observability": {
+		"enabled": true,
+	},
+	"compatibility_flags": ["nodejs_compat"],
+	"d1_databases": [
+		{
+			"binding": "db",
+			"database_name": "main",
+			"database_id": "random_id",
+		},
+	],
+}
