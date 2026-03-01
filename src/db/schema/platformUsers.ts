@@ -12,10 +12,11 @@ export const platformUsers = sqliteTable(
 		userId: text("user_id")
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
+		platform: text().notNull(),
 		platformId: text("platform_id").notNull(),
 		createdAt: text("created_at")
 			.notNull()
 			.default(sql`(datetime('now'))`),
 	},
-	(table) => [unique().on(table.userId, table.platformId)],
+	(table) => [unique().on(table.userId, table.platform)],
 );

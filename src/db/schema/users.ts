@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createId } from "./helper";
 
 export const users = sqliteTable("users", {
@@ -7,7 +7,8 @@ export const users = sqliteTable("users", {
 		.primaryKey()
 		.$defaultFn(() => createId()),
 	name: text("name").notNull(),
-	regNo: text("reg_no").notNull().unique(),
+	regNo: integer("reg_no").notNull().unique(),
+	password: text("password").notNull(),
 	gender: text("gender", { enum: ["male", "female", "other"] }).notNull(),
 	dob: text("dob").notNull(),
 	program: text("program").notNull(),
