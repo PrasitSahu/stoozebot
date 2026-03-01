@@ -14,8 +14,8 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_id": "prod_db_id",
-			"database_name": "prod_db",
+			"database_id": "dde31626-7ade-474b-9a58-c25f5c748b1d",
+			"database_name": "dev_db",
 			"migrations_dir": "./migrations",
 		},
 	],
