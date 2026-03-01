@@ -1,5 +1,8 @@
+import { Bot, webhookCallback } from "grammy";
+
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
+		const bot = new Bot(env.BOT_TOKEN);
+		return webhookCallback(bot, "cloudflare-mod")(request);
 	},
 } satisfies ExportedHandler<Env>;

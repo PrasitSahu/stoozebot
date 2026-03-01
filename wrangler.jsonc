@@ -13,9 +13,23 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"d1_databases": [
 		{
-			"binding": "db",
-			"database_name": "main",
-			"database_id": "random_id",
+			"binding": "DB",
+			"database_id": "prod_db_id",
+			"database_name": "prod_db",
+			"migrations_dir": "./migrations",
 		},
 	],
+	"env": {
+		"prod": {
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_id": "prod_db_id",
+					"database_name": "prod_db",
+					"migrations_dir": "./migrations",
+					"remote": false,
+				},
+			],
+		},
+	},
 }
