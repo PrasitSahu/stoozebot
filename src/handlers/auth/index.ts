@@ -1,6 +1,7 @@
 import { Bot, Context } from "grammy";
 import { BotContext, DB } from "../../config";
-import soaPortals, { Err } from "../../services/soaPortals";
+import soaPortals from "../../services/soaPortals";
+import { Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplySomethingWentWrong } from "../../constants";
 import { users } from "../../db";
 import { InferInsertModel } from "drizzle-orm";
 import { createPlatformUser, createUser, Platform } from "./user";
@@ -55,8 +56,8 @@ export function login(bot: Bot<BotContext>, db: DB) {
 				if (!user) {
 					const userData = await soaPortalService.genToken();
 					if (userData?.status?.responseStatus !== "Success") {
-						await ctx.reply("❌ Invalid credentials. Try again...");
-						return;
+						// TODO: fix this with update password for change in password
+						throw new Error(Err.ErrInvalidCred);
 					}
 
 					const regdata = userData?.response?.regdata;
@@ -97,12 +98,18 @@ export function login(bot: Bot<BotContext>, db: DB) {
 			} catch (error: unknown) {
 				if (error instanceof Error) {
 					if (error.message === Err.ErrFormat) {
-						await ctx.reply("portal provided unexpected data. Please have patience fix is on the way 🙂");
+						await ctx.reply(ReplyInvalidFormat);
+						return;
+					}
+
+					if (error.message === Err.ErrInvalidCred) {
+						await ctx.reply(ReplyInvalidCreds);
 						return;
 					}
 				}
 				console.log(error);
-				await ctx.reply("something went wrong! Fix is on the way 🙂");
+				await ctx.reply(ReplySomethingWentWrong);
+				return;
 			}
 
 			await ctx.reply("✅ Done");
