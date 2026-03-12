@@ -1,12 +1,12 @@
 import { BotContext, DB } from "../../config";
-import { text } from "../register";
+import { text } from "../../utils";
 
 export async function start(ctx: BotContext, db: DB) {
 	if (ctx.chat?.type === "private") {
 		await ctx.reply(greet(ctx.chat.first_name), { parse_mode: "Markdown" });
 
 		// new user
-		if (!ctx.auth.telegramUser) {
+		if (!ctx.auth.user) {
 			await ctx.reply(initInfoMessage(), { parse_mode: "Markdown" });
 		}
 	}

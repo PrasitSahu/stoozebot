@@ -12,8 +12,8 @@ export function login(bot: Bot<BotContext>, db: DB) {
 		if (!message) return;
 
 		if (ctx.chat?.type === "private") {
-			if (!!ctx.auth.telegramUser) {
-				await ctx.reply("✅ Already logged in.");
+			if (!!ctx.auth.user) {
+				await ctx.reply("✅ Already logged in");
 				return;
 			}
 

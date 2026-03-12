@@ -22,3 +22,6 @@ export function aesDec(data: string): {} {
 
 	return decrypted.toString(CryptoJS.enc.Utf8);
 }
+export function text(str: string): string {
+	return str.trim();
+}
