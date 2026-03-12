@@ -2,7 +2,7 @@ import { drizzle } from "drizzle-orm/d1";
 import { Bot, webhookCallback } from "grammy";
 import { BotContext } from "./config";
 import * as schema from "./db/index";
-import { registerCommands } from "./handlers/register";
+import { registerAuth, registerCommands } from "./handlers/register";
 import { auth } from "./middlewares/auth";
 import developer from "./middlewares/developer";
 
@@ -24,6 +24,7 @@ export default {
 		bot.use(developer);
 		bot.use(auth(db));
 
+		registerAuth(bot, db);
 		registerCommands(bot, db);
 
 		return webhookCallback(bot, "cloudflare-mod")(request);

@@ -1,6 +1,7 @@
 import { Bot } from "grammy";
 import { BotContext, DB } from "../config";
 import { start } from "./commands/start";
+import { login } from "./auth";
 
 export const enum Commands {
 	Start = "start",
@@ -8,6 +9,10 @@ export const enum Commands {
 
 export function registerCommands(bot: Bot<BotContext>, db: DB) {
 	bot.command(Commands.Start, (ctx) => start(ctx, db));
+}
+
+export function registerAuth(bot: Bot<BotContext>, db: DB) {
+	login(bot, db);
 }
 
 export function text(str: string): string {
