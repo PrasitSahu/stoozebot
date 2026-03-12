@@ -35,7 +35,17 @@ We never store your password in plain text or in reversible encoded form.
 Passwords are securely hashed before storage and cannot be viewed by anyone — including administrators.
 
 Looks like you are a new user:
-/login
+Submit credentials using:
+
+\`#login REGNO_PASSWORD\`
+
+Example:
+\`#login 2341010000_mySecurePass123\`
+
+Ensure:
+- No spaces
+- Correct registration number
+- Correct password
 
 Need help? Use /help
 `);
