@@ -4,14 +4,17 @@ import { ReplyNoAuth } from "../constants";
 
 export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<void> {
 	return async (ctx: BotContext, next: NextFunction) => {
-		const user = await db.query.users.findFirst({
-			where({ id }, { eq }) {
-				return eq(id, ctx.chat?.id.toString() || "");
+		const platformUserWithuser = await db.query.platformUsers.findFirst({
+			where({ platformId }, { eq }) {
+				return eq(platformId, ctx.chat?.id.toString() || "");
+			},
+			with: {
+				user: true,
 			},
 		});
 
 		const auth: Auth = {
-			user: user || null,
+			user: platformUserWithuser?.user || null,
 		};
 
 		ctx.auth = auth;
@@ -20,9 +23,11 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 	};
 }
 
-export function filterNAuth(ctx: BotContext, next: NextFunction) {
+export async function filterNAuth(ctx: BotContext, next: NextFunction) {
 	if (!ctx.auth.user) {
-		ctx.reply(ReplyNoAuth);
+		await ctx.reply(ReplyNoAuth, {
+			parse_mode: "Markdown",
+		});
 		return;
 	}
 
