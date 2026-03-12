@@ -4,6 +4,7 @@ import { userLimits } from "./schema/userLimits";
 import { attendences } from "./schema/attendences";
 import { platformUsers } from "./schema/platformUsers";
 import { marks } from "./schema/marks";
+import { authTokens } from "./schema/authTokens";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
 	userLimits: one(userLimits, {
@@ -43,9 +44,17 @@ export const marksRelations = relations(marks, ({ one }) => ({
 	}),
 }));
 
+export const authTokenRelations = relations(authTokens, ({ one }) => ({
+	user: one(users, {
+		fields: [authTokens.userId],
+		references: [users.id],
+	}),
+}));
+
 export * from "./schema/users";
 export * from "./schema/apiLimits";
 export * from "./schema/attendences";
 export * from "./schema/platformUsers";
 export * from "./schema/marks";
 export * from "./schema/userLimits";
+export * from "./schema/authTokens";
