@@ -14,10 +14,16 @@ export const enum Err {
 	ErrAuth = "UNAUTHORIZED",
 }
 
-export const ReplyNoAuth = text(`⚠️ Authentication required.
-You need to log in before using this command.
-Use: \`#login REGNO_PASSWORD\``);
+export const ReplyNoAuth = text(
+	`
+	⚠️ Authentication required.\nYou need to log in before using this command.\nUse: \`#login REGNO_PASSWORD\`
+`,
+);
 
+// replies
 export const ReplyInvalidFormat = text("portal provided unexpected data. Please have patience fix is on the way 🙂");
 export const ReplyInvalidCreds = text("❌ Invalid credentials. Try again...");
 export const ReplySomethingWentWrong = text("something went wrong! Fix is on the way 🙂");
+
+// regex
+export const attendenceRegex = /#attendence\s+([A-Z0-9]+)/;

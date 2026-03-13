@@ -31,5 +31,5 @@ export async function filterNAuth(ctx: BotContext, next: NextFunction) {
 		return;
 	}
 
-	next();
+	await next();
 }

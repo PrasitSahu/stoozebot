@@ -30,7 +30,7 @@ export interface GenTokenResponse {
 	OTP: "Y" | "N";
 }
 
-export interface PersonalInfoData {
+export interface PersonalInfoResponse {
 	qualification: {};
 	"photo&signature": {};
 	generalinformation: {
@@ -45,6 +45,28 @@ export interface PersonalInfoData {
 	};
 }
 
+interface Sem {
+	registrationcode: string;
+	registrationid: string;
+}
+
+export interface SemListResponse {
+	semlist: Sem[];
+}
+
+export interface Attendence {
+	Attendanceperc: string;
+	TotalClass: string;
+	slno: number;
+	sty_no: string;
+	subject: string;
+	subjectcode: string;
+}
+
+export interface AttendenceResponse {
+	studentattendancelist: Attendence[];
+}
+
 export interface Institute {
 	label: string;
 	value: string;
@@ -55,14 +77,6 @@ export interface Creds {
 	username: string;
 	passwordotpvalue: string;
 	Modulename: string;
-}
-
-export const enum Err {
-	ErrFormat = "INVALID_FORMAT",
-	ErrNoURL = "NO_URL",
-	ErrInvalidURL = "INVALID_URL",
-	ErrReqFail = "REQ_FAILED",
-	ErrAuth = "UNAUTHORIZED",
 }
 
 export default class Service {
@@ -101,7 +115,7 @@ export default class Service {
 		return await res.json<Response<GenTokenResponse>>();
 	}
 
-	async getPersonalInfo(token: string): Promise<Response<PersonalInfoData>> {
+	async getPersonalInfo(token: string): Promise<Response<PersonalInfoResponse>> {
 		const url = new URL(this.rootUrl.href + "/studentpersinfo/getstudent-personalinformation");
 
 		const req = new Request(this.getProxyUrl(url), {
@@ -118,6 +132,45 @@ export default class Service {
 		});
 
 		const res = await fetch(req);
-		return await res.json<Response<PersonalInfoData>>();
+		return await res.json<Response<PersonalInfoResponse>>();
+	}
+
+	async getAttendenceSemList(token: string): Promise<Response<SemListResponse>> {
+		const url = new URL(this.rootUrl + "/StudentClassAttendance/getstudentInforegistrationforattendence");
+
+		const req = new Request(this.getProxyUrl(url), {
+			method: Method.Post,
+			headers: {
+				"Content-Type": "application/json",
+				Signature: process.env.PROXY_SIGNATURE,
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({
+				instituteid: process.env.INSTITUTE_ID,
+			}),
+		});
+
+		const res = await fetch(req);
+		return await res.json<Response<SemListResponse>>();
+	}
+
+	async getAttendence(token: string, regId: string): Promise<Response<AttendenceResponse>> {
+		const url = new URL(this.rootUrl + "/StudentClassAttendance/getstudentattendancedetail");
+
+		const req = new Request(this.getProxyUrl(url), {
+			method: Method.Post,
+			headers: {
+				"Content-Type": "application/json",
+				Signature: process.env.PROXY_SIGNATURE,
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({
+				instituteid: process.env.INSTITUTE_ID,
+				registrationid: regId,
+			}),
+		});
+
+		const res = await fetch(req);
+		return await res.json<Response<AttendenceResponse>>();
 	}
 }
