@@ -54,7 +54,7 @@ export interface SemListResponse {
 	semlist: Sem[];
 }
 
-export interface Attendence {
+export interface Attendance {
 	Attendanceperc: string;
 	TotalClass: string;
 	slno: number;
@@ -63,8 +63,8 @@ export interface Attendence {
 	subjectcode: string;
 }
 
-export interface AttendenceResponse {
-	studentattendancelist: Attendence[];
+export interface AttendanceResponse {
+	studentattendancelist: Attendance[];
 }
 
 export interface Institute {
@@ -135,7 +135,7 @@ export default class Service {
 		return await res.json<Response<PersonalInfoResponse>>();
 	}
 
-	async getAttendenceSemList(token: string): Promise<Response<SemListResponse>> {
+	async getAttendanceSemList(token: string): Promise<Response<SemListResponse>> {
 		const url = new URL(this.rootUrl + "/StudentClassAttendance/getstudentInforegistrationforattendence");
 
 		const req = new Request(this.getProxyUrl(url), {
@@ -154,7 +154,7 @@ export default class Service {
 		return await res.json<Response<SemListResponse>>();
 	}
 
-	async getAttendence(token: string, regId: string): Promise<Response<AttendenceResponse>> {
+	async getAttendance(token: string, regId: string): Promise<Response<AttendanceResponse>> {
 		const url = new URL(this.rootUrl + "/StudentClassAttendance/getstudentattendancedetail");
 
 		const req = new Request(this.getProxyUrl(url), {
@@ -171,6 +171,6 @@ export default class Service {
 		});
 
 		const res = await fetch(req);
-		return await res.json<Response<AttendenceResponse>>();
+		return await res.json<Response<AttendanceResponse>>();
 	}
 }

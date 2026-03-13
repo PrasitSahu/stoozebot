@@ -1,13 +1,13 @@
 import { InferSelectModel } from "drizzle-orm";
 import { BotContext, DB } from "../../../config";
-import { attendenceRegex, Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplyNoAuth, ReplySomethingWentWrong } from "../../../constants";
+import { attendanceRegex, Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplyNoAuth, ReplySomethingWentWrong } from "../../../constants";
 import Service from "../../../services/soaPortals";
 import { users } from "../../../db";
 import { upsertNewToken } from "./listSem";
 import jwt from "jsonwebtoken";
 import { text } from "../../../utils";
 
-interface ReplyAttendenceParam {
+interface ReplyAttendanceParam {
 	index: number;
 	sub: string;
 	subCode: string;
@@ -16,7 +16,7 @@ interface ReplyAttendenceParam {
 }
 
 const imojiNums = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
-const ReplyAttendence = (param: ReplyAttendenceParam) =>
+const ReplyAttendance = (param: ReplyAttendanceParam) =>
 	text(
 		`
         ${imojiNums.length >= param.index ? imojiNums[param.index] : param.index} ${param.sub} (${param.subCode})\n📚 Classes: ${param.totalCls}\n✅ Attendance: ${param.perc}
@@ -24,7 +24,7 @@ const ReplyAttendence = (param: ReplyAttendenceParam) =>
 	);
 const sep = "\n\n➖➖➖➖➖➖➖➖\n\n";
 
-export async function getAttendence(ctx: BotContext, db: DB) {
+export async function getAttendance(ctx: BotContext, db: DB) {
 	let user: InferSelectModel<typeof users>;
 	if (!ctx.auth.user) {
 		await ctx.reply(ReplyNoAuth, {
@@ -37,11 +37,11 @@ export async function getAttendence(ctx: BotContext, db: DB) {
 
 	const soaPortalService = new Service(user.password);
 	try {
-		const match = ctx.message?.text?.match(attendenceRegex);
-		if (!match) {
+		const match = ctx.message?.text?.match(attendanceRegex);
+		if (!ctx.match) {
 			return;
 		}
-		const regId = match[1];
+		const regId = ctx.match[1];
 
 		const authToken = await db.query.authTokens.findFirst({
 			where(table, { eq }) {
@@ -67,20 +67,20 @@ export async function getAttendence(ctx: BotContext, db: DB) {
 				token = await upsertNewToken(user.password, db, user.id);
 			}
 
-			const attendensesRes = await soaPortalService.getAttendence(token, regId);
-			if (attendensesRes?.status?.responseStatus !== "Success") {
-				console.error("failed to fetch attendence");
+			const attendancesRes = await soaPortalService.getAttendance(token, regId);
+			if (attendancesRes?.status?.responseStatus !== "Success") {
+				console.error("failed to fetch attendance");
 				throw new Error(Err.ErrFailRes);
 			}
 
-			const attendences = attendensesRes?.response?.studentattendancelist;
-			if (!attendences) {
-				console.error("failed to detect attendence sem list type in 'attendence' command");
+			const attendances = attendancesRes?.response?.studentattendancelist;
+			if (!attendances) {
+				console.error("failed to detect attendance sem list type in 'attendance' command");
 				throw new Error(Err.ErrFormat);
 			}
 
-			const replies = attendences.map((a) =>
-				ReplyAttendence({
+			const replies = attendances.map((a) =>
+				ReplyAttendance({
 					index: a.slno,
 					sub: a.subject,
 					subCode: a.subjectcode,

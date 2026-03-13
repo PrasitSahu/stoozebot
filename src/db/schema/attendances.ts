@@ -3,8 +3,8 @@ import { sqliteTable, text, integer, unique } from "drizzle-orm/sqlite-core";
 import { createId } from "./helper";
 import { users } from "./users";
 
-export const attendences = sqliteTable(
-	"attendences",
+export const attendances = sqliteTable(
+	"attendances",
 	{
 		id: text("id")
 			.primaryKey()

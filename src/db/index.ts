@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { users } from "./schema/users";
 import { userLimits } from "./schema/userLimits";
-import { attendences } from "./schema/attendences";
+import { attendances } from "./schema/attendances";
 import { platformUsers } from "./schema/platformUsers";
 import { marks } from "./schema/marks";
 import { authTokens } from "./schema/authTokens";
@@ -11,7 +11,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
 		fields: [users.id],
 		references: [userLimits.userId],
 	}),
-	attendences: many(attendences),
+	attendances: many(attendances),
 	platformUsers: many(platformUsers),
 	marks: many(marks),
 }));
@@ -23,9 +23,9 @@ export const userLimitsRelations = relations(userLimits, ({ one }) => ({
 	}),
 }));
 
-export const attendencesRelations = relations(attendences, ({ one }) => ({
+export const attendancesRelations = relations(attendances, ({ one }) => ({
 	user: one(users, {
-		fields: [attendences.userId],
+		fields: [attendances.userId],
 		references: [users.id],
 	}),
 }));
@@ -53,7 +53,7 @@ export const authTokenRelations = relations(authTokens, ({ one }) => ({
 
 export * from "./schema/users";
 export * from "./schema/apiLimits";
-export * from "./schema/attendences";
+export * from "./schema/attendances";
 export * from "./schema/platformUsers";
 export * from "./schema/marks";
 export * from "./schema/userLimits";

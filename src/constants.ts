@@ -26,4 +26,4 @@ export const ReplyInvalidCreds = text("❌ Invalid credentials. Try again...");
 export const ReplySomethingWentWrong = text("something went wrong! Fix is on the way 🙂");
 
 // regex
-export const attendenceRegex = /#attendence\s+([A-Z0-9]+)/;
+export const attendanceRegex = /#attendance\s+([A-Z0-9]+)/;

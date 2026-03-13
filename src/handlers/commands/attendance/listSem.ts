@@ -5,7 +5,7 @@ import { Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplyNoAuth, ReplySomething
 import { authTokens } from "../../../db";
 import Service from "../../../services/soaPortals";
 
-export async function attendence(ctx: BotContext, db: DB) {
+export async function attendance(ctx: BotContext, db: DB) {
 	let userId: string;
 	let passToken: string;
 	if (!ctx.auth.user) {
@@ -44,20 +44,20 @@ export async function attendence(ctx: BotContext, db: DB) {
 		}
 
 		const soaPortalService = new Service(passToken);
-		const attendenceSemList = await soaPortalService.getAttendenceSemList(token);
+		const attendanceSemList = await soaPortalService.getAttendanceSemList(token);
 
-		if (attendenceSemList?.status?.responseStatus !== "Success") {
-			console.error("failed to fetch attendence");
+		if (attendanceSemList?.status?.responseStatus !== "Success") {
+			console.error("failed to fetch attendance");
 			throw new Error(Err.ErrFailRes);
 		}
 
-		const semList = attendenceSemList?.response?.semlist;
+		const semList = attendanceSemList?.response?.semlist;
 		if (!semList) {
-			console.error("failed to detect attendence sem list type in 'attendence' command");
+			console.error("failed to detect attendance sem list type in 'attendance' command");
 			throw new Error(Err.ErrFormat);
 		}
 
-		const btns = semList.map((sem) => [InlineKeyboard.text(sem.registrationcode, `#attendence ${sem.registrationid}`)]);
+		const btns = semList.map((sem) => [InlineKeyboard.text(sem.registrationcode, `#attendance ${sem.registrationid}`)]);
 
 		const semInlineKeyboard = InlineKeyboard.from(btns);
 		await ctx.reply("Select from your sem list", {
