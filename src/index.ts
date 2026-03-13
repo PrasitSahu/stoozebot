@@ -2,9 +2,11 @@ import { drizzle } from "drizzle-orm/d1";
 import { Bot, webhookCallback } from "grammy";
 import { BotContext } from "./config";
 import * as schema from "./db/index";
-import { registerAuth, registerCommands } from "./handlers/register";
+import { registerAuth, registerCommands, setCommandList } from "./handlers/register";
 import { auth } from "./middlewares/auth";
 import developer from "./middlewares/developer";
+
+let isCold = true;
 
 function verifyBot(secret: string) {
 	return secret === process.env.BOT_SECRET;
@@ -17,6 +19,14 @@ export default {
 		}
 
 		const bot = new Bot<BotContext>(env.BOT_TOKEN);
+		if (isCold) {
+			try {
+				await bot.init();
+				await setCommandList(bot);
+			} catch (error) {}
+			isCold = false;
+		}
+
 		const db = drizzle(env.DB, {
 			schema,
 		});
