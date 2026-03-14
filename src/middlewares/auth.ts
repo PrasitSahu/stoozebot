@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 import { NextFunction } from "grammy";
 import { Auth, BotContext, DB } from "../config";
-import { Platform, ReplyNoAuth } from "../constants";
+import { Err, Platform, ReplyNoAuth } from "../constants";
 import { platformUsers } from "../db/schema/platformUsers";
 
 export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<void> {
@@ -71,10 +71,16 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 			};
 			ctx.auth = auth;
 	
-			await next();
 		} catch (error) {
-			console.error(error);
+			if(error instanceof Error){
+				if(error.message === Err.ErrReqFail){
+					await next()
+					return
+				}
+			}
+			console.error(error)
 		}
+		await next();
 	};
 }
 

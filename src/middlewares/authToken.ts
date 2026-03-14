@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import { BotContext, DB } from "../config";
 import { Err } from "../constants";
 import { authTokens } from "../db/schema/authTokens";
-import { handleErrors } from "../handlers/errorHandler";
 import soaPService from "../services/soaPortals";
 
 export function manageToken(db: DB): (ctx: BotContext, next: NextFunction) => Promise<void> {
@@ -33,10 +32,16 @@ export function manageToken(db: DB): (ctx: BotContext, next: NextFunction) => Pr
 				}
 			}
 
-            await next();
         } catch(error){
-            await handleErrors(ctx, error as Error);
+			if(error instanceof Error){
+				if(error.message === Err.ErrReqFail){
+					await next()
+					return
+				}
+			}
+			console.error(error)
         }
+		await next();
     }
 }
 

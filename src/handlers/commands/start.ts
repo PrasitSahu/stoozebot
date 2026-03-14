@@ -1,7 +1,4 @@
-import { sql } from "drizzle-orm";
 import { BotContext, DB } from "../../config";
-import { Platform } from "../../constants";
-import { platformUsers } from "../../db/schema/platformUsers";
 import { text } from "../../utils";
 
 export async function start(ctx: BotContext, db: DB) {

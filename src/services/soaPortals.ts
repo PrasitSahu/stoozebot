@@ -1,3 +1,4 @@
+import { Err } from "../constants";
 import { aesEnc } from "../utils";
 import { Method } from "./service";
 
@@ -7,7 +8,7 @@ interface Status {
 	identifier: string | null;
 }
 
-interface Response<T> {
+export interface Response<T> {
 	status: Status;
 	response: T;
 }
@@ -45,7 +46,7 @@ export interface PersonalInfoResponse {
 	};
 }
 
-interface Sem {
+export interface Sem {
 	registrationcode: string;
 	registrationid: string;
 }
@@ -112,12 +113,13 @@ export default class soaPService {
 		});
 
 		const res = await fetch(req);
-		return await res.json<Response<GenTokenResponse>>();
+		return await this.setReturn<Response<GenTokenResponse>>(res);
 	}
 
+	
 	async getPersonalInfo(token: string): Promise<Response<PersonalInfoResponse>> {
 		const url = new URL(this.rootUrl.href + "/studentpersinfo/getstudent-personalinformation");
-
+		
 		const req = new Request(this.getProxyUrl(url), {
 			method: Method.Post,
 			headers: {
@@ -130,14 +132,14 @@ export default class soaPService {
 				instituteid: process.env.INSTITUTE_ID,
 			}),
 		});
-
+		
 		const res = await fetch(req);
-		return await res.json<Response<PersonalInfoResponse>>();
+		return await this.setReturn<Response<PersonalInfoResponse>>(res);
 	}
-
+	
 	async getAttendanceSemList(token: string): Promise<Response<SemListResponse>> {
 		const url = new URL(this.rootUrl + "/StudentClassAttendance/getstudentInforegistrationforattendence");
-
+		
 		const req = new Request(this.getProxyUrl(url), {
 			method: Method.Post,
 			headers: {
@@ -149,11 +151,11 @@ export default class soaPService {
 				instituteid: process.env.INSTITUTE_ID,
 			}),
 		});
-
+		
 		const res = await fetch(req);
-		return await res.json<Response<SemListResponse>>();
+		return await this.setReturn<Response<SemListResponse>>(res);
 	}
-
+	
 	async getAttendance(token: string, regId: string): Promise<Response<AttendanceResponse>> {
 		const url = new URL(this.rootUrl + "/StudentClassAttendance/getstudentattendancedetail");
 
@@ -169,8 +171,17 @@ export default class soaPService {
 				registrationid: regId,
 			}),
 		});
-
+		
 		const res = await fetch(req);
-		return await res.json<Response<AttendanceResponse>>();
+		return await this.setReturn<Response<AttendanceResponse>>(res);
+	}
+	
+	private async setReturn<T>(res: globalThis.Response) {
+		let text = await res.text();
+		text = text.trim();
+		if (text === Err.ErrReqFail) {
+			throw new Error(Err.ErrReqFail);
+		}
+		return JSON.parse(text) as T;
 	}
 }
