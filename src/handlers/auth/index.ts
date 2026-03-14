@@ -1,7 +1,7 @@
 import { InferInsertModel } from "drizzle-orm";
 import { Bot } from "grammy";
 import { BotContext, DB } from "../../config";
-import { Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplySomethingWentWrong } from "../../constants";
+import { Err, ReplyDone, ReplyInvalidCreds, ReplyInvalidFormat, ReplySomethingWentWrong } from "../../constants";
 import { users } from "../../db";
 import soaPortals from "../../services/soaPortals";
 import { aesEnc } from "../../utils";
@@ -112,7 +112,7 @@ export function login(bot: Bot<BotContext>, db: DB) {
 				return;
 			}
 
-			await ctx.reply("✅ Done");
+			await ctx.reply(ReplyDone);
 		}
 	});
 }

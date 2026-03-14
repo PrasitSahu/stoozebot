@@ -19,5 +19,5 @@ export const platformUsers = sqliteTable(
 			.notNull()
 			.default(sql`(datetime('now'))`),
 	},
-	(table) => [unique().on(table.userId, table.platform, table.platformId)],
+	(table) => [unique().on(table.platform, table.platformId)],
 );

@@ -5,6 +5,7 @@ import * as schema from "./db/index";
 import { registerAuth, registerCommands, setCommandList } from "./handlers/register";
 import { auth } from "./middlewares/auth";
 import developer from "./middlewares/developer";
+import { limits } from "./middlewares/limits";
 
 let isCold = true;
 
@@ -33,6 +34,7 @@ export default {
 
 		bot.use(developer);
 		bot.use(auth(db));
+		bot.use(limits(db));
 
 		registerAuth(bot, db);
 		registerCommands(bot, db);

@@ -10,5 +10,9 @@ export default async function (ctx: BotContext, next: NextFunction) {
 
 	ctx.config = config;
 
-	await next();
+	try {
+		await next();
+	} catch (error) {
+		console.error(error);
+	}
 }

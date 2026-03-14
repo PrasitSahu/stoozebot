@@ -1,31 +1,35 @@
 import { Bot } from "grammy";
-import { BotContext, DB } from "../config";
-import { start } from "./commands/start";
-import { login } from "./auth";
-import { filterNAuth } from "../middlewares/auth";
-import { attendance } from "./commands/attendance/listSem";
-import { attendanceRegex } from "../constants";
-import { getAttendance } from "./commands/attendance/attendance";
-import { help } from "./commands/help";
 import { BotCommand } from "grammy/types";
+import { BotContext, DB } from "../config";
+import { attendanceRegex } from "../constants";
+import { filterNAuth } from "../middlewares/auth";
+import { login } from "./auth";
+import { getAttendance } from "./commands/attendance/attendance";
+import { attendance } from "./commands/attendance/listSem";
+import { help } from "./commands/help";
+import { start } from "./commands/start";
+import { logout } from "./commands/logout";
 
 export const enum Commands {
 	Start = "start",
 	Attendance = "attendance",
 	Help = "help",
+	Logout = "logout"
 }
 
 export const CommandsDesc: Record<Commands, string> = {
 	[Commands.Start]: "🚀 Start the bot",
 	[Commands.Attendance]: "📋 View your attendance",
 	[Commands.Help]: "❓ Get help and usage instructions",
+	[Commands.Logout]: "👋 Logout",
 };
 
 export function registerCommands(bot: Bot<BotContext>, db: DB) {
 	bot.command(Commands.Start, (ctx) => start(ctx, db));
 	bot.command(Commands.Help, (ctx) => help(ctx));
-
+ 
 	bot.use(filterNAuth);
+	bot.command(Commands.Logout, (ctx) => logout(ctx, db))
 	bot.command(Commands.Attendance, (ctx) => attendance(ctx, db));
 	bot.callbackQuery(attendanceRegex, (ctx) => getAttendance(ctx, db));
 }

@@ -1,41 +1,87 @@
+import { and, eq, sql } from "drizzle-orm";
 import { NextFunction } from "grammy";
 import { Auth, BotContext, DB } from "../config";
-import { ReplyNoAuth } from "../constants";
+import { Platform, ReplyNoAuth } from "../constants";
+import { platformUsers } from "../db/schema/platformUsers";
 
 export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<void> {
 	return async (ctx: BotContext, next: NextFunction) => {
-		const platformUserWithuser = await db.query.platformUsers.findFirst({
-			where({ platformId }, { eq }) {
-				return eq(platformId, ctx.chat?.id.toString() || "");
-			},
-			with: {
-				user: true,
-			},
-		});
-
-		if(!platformUserWithuser) {
-			ctx.auth = null;
-			await next();
-			return;
+		if(!ctx.chat){
+			return
 		}
 
-		const auth: Auth = {
-			user: platformUserWithuser.user,
-			reqs: platformUserWithuser.reqs,
-		};
-		ctx.auth = auth;
-
-		await next();
+		const max = Number(process.env.LIMIT_PER_DAY);
+		try {
+			const reqs = await db.update(platformUsers)
+			.set({
+				reqs: sql`
+					CASE
+						WHEN ${platformUsers.lastReqAt} < datetime('now', 'start of day')
+						THEN 1
+						WHEN ${platformUsers.reqs} > ${max}
+						THEN ${platformUsers.reqs}
+						ELSE ${platformUsers.reqs} + 1
+					END
+				`,
+				lastReqAt: sql`datetime('now')`,
+			})
+			.where(
+				and(
+					eq(platformUsers.platformId, ctx.chat.id.toString()),
+				),
+			)
+			.returning({reqs: platformUsers.reqs})
+	
+			if(reqs.length === 0) {
+				await db.insert(platformUsers)
+				.values({
+					platform: Platform.Telegram,
+					platformId: ctx.chat.id.toString(),
+					reqs: 1,
+					lastReqAt: sql`datetime('now')`,
+				})
+				.onConflictDoNothing();
+			}
+	
+			const platformUserWithuser = await db.query.platformUsers.findFirst({
+				where({ platformId }, { eq }) {
+					return eq(platformId, ctx.chat?.id.toString() || "");
+				},
+				with: {
+					user: true,
+				},
+			});
+	
+			if(!platformUserWithuser) {
+				ctx.auth = null;
+				await next();
+				return;
+			}
+	
+			const auth: Auth = {
+				user: platformUserWithuser.user,
+				reqs: reqs.length ? reqs[0].reqs : 1,
+			};
+			ctx.auth = auth;
+	
+			await next();
+		} catch (error) {
+			console.error(error);
+		}
 	};
 }
 
 export async function filterNAuth(ctx: BotContext, next: NextFunction) {
-	if (!ctx.auth) {
+	if (!ctx.auth || !ctx.auth.user) {
 		await ctx.reply(ReplyNoAuth, {
 			parse_mode: "Markdown",
 		});
 		return;
 	}
 
-	await next();
+	try {
+		await next();
+	} catch (error) {
+		console.error(error);
+	}
 }

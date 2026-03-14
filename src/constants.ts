@@ -20,10 +20,18 @@ export const ReplyNoAuth = text(
 `,
 );
 
+
 // replies
+export const ReplyDone = text("✅ Done");
 export const ReplyInvalidFormat = text("portal provided unexpected data. Please have patience fix is on the way 🙂");
 export const ReplyInvalidCreds = text("❌ Invalid credentials. Try again...");
 export const ReplySomethingWentWrong = text("something went wrong! Fix is on the way 🙂");
+export const ReplyLimitReached = text(
+`
+⚠️ Daily limit reached.
+You have exhausted your daily request limit. No further replies will be sent until tomorrow.
+`,
+);
 
 // regex
 export const attendanceRegex = /#attendance\s+([A-Z0-9]+)/;

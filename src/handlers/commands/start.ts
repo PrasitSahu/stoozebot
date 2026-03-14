@@ -8,12 +8,6 @@ export async function start(ctx: BotContext, db: DB) {
 	if (ctx.chat?.type === "private") {
 		try {
 		await ctx.reply(greet(ctx.chat.first_name), { parse_mode: "Markdown" });
-		await db.insert(platformUsers).values({
-			platform: Platform.Telegram,
-			platformId: ctx.chat.id.toString(),
-			reqs: 1,
-			lastReqAt: sql`datetime('now')`,
-		})
 		} catch (error) {
 			console.log(error);
 		}
