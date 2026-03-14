@@ -3,7 +3,8 @@ import { BotCommand } from "grammy/types";
 import { BotContext, DB } from "../config";
 import { attendanceRegex } from "../constants";
 import { filterNAuth } from "../middlewares/auth";
-import { login } from "./auth";
+import { updateCreds } from "./auth/updateCreds";
+import { login } from "./auth/login";
 import { getAttendance } from "./commands/attendance/attendance";
 import { attendance } from "./commands/attendance/listSem";
 import { help } from "./commands/help";
@@ -36,6 +37,7 @@ export function registerCommands(bot: Bot<BotContext>, db: DB) {
 
 export function registerAuth(bot: Bot<BotContext>, db: DB) {
 	login(bot, db);
+	updateCreds(bot, db);
 }
 
 export async function setCommandList(bot: Bot<BotContext>) {

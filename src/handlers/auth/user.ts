@@ -1,4 +1,4 @@
-import { InferInsertModel } from "drizzle-orm";
+import { InferInsertModel, eq } from "drizzle-orm";
 import { SQLiteTransaction } from "drizzle-orm/sqlite-core";
 import { DB } from "../../config";
 import { authTokens, platformUsers, users } from "../../db";
@@ -28,4 +28,11 @@ export async function createPlatformUser(db: DB, id: string, platformId: string)
 		target: [platformUsers.platform, platformUsers.platformId],
 		set: { userId: id },
 	});
+}
+
+export async function updateUserCreds(db: DB, id: string, passToken: string, authToken: string) {
+	await db.batch([
+		db.update(users).set({ password: passToken }).where(eq(users.id, id)),
+		db.update(authTokens).set({ token: authToken }).where(eq(authTokens.userId, id)),
+	]);
 }

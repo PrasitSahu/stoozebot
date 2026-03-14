@@ -1,14 +1,15 @@
 import { InferInsertModel } from "drizzle-orm";
 import { Bot } from "grammy";
 import { BotContext, DB } from "../../config";
-import { Err, ReplyDone, ReplyInvalidCreds, ReplyInvalidFormat, ReplySomethingWentWrong } from "../../constants";
+import { Err, ReplyInvalidFormat, ReplyInvalidCreds, ReplySomethingWentWrong, ReplyDone } from "../../constants";
 import { users } from "../../db";
 import soaPortals from "../../services/soaPortals";
 import { aesEnc } from "../../utils";
-import { createPlatformUser, createUser, Platform } from "./user";
+import { Platform, createUser, createPlatformUser, updateUserCreds } from "./user";
+
 
 export function login(bot: Bot<BotContext>, db: DB) {
-	bot.hears(/#login\s+([0-9]+)_([^\s]+)/, async (ctx: BotContext) => {
+	bot.hears(/#login\s+([0-9a-zA-Z]+)_([^\s]+)/, async (ctx: BotContext) => {
 		const message = ctx.message?.text;
 		if (!message) return;
 
@@ -28,7 +29,7 @@ export function login(bot: Bot<BotContext>, db: DB) {
 				return;
 			}
 
-			const regNoInp = match[1];
+			const regNoInp = match[1].toUpperCase();
 			const password = match[2];
 
 			const user = await db.query.users.findFirst({
@@ -52,11 +53,10 @@ export function login(bot: Bot<BotContext>, db: DB) {
 			});
 
 			const soaPortalService = new soaPortals(passToken);
-			try {
+            try {
 				if (!user) {
 					const userData = await soaPortalService.genToken();
 					if (userData?.status?.responseStatus !== "Success") {
-						// TODO: fix this with update password for change in password
 						throw new Error(Err.ErrInvalidCred);
 					}
 
@@ -92,9 +92,21 @@ export function login(bot: Bot<BotContext>, db: DB) {
 						phone: generalInfo.studentcellno,
 					};
 					await createUser(db, newUser, chatId, regdata.token);
-				} else if (!user.platformUsers.length) {
-					await createPlatformUser(db, user.id, chatId);
-				}
+				} else {
+                    // check for password with a token request, if it works then update the same
+                    const userData = await soaPortalService.genToken();
+                    if (userData?.status?.responseStatus !== "Success") {
+                        throw new Error(Err.ErrInvalidCred);
+                    }
+
+                    const regdata = userData?.response?.regdata;
+                    if (!regdata) {
+                        console.error("failed to detect data format for regdata in 'genToken' response");
+                        throw new Error(Err.ErrFormat);
+                    }
+                    await updateUserCreds(db, user.id, passToken, regdata.token);
+                    await createPlatformUser(db, user.id, ctx.chat.id.toString())
+                }
 			} catch (error: unknown) {
 				if (error instanceof Error) {
 					if (error.message === Err.ErrFormat) {
@@ -103,7 +115,7 @@ export function login(bot: Bot<BotContext>, db: DB) {
 					}
 
 					if (error.message === Err.ErrInvalidCred) {
-						await ctx.reply(ReplyInvalidCreds);
+						await ctx.reply("❌ Invalid credentials. Please try again.");
 						return;
 					}
 				}
