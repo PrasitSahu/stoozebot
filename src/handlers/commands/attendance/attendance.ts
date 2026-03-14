@@ -2,7 +2,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { BotContext, DB } from "../../../config";
 import { Err, ReplyNoAuth } from "../../../constants";
 import { users } from "../../../db";
-import Service from "../../../services/soaPortals";
+import soaPService from "../../../services/soaPortals";
 import { text } from "../../../utils";
 import { handleErrors } from "../../errorHandler";
 
@@ -34,7 +34,7 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 
 	user = ctx.auth.user;
 
-	const soaPortalService = new Service(user.password);
+	const soaPortalService = new soaPService(user.password);
 	try {
 		if (!ctx.match) {
 			return;

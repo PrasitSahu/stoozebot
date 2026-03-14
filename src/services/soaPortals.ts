@@ -79,7 +79,7 @@ export interface Creds {
 	Modulename: string;
 }
 
-export default class Service {
+export default class soaPService {
 	proxyOrigin = new URL(process.env.PROXY);
 	rootUrl = new URL("https://soaportals.com/StudentPortalSOAAPI");
 	passToken: string = "";

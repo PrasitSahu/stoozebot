@@ -4,7 +4,7 @@ import { BotContext, DB } from "../config";
 import { Err } from "../constants";
 import { authTokens } from "../db/schema/authTokens";
 import { handleErrors } from "../handlers/errorHandler";
-import Service from "../services/soaPortals";
+import soaPService from "../services/soaPortals";
 
 export function manageToken(db: DB): (ctx: BotContext, next: NextFunction) => Promise<void> {
     return async (ctx: BotContext, next: NextFunction) => {
@@ -41,7 +41,7 @@ export function manageToken(db: DB): (ctx: BotContext, next: NextFunction) => Pr
 }
 
 export async function upsertNewToken(passToken: string, db: DB, userId: string) {
-	const soaPortalService = new Service(passToken);
+	const soaPortalService = new soaPService(passToken);
 	const tokenRes = await soaPortalService.genToken();
 
 	if (tokenRes?.status?.responseStatus !== "Success") {

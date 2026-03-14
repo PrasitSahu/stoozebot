@@ -1,7 +1,7 @@
 import { InlineKeyboard } from "grammy";
 import { BotContext, DB } from "../../../config";
 import { Err, ReplyNoAuth } from "../../../constants";
-import Service from "../../../services/soaPortals";
+import soaPService from "../../../services/soaPortals";
 import { handleErrors } from "../../errorHandler";
 
 export async function attendance(ctx: BotContext, db: DB) {
@@ -17,7 +17,7 @@ export async function attendance(ctx: BotContext, db: DB) {
 			console.error("token not found in auth");
 			throw new Error(Err.ErrAuth);
 		}
-		const soaPortalService = new Service(ctx.auth.user.password);
+		const soaPortalService = new soaPService(ctx.auth.user.password);
 		const attendanceSemList = await soaPortalService.getAttendanceSemList(ctx.auth.token);
 
 		if (attendanceSemList?.status?.responseStatus !== "Success") {
