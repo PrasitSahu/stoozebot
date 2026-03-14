@@ -24,7 +24,7 @@ export const ReplyNoAuth = text(
 // replies
 export const ReplyDone = text("✅ Done");
 export const ReplyInvalidFormat = text("portal provided unexpected data. Please have patience fix is on the way 🙂");
-export const ReplyInvalidCreds = text("❌ Invalid credentials. Try again...");
+export const ReplyInvalidCreds = text("🙃 Looks like you have changed your password.\nPlease update your password using \`#updatecreds REGNO_PASSWORD\`");
 export const ReplySomethingWentWrong = text("something went wrong! Fix is on the way 🙂");
 export const ReplyLimitReached = text(
 `

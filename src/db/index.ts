@@ -9,7 +9,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
 	attendances: many(attendances),
 	platformUsers: many(platformUsers),
 	marks: many(marks),
-	authTokens: one(authTokens, {
+	authToken: one(authTokens, {
 		fields: [users.id],
 		references: [authTokens.userId],
 	}),

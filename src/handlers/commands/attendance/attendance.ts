@@ -1,11 +1,10 @@
 import { InferSelectModel } from "drizzle-orm";
-import jwt from "jsonwebtoken";
 import { BotContext, DB } from "../../../config";
-import { Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplyNoAuth, ReplySomethingWentWrong } from "../../../constants";
+import { Err, ReplyNoAuth } from "../../../constants";
 import { users } from "../../../db";
 import Service from "../../../services/soaPortals";
 import { text } from "../../../utils";
-import { upsertNewToken } from "./listSem";
+import { handleErrors } from "../../errorHandler";
 
 interface ReplyAttendanceParam {
 	index: number;
@@ -42,72 +41,39 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 		}
 		const regId = ctx.match[1];
 
-		const authToken = await db.query.authTokens.findFirst({
-			where(table, { eq }) {
-				return eq(table.userId, user.id);
-			},
+		if(!ctx.auth?.token){
+			console.error("token not found in auth");
+			throw new Error(Err.ErrAuth);
+		}
+
+		const attendancesRes = await soaPortalService.getAttendance(ctx.auth.token, regId);
+		if (attendancesRes?.status?.responseStatus !== "Success") {
+			console.error("failed to fetch attendance");
+			throw new Error(Err.ErrFailRes);
+		}
+
+		const attendances = attendancesRes?.response?.studentattendancelist;
+		if (!attendances) {
+			console.error("failed to detect attendance sem list type in 'attendance' command");
+			throw new Error(Err.ErrFormat);
+		}
+
+		const replies = attendances.map((a) =>
+			ReplyAttendance({
+				index: a.slno,
+				sub: a.subject,
+				subCode: a.subjectcode,
+				totalCls: a.TotalClass,
+				perc: a.Attendanceperc,
+			}),
+		);
+
+		const reply = replies.join(sep);
+		await ctx.reply(reply, {
+			parse_mode: "Markdown",
 		});
-
-		var token: string;
-		if (!authToken?.token) {
-			token = await upsertNewToken(user.password, db, user.id);
-		} else {
-			token = authToken.token;
-
-			var payload: jwt.JwtPayload;
-			var p = jwt.decode(token, { json: true });
-			if (!p) {
-				throw new Error("failed to decode jwt");
-			} else {
-				payload = p;
-			}
-
-			if ((payload?.exp as number) < Date.now()) {
-				token = await upsertNewToken(user.password, db, user.id);
-			}
-
-			const attendancesRes = await soaPortalService.getAttendance(token, regId);
-			if (attendancesRes?.status?.responseStatus !== "Success") {
-				console.error("failed to fetch attendance");
-				throw new Error(Err.ErrFailRes);
-			}
-
-			const attendances = attendancesRes?.response?.studentattendancelist;
-			if (!attendances) {
-				console.error("failed to detect attendance sem list type in 'attendance' command");
-				throw new Error(Err.ErrFormat);
-			}
-
-			const replies = attendances.map((a) =>
-				ReplyAttendance({
-					index: a.slno,
-					sub: a.subject,
-					subCode: a.subjectcode,
-					totalCls: a.TotalClass,
-					perc: a.Attendanceperc,
-				}),
-			);
-
-			const reply = replies.join(sep);
-			await ctx.reply(reply, {
-				parse_mode: "Markdown",
-			});
-		}
+	
 	} catch (error) {
-		if (error instanceof Error) {
-			if (error.message === Err.ErrFormat) {
-				await ctx.reply(ReplyInvalidFormat);
-				return;
-			}
-
-			if (error.message === Err.ErrInvalidCred) {
-				await ctx.reply(ReplyInvalidCreds);
-				return;
-			}
-		}
-
-		console.log(error);
-		await ctx.reply(ReplySomethingWentWrong);
-		return;
+		await handleErrors(ctx, error as Error);
 	}
 }

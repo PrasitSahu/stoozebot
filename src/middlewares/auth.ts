@@ -28,6 +28,7 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 			.where(
 				and(
 					eq(platformUsers.platformId, ctx.chat.id.toString()),
+					eq(platformUsers.platform, Platform.Telegram)
 				),
 			)
 			.returning({reqs: platformUsers.reqs})
@@ -48,7 +49,11 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 					return eq(platformId, ctx.chat?.id.toString() || "");
 				},
 				with: {
-					user: true,
+					user: {
+						with: {
+							authToken: true
+						}
+					}
 				},
 			});
 	
@@ -60,7 +65,9 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 	
 			const auth: Auth = {
 				user: platformUserWithuser.user,
+				// Fix: if no reqs, set to max
 				reqs: reqs.length ? reqs[0].reqs : 1,
+				token: platformUserWithuser.user?.authToken?.token || null,
 			};
 			ctx.auth = auth;
 	

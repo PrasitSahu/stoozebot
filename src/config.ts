@@ -11,6 +11,7 @@ export interface Config {
 export interface Auth {
 	user: InferSelectModel<typeof schema.users> | null;
 	reqs: number;
+	token: string | null;
 }
 
 export interface BotContext extends Context {

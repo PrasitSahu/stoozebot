@@ -6,6 +6,7 @@ import { registerAuth, registerCommands, setCommandList } from "./handlers/regis
 import { auth } from "./middlewares/auth";
 import developer from "./middlewares/developer";
 import { limits } from "./middlewares/limits";
+import { manageToken } from "./middlewares/authToken";
 
 let isCold = true;
 
@@ -35,6 +36,7 @@ export default {
 		bot.use(developer);
 		bot.use(auth(db));
 		bot.use(limits(db));
+		bot.use(manageToken(db));
 
 		registerAuth(bot, db);
 		registerCommands(bot, db);
