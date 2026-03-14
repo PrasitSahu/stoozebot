@@ -34,4 +34,4 @@ You have exhausted your daily request limit. No further replies will be sent unt
 );
 
 // regex
-export const attendanceRegex = /#attendance\s+([A-Z0-9]+)/;
+export const attendanceRegex = /#attendance\s+([A-Z0-9]+)-(.+)/;

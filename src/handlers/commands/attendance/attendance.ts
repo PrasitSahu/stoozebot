@@ -2,9 +2,11 @@ import { InferSelectModel } from "drizzle-orm";
 import { BotContext, DB } from "../../../config";
 import { Err, ReplyNoAuth } from "../../../constants";
 import { users } from "../../../db";
-import soaPService from "../../../services/soaPortals";
+import soaPService, { Attendance, AttendanceResponse, Response } from "../../../services/soaPortals";
 import { text } from "../../../utils";
 import { handleErrors } from "../../errorHandler";
+import {attendances as attendancesTable} from "../../../db/schema/attendances";
+import { eq } from "drizzle-orm";
 
 interface ReplyAttendanceParam {
 	index: number;
@@ -40,35 +42,88 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 			return;
 		}
 		const regId = ctx.match[1];
+		const regCode = ctx.match[2];
 
 		if(!ctx.auth?.token){
 			console.error("token not found in auth");
 			throw new Error(Err.ErrAuth);
 		}
-
-		const attendancesRes = await soaPortalService.getAttendance(ctx.auth.token, regId);
-		if (attendancesRes?.status?.responseStatus !== "Success") {
-			console.error("failed to fetch attendance");
-			throw new Error(Err.ErrFailRes);
+		
+		let attendancesRes: Response<AttendanceResponse>;
+		let attendances: Attendance[];
+		let fromSource: boolean = true;
+		try {
+			attendancesRes = await soaPortalService.getAttendance(ctx.auth.token, regId);
+			if (attendancesRes?.status?.responseStatus !== "Success") {
+				console.error("failed to fetch attendance");
+				throw new Error(Err.ErrFailRes);
+			}
+	
+			attendances = attendancesRes?.response?.studentattendancelist;
+			if (!attendances) {
+				console.error("failed to detect attendance sem list type in 'attendance' command");
+				throw new Error(Err.ErrFormat);
+			}
+		} catch (error) {
+			if(error instanceof Error && error.message === Err.ErrReqFail){
+				fromSource = false;
+				const a = await db.select().from(attendancesTable).where(eq(attendancesTable.userId, user.id));
+				attendances = a.map((a) => {
+					return {
+						slno: a.slNo,
+						subject: a.subject,
+						subjectcode: a.subjectCode,
+						TotalClass: a.total,
+						Attendanceperc: a.percentage,
+						sty_no: a.sem,
+					}
+				})
+			} else {
+				throw error;
+			}
 		}
 
-		const attendances = attendancesRes?.response?.studentattendancelist;
-		if (!attendances) {
-			console.error("failed to detect attendance sem list type in 'attendance' command");
-			throw new Error(Err.ErrFormat);
+		if(!attendances.length){
+			await ctx.reply("No attendance found");
+			return;
 		}
 
-		const replies = attendances.map((a) =>
-			ReplyAttendance({
+		const replies = attendances.map(async (a) => {
+			if(fromSource){
+				await db.insert(attendancesTable).values({
+					slNo: a.slno,
+					subject: a.subject,
+					subjectCode: a.subjectcode,
+					total: a.TotalClass,
+					percentage: a.Attendanceperc,
+					sem: a.sty_no,
+					userId: user.id,
+					regCode: regCode,
+					regId: regId,
+				}).onConflictDoUpdate({
+					target: [attendancesTable.userId, attendancesTable.subjectCode],
+					set: {
+						slNo: a.slno,
+						subject: a.subject,
+						subjectCode: a.subjectcode,
+						total: a.TotalClass,
+						percentage: a.Attendanceperc,
+						sem: a.sty_no,
+						userId: user.id,
+					}
+				})
+			}
+
+			return ReplyAttendance({
 				index: a.slno,
 				sub: a.subject,
 				subCode: a.subjectcode,
 				totalCls: a.TotalClass,
 				perc: a.Attendanceperc,
-			}),
-		);
+			})
+		});
 
-		const reply = replies.join(sep);
+		const reply = (await Promise.all(replies)).join(sep);
 		await ctx.reply(reply, {
 			parse_mode: "Markdown",
 		});
