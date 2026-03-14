@@ -1,11 +1,11 @@
-import { Bot, Context } from "grammy";
+import { InferInsertModel } from "drizzle-orm";
+import { Bot } from "grammy";
 import { BotContext, DB } from "../../config";
-import soaPortals from "../../services/soaPortals";
 import { Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplySomethingWentWrong } from "../../constants";
 import { users } from "../../db";
-import { InferInsertModel } from "drizzle-orm";
-import { createPlatformUser, createUser, Platform } from "./user";
+import soaPortals from "../../services/soaPortals";
 import { aesEnc } from "../../utils";
+import { createPlatformUser, createUser, Platform } from "./user";
 
 export function login(bot: Bot<BotContext>, db: DB) {
 	bot.hears(/#login\s+([0-9]+)_([^\s]+)/, async (ctx: BotContext) => {
@@ -13,7 +13,7 @@ export function login(bot: Bot<BotContext>, db: DB) {
 		if (!message) return;
 
 		if (ctx.chat?.type === "private") {
-			if (!!ctx.auth.user) {
+			if (!!ctx.auth?.user) {
 				await ctx.reply("✅ Already logged in");
 				return;
 			}

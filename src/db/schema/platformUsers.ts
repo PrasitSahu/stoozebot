@@ -1,4 +1,4 @@
-import { sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 import { createId } from "./helper";
 import { users } from "./users";
 import { sql } from "drizzle-orm";
@@ -10,10 +10,11 @@ export const platformUsers = sqliteTable(
 			.primaryKey()
 			.$defaultFn(() => createId()),
 		userId: text("user_id")
-			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
 		platform: text().notNull(),
 		platformId: text("platform_id").notNull(),
+		reqs: integer("reqs").notNull().default(0),
+		lastReqAt: text("last_req_at").notNull().default(sql`(datetime('now'))`),
 		createdAt: text("created_at")
 			.notNull()
 			.default(sql`(datetime('now'))`),

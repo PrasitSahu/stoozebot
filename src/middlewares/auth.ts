@@ -13,10 +13,16 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 			},
 		});
 
-		const auth: Auth = {
-			user: platformUserWithuser?.user || null,
-		};
+		if(!platformUserWithuser) {
+			ctx.auth = null;
+			await next();
+			return;
+		}
 
+		const auth: Auth = {
+			user: platformUserWithuser.user,
+			reqs: platformUserWithuser.reqs,
+		};
 		ctx.auth = auth;
 
 		await next();
@@ -24,7 +30,7 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 }
 
 export async function filterNAuth(ctx: BotContext, next: NextFunction) {
-	if (!ctx.auth.user) {
+	if (!ctx.auth) {
 		await ctx.reply(ReplyNoAuth, {
 			parse_mode: "Markdown",
 		});

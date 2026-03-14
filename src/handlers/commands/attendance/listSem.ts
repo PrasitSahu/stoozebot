@@ -8,15 +8,15 @@ import Service from "../../../services/soaPortals";
 export async function attendance(ctx: BotContext, db: DB) {
 	let userId: string;
 	let passToken: string;
-	if (!ctx.auth.user) {
+	if (!ctx.auth?.user) {
 		await ctx.reply(ReplyNoAuth, {
 			parse_mode: "Markdown",
 		});
 		return;
-	} else {
-		userId = ctx.auth.user.id;
-		passToken = ctx.auth.user.password;
 	}
+
+	userId = ctx.auth.user.id;
+	passToken = ctx.auth.user.password;
 	try {
 		const authToken = await db.query.authTokens.findFirst({
 			where(table, { eq }) {

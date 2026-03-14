@@ -1,11 +1,11 @@
 import { InferSelectModel } from "drizzle-orm";
-import { BotContext, DB } from "../../../config";
-import { attendanceRegex, Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplyNoAuth, ReplySomethingWentWrong } from "../../../constants";
-import Service from "../../../services/soaPortals";
-import { users } from "../../../db";
-import { upsertNewToken } from "./listSem";
 import jwt from "jsonwebtoken";
+import { BotContext, DB } from "../../../config";
+import { Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplyNoAuth, ReplySomethingWentWrong } from "../../../constants";
+import { users } from "../../../db";
+import Service from "../../../services/soaPortals";
 import { text } from "../../../utils";
+import { upsertNewToken } from "./listSem";
 
 interface ReplyAttendanceParam {
 	index: number;
@@ -26,18 +26,17 @@ const sep = "\n\n➖➖➖➖➖➖➖➖\n\n";
 
 export async function getAttendance(ctx: BotContext, db: DB) {
 	let user: InferSelectModel<typeof users>;
-	if (!ctx.auth.user) {
+	if (!ctx.auth?.user) {
 		await ctx.reply(ReplyNoAuth, {
 			parse_mode: "Markdown",
 		});
 		return;
-	} else {
-		user = ctx.auth.user;
 	}
+
+	user = ctx.auth.user;
 
 	const soaPortalService = new Service(user.password);
 	try {
-		const match = ctx.message?.text?.match(attendanceRegex);
 		if (!ctx.match) {
 			return;
 		}

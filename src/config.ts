@@ -10,11 +10,12 @@ export interface Config {
 
 export interface Auth {
 	user: InferSelectModel<typeof schema.users> | null;
+	reqs: number;
 }
 
 export interface BotContext extends Context {
 	config: Config;
-	auth: Auth;
+	auth: Auth | null;
 }
 
 export type DB = DrizzleD1Database<typeof schema> & {
