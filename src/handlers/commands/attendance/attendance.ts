@@ -26,6 +26,7 @@ const ReplyAttendance = (param: ReplyAttendanceParam) =>
 const sep = "\n\n➖➖➖➖➖➖➖➖\n\n";
 
 export async function getAttendance(ctx: BotContext, db: DB) {
+	await ctx.answerCallbackQuery();
 	let user: InferSelectModel<typeof users>;
 	if (!ctx.auth?.user) {
 		await ctx.reply(ReplyNoAuth, {
