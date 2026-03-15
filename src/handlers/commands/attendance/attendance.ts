@@ -27,17 +27,18 @@ const sep = "\n\n➖➖➖➖➖➖➖➖\n\n";
 
 export async function getAttendance(ctx: BotContext, db: DB) {
 	let user: InferSelectModel<typeof users>;
-	if (!ctx.auth?.user) {
-		await ctx.reply(ReplyNoAuth, {
-			parse_mode: "Markdown",
-		});
-		return;
-	}
 
-	user = ctx.auth.user;
-
-	const soaPortalService = new soaPService(user.password);
 	try {
+		if (!ctx.auth?.user) {
+			await ctx.reply(ReplyNoAuth, {
+				parse_mode: "Markdown",
+			});
+			return;
+		}
+
+		user = ctx.auth.user;
+		const soaPortalService = new soaPService(user.password);
+
 		if (!ctx.match) {
 			return;
 		}
@@ -48,6 +49,8 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 			console.error("token not found in auth");
 			throw new Error(Err.ErrAuth);
 		}
+
+		await ctx.replyWithChatAction("typing");
 
 		let attendancesRes: Response<AttendanceResponse>;
 		let attendances: Attendance[];
