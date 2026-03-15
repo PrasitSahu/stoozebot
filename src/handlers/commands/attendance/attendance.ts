@@ -108,7 +108,7 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 						regId: regId,
 					})
 					.onConflictDoUpdate({
-						target: [attendancesTable.userId, attendancesTable.subjectCode],
+						target: [attendancesTable.userId, attendancesTable.subjectCode, attendancesTable.regCode, attendancesTable.regId],
 						set: {
 							slNo: a.slno,
 							subject: a.subject,
