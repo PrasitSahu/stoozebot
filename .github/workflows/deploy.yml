@@ -34,6 +34,17 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           environment: dev
+          secrets: |
+            BOT_TOKEN
+            BOT_SECRET
+            BOT_DEVELOPER
+            KEY
+            IV
+            PROXY
+            PROXY_SIGNATURE
+            CLIENT_ID
+            INSTITUTE_ID
+            LIMIT_PER_DAY
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           BOT_SECRET: ${{ secrets.BOT_SECRET }}
@@ -73,6 +84,17 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           environment: prod
+          secrets: |
+            BOT_TOKEN
+            BOT_SECRET
+            BOT_DEVELOPER
+            KEY
+            IV
+            PROXY
+            PROXY_SIGNATURE
+            CLIENT_ID
+            INSTITUTE_ID
+            LIMIT_PER_DAY
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           BOT_SECRET: ${{ secrets.BOT_SECRET }}
