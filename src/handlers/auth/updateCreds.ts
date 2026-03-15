@@ -11,6 +11,8 @@ export function updateCreds(bot: Bot<BotContext>, db: DB) {
 		const message = ctx.message?.text;
 		if (!message) return;
 
+		await ctx.deleteMessage();
+
 		if (ctx.chat?.type === "private") {
 			const chatId = ctx.chat.id.toString();
 
