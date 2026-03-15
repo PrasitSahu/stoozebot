@@ -29,12 +29,52 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          bun wrangler d1 migrations apply DB --remote
+          bun wrangler d1 migrations apply DB --remote --env dev
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          environment: dev
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          BOT_SECRET: ${{ secrets.BOT_SECRET }}
+          BOT_DEVELOPER: ${{ secrets.BOT_DEVELOPER }}
+          KEY: ${{ secrets.KEY }}
+          IV: ${{ secrets.IV }}
+          PROXY: ${{ secrets.PROXY }}
+          PROXY_SIGNATURE: ${{ secrets.PROXY_SIGNATURE }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          INSTITUTE_ID: ${{ secrets.INSTITUTE_ID }}
+          LIMIT_PER_DAY: ${{ secrets.LIMIT_PER_DAY }}
+  prod:
+    runs-on: ubuntu-latest
+    name: prod
+    needs: dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: install dependencies
+        run: bun install
+
+      - name: run tests
+        run: bun vitest
+
+      - name: apply migration
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          bun wrangler d1 migrations apply DB --remote --env prod
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          environment: prod
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           BOT_SECRET: ${{ secrets.BOT_SECRET }}

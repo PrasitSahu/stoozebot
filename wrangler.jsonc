@@ -4,28 +4,32 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "stoozebot",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-02-28",
 	"observability": {
 		"enabled": true,
 	},
 	"compatibility_flags": ["nodejs_compat"],
-	"d1_databases": [
-		{
-			"binding": "DB",
-			"database_id": "dde31626-7ade-474b-9a58-c25f5c748b1d",
-			"database_name": "dev_db",
-			"migrations_dir": "./migrations",
-		},
-	],
 	"env": {
-		"prod": {
+		"dev": {
+			"name": "stoozebot-dev",
 			"d1_databases": [
 				{
 					"binding": "DB",
-					"database_id": "prod_db_id",
-					"database_name": "prod_db",
+					"database_id": "dde31626-7ade-474b-9a58-c25f5c748b1d",
+					"database_name": "stoozebot_dev",
+					"migrations_dir": "./migrations",
+					"remote": false,
+				},
+			],
+		},
+		"prod": {
+			"name": "stoozebot",
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_id": "b159e0b6-ba7e-4114-a86e-69e1d9e17b6b",
+					"database_name": "stoozebot",
 					"migrations_dir": "./migrations",
 					"remote": false,
 				},
