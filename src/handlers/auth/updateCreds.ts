@@ -1,10 +1,10 @@
 import { Bot } from "grammy";
 import { BotContext, DB } from "../../config";
-import { Err, ReplyInvalidFormat, ReplySomethingWentWrong } from "../../constants";
+import { Err } from "../../constants";
 import soaPortals from "../../services/soaPortals";
 import { aesEnc } from "../../utils";
+import { handleErrors } from "../errorHandler";
 import { Platform, updateUserCreds } from "./user";
-
 
 export function updateCreds(bot: Bot<BotContext>, db: DB) {
 	bot.hears(/#updatecreds\s+([A-Z0-9]+)_([^\s]+)/, async (ctx: BotContext) => {
@@ -71,19 +71,7 @@ export function updateCreds(bot: Bot<BotContext>, db: DB) {
 
 				await updateUserCreds(db, user.id, passToken, regdata.token);
 			} catch (error: unknown) {
-				if (error instanceof Error) {
-					if (error.message === Err.ErrFormat) {
-						await ctx.reply(ReplyInvalidFormat);
-						return;
-					}
-
-					if (error.message === Err.ErrInvalidCred) {
-						await ctx.reply("❌ Invalid credentials. Please try again.");
-						return;
-					}
-				}
-				console.log(error);
-				await ctx.reply(ReplySomethingWentWrong);
+				await handleErrors(ctx, error as Error);
 				return;
 			}
 
