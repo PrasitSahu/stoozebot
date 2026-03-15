@@ -13,6 +13,8 @@ export function login(bot: Bot<BotContext>, db: DB) {
 		const message = ctx.message?.text;
 		if (!message) return;
 
+		await ctx.deleteMessage();
+
 		if (ctx.chat?.type === "private") {
 			if (!!ctx.auth?.user) {
 				await ctx.reply("✅ Already logged in");
