@@ -57,7 +57,7 @@ jobs:
           INSTITUTE_ID: ${{ secrets.INSTITUTE_ID }}
           LIMIT_PER_DAY: ${{ secrets.LIMIT_PER_DAY }}
   prod:
-    environment: dev
+    environment: prod
     runs-on: ubuntu-latest
     name: prod
     needs: dev

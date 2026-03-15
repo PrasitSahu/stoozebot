@@ -25,8 +25,7 @@ Welcome! Here are the commands you can use:
 
 ⚠️ Notes
 
-• Your credentials are stored securely
-• If attendance fails to load, try /login again
+• Your credentials are hashed securely
 
     `,
 );
