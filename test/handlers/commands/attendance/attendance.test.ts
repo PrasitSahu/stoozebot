@@ -43,6 +43,8 @@ describe("attendance command (getAttendance callback)", () => {
 
 		await getAttendance(ctx, db);
 
+		expect(ctx.answerCallbackQuery).toHaveBeenCalledOnce();
+
 		expect(db.insert).toHaveBeenCalled();
 		expect(ctx.reply).toHaveBeenCalledOnce();
 
