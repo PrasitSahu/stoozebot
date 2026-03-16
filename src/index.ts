@@ -4,9 +4,10 @@ import { BotContext } from "./config";
 import * as schema from "./db/index";
 import { registerAuth, registerCommands, setCommandList } from "./handlers/register";
 import { auth } from "./middlewares/auth";
-import developer from "./middlewares/developer";
-import { limits } from "./middlewares/limits";
 import { manageToken } from "./middlewares/authToken";
+import developer from "./middlewares/developer";
+import { botApiLimit, limits } from "./middlewares/limits";
+export { BotThrottler } from "./BotThrottler";
 
 let isCold = true;
 
@@ -29,14 +30,18 @@ export default {
 			isCold = false;
 		}
 
-		const db = drizzle(env.DB, {
+		const db = drizzle(env.DB!, {
 			schema,
 		});
 
+		// middlewares
 		bot.use(developer);
 		bot.use(auth(db));
-		bot.use(limits(db));
+		bot.use(limits);
 		bot.use(manageToken(db));
+
+		// transformers
+		bot.api.config.use(botApiLimit(env));
 
 		registerAuth(bot, db);
 		registerCommands(bot, db);
