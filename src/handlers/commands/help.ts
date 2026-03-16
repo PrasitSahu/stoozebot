@@ -8,17 +8,18 @@ Welcome! Here are the commands you can use:
 📌 Available Commands
 
 /start — Start the bot
-\`#login REGNO_PASSWORD\` — Login to the portal
-/attendence — View your semester attendance
+/attendance — View your semester attendance
 /logout — Remove saved credentials
 /help — Show this help message
 
+\`#login REGNO_PASSWORD\` — Login to the portal
+\`#updatecreds REGNO_PASSWORD\` — Update your credentials
 ━━━━━━━━━━━━━━
 
 💡 How to Use
 
 1️⃣ Login using the #login format
-2️⃣ Use /attendence to check attendance
+2️⃣ Use /attendance to check attendance
 3️⃣ Select the semester from the menu
 
 ━━━━━━━━━━━━━━
