@@ -38,7 +38,7 @@ export class BotThrottler extends DurableObject {
 
 		// Check chat limit (1 per second)
 		const currentChatReqs = this.chatRequests.get(chatId) || [];
-		if (currentChatReqs.length >= 1) {
+		if (currentChatReqs.length > 1) {
 			const oldestChat = currentChatReqs[0];
 			delay = Math.max(delay, oldestChat + 1000 - now);
 		}

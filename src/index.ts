@@ -39,9 +39,7 @@ export default {
 		bot.use(auth(db));
 		bot.use(limits);
 		bot.use(manageToken(db));
-
-		// transformers
-		bot.api.config.use(botApiLimit(env));
+		bot.use(botApiLimit(env));
 
 		registerAuth(bot, db);
 		registerCommands(bot, db);

@@ -29,7 +29,13 @@
 						"class_name": "BotThrottler",
 					}
 				]
-			}
+			},
+			"migrations": [
+				{
+					"tag": "v1",
+					"new_sqlite_classes": ["BotThrottler"]
+				}
+			]
 		},
 		"prod": {
 			"name": "stoozebot",
@@ -49,7 +55,13 @@
 						"class_name": "BotThrottler"
 					}
 				]
-			}
+			},
+			"migrations": [
+				{
+					"tag": "v1",
+					"new_sqlite_classes": ["BotThrottler"]
+				}
+			]
 		},
 	},
 }

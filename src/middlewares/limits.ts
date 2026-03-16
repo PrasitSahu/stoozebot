@@ -32,18 +32,18 @@ export async function limits(ctx: BotContext, next: NextFunction) {
 }
 
 export function botApiLimit(env: Env) {
-	return async (prev: ApiCallFn<RawApi>, method: any, payload: any, signal: any) => {
+	return async (ctx: BotContext, next: NextFunction) => {
+		if(!ctx.chat?.id) return
 		if (env.BOT_THROTTLER) {
 			const throttlerId = env.BOT_THROTTLER.idFromName(GlobalThrottlerKey);
 			const throttler = env.BOT_THROTTLER.get(throttlerId);
 
-			const { delay } = await throttler.getDelay(env.BOT_DEVELOPER);
+			const { delay } = await throttler.getDelay(ctx.chat.id.toString());
 			
 			if (delay > 0) {
-				console.log("limit hit: ", delay)
 				await new Promise((resolve) => setTimeout(resolve, delay));
 			}
 		}
-		return await prev(method, payload, signal);
+		await next();
 	}
 }
