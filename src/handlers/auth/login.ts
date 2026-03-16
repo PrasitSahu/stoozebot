@@ -1,7 +1,7 @@
 import { InferInsertModel } from "drizzle-orm";
 import { Bot } from "grammy";
 import { BotContext, DB } from "../../config";
-import { Err, ReplyDone } from "../../constants";
+import { Err, ReplyDone, LoginRegex } from "../../constants";
 import { users } from "../../db";
 import soaPortals from "../../services/soaPortals";
 import { aesEnc } from "../../utils";
@@ -9,7 +9,7 @@ import { handleErrors } from "../errorHandler";
 import { Platform, createPlatformUser, createUser, updateUserCreds } from "./user";
 
 export function login(bot: Bot<BotContext>, db: DB) {
-	bot.hears(/#login\s+([0-9a-zA-Z]+)_([^\s]+)/, async (ctx: BotContext) => {
+	bot.hears(LoginRegex, async (ctx: BotContext) => {
 		const message = ctx.message?.text;
 		if (!message) return;
 
@@ -23,8 +23,7 @@ export function login(bot: Bot<BotContext>, db: DB) {
 
 			const chatId = ctx.chat.id.toString();
 
-			const pattern = /^#login\s+([A-Za-z0-9]+)_([^\s]+)$/;
-			const match = message.match(pattern);
+			const match = message.match(LoginRegex);
 
 			if (!match) {
 				await ctx.reply("❌ Invalid format. Use: #login REGNO_PASSWORD");

@@ -1,13 +1,13 @@
 import { Bot } from "grammy";
 import { BotContext, DB } from "../../config";
-import { Err } from "../../constants";
+import { Err, UpdateCredsRegex } from "../../constants";
 import soaPortals from "../../services/soaPortals";
 import { aesEnc } from "../../utils";
 import { handleErrors } from "../errorHandler";
 import { Platform, updateUserCreds } from "./user";
 
 export function updateCreds(bot: Bot<BotContext>, db: DB) {
-	bot.hears(/#updatecreds\s+([A-Z0-9]+)_([^\s]+)/, async (ctx: BotContext) => {
+	bot.hears(UpdateCredsRegex, async (ctx: BotContext) => {
 		const message = ctx.message?.text;
 		if (!message) return;
 
@@ -16,8 +16,7 @@ export function updateCreds(bot: Bot<BotContext>, db: DB) {
 		if (ctx.chat?.type === "private") {
 			const chatId = ctx.chat.id.toString();
 
-			const pattern = /^#updatecreds\s+([A-Za-z0-9]+)_([^\s]+)$/;
-			const match = message.match(pattern);
+			const match = message.match(UpdateCredsRegex);
 
 			if (!match) {
 				await ctx.reply("❌ Invalid format. Use: #updatecreds REGNO_PASSWORD");
