@@ -15,5 +15,5 @@ export const authTokens = sqliteTable("auth_tokens", {
 	updatedAt: text("updated_at")
 		.notNull()
 		.default(sql`(datetime('now'))`)
-		.$onUpdateFn(() => new Date().toISOString()),
+		.$onUpdateFn(() => sql`(datetime('now'))`),
 });

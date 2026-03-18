@@ -39,4 +39,6 @@ export const ReplySiteDown = text("⚠️ The site is Down");
 export const attendanceRegex = /#attendance\s+([A-Z0-9]+)-(.+)/;
 export const UpdateCredsRegex = /#updatecreds\s+([A-Z0-9]+)_([^\s]+)/;
 export const LoginRegex = /#login\s+([A-Z0-9]+)_([^\s]+)/;
+export const ResultRegex = /^#result\s+(\d+)$/;
+
 export const GlobalThrottlerKey = "global_bot_throttler";

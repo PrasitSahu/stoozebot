@@ -12,5 +12,5 @@ export const apiLimits = sqliteTable("api_limits", {
 	updatedAt: text("updated_at")
 		.notNull()
 		.default(sql`(datetime('now'))`)
-		.$onUpdateFn(() => new Date().toISOString()),
+		.$onUpdateFn(() => sql`(datetime('now'))`),
 });

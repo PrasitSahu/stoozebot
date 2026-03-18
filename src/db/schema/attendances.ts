@@ -23,7 +23,7 @@ export const attendances = sqliteTable(
 		updatedAt: text("updated_at")
 			.notNull()
 			.default(sql`(datetime('now'))`)
-			.$onUpdateFn(() => new Date().toISOString()),
+			.$onUpdateFn(() => sql`(datetime('now'))`),
 	},
 	(table) => [unique().on(table.userId, table.subjectCode, table.regCode, table.regId)],
 );

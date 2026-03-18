@@ -13,7 +13,7 @@ export function aesEnc(data: {}): string {
 	return encrypted.toString();
 }
 
-export function aesDec(data: string): {} {
+export function aesDec(data: string) {
 	const decrypted = CryptoJS.AES.decrypt(data, key, {
 		iv: iv,
 		mode: CryptoJS.mode.CBC,
