@@ -27,7 +27,7 @@ export function manageToken(db: DB): (ctx: BotContext, next: NextFunction) => Pr
 					payload = p;
 				}
 
-				if ((payload?.exp as number) < Date.now()) {
+				if ((payload?.exp as number) < Date.now() / 1000) {
 					ctx.auth.token = await upsertNewToken(passToken, db, userId);
 				}
 			}
