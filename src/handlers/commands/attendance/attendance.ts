@@ -7,6 +7,7 @@ import { text } from "../../../utils";
 import { handleErrors } from "../../errorHandler";
 import { attendances as attendancesTable } from "../../../db/schema/attendances";
 import { eq } from "drizzle-orm";
+import { InlineKeyboard } from "grammy";
 
 interface ReplyAttendanceParam {
 	index: number;
@@ -45,6 +46,7 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 		}
 		const regId = ctx.match[1];
 		const regCode = ctx.match[2];
+		const refresh = ctx.match[3];
 
 		if (!ctx.auth?.token) {
 			console.error("token not found in auth");
@@ -134,10 +136,31 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 			});
 		});
 
+		// refresh inline keyboard
+		const inlineKeyboard = new InlineKeyboard()
+			.text("🔄️ Refresh", `#attendance ${regId}-${regCode}-r`)
+			.row()
+			.text("Cancel", "#cancel");
+		
 		const reply = (await Promise.all(replies)).join(sep);
-		await ctx.reply(reply, {
-			parse_mode: "Markdown",
-		});
+		
+		if (refresh) {
+			if (ctx.msg?.text === reply) return;
+			try {
+				await ctx.editMessageText(reply, {
+					parse_mode: "Markdown",
+					reply_markup: inlineKeyboard,
+				});
+			} catch (error: any) {
+				if (error.description?.includes("message is not modified")) return;
+				throw error;
+			}
+		} else {
+			await ctx.reply(reply, {
+				parse_mode: "Markdown",
+				reply_markup: inlineKeyboard,
+			});
+		}
 	} catch (error) {
 		await handleErrors(ctx, error as Error);
 	}
