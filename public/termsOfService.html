@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms Of Service</title>
+    <script src="https://telegram.org/js/telegram-web-app.js?61"></script>
+    <style>
+        :root{
+            --bg-color: #ffffff;
+            --text-color: #000000;
+        }
+        body {
+            font-family: monospace;
+            padding: 20px;
+            line-height: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+    </style>
+    <script>
+        // dark theme
+        const darkTheme = {
+            bg_color: "#1e1e1e",
+            text_color: "#fff",
+        }
+
+        const tg = window.Telegram.WebApp;
+
+        function setDarkTheme(){
+            document.documentElement.style.setProperty("--bg-color", darkTheme.bg_color);
+            document.documentElement.style.setProperty("--text-color", darkTheme.text_color);
+            tg.setBackgroundColor(darkTheme.bg_color);
+        }
+
+        function setLightTheme(){
+            document.documentElement.style.setProperty("--bg-color", "#ffffff");
+            document.documentElement.style.setProperty("--text-color", "#000000");
+        }
+
+        function updateTheme(){
+            if (tg.colorScheme === "dark") {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        }
+
+        tg.ready();
+
+        updateTheme();
+        tg.onEvent("themeChanged", updateTheme);
+    </script>
+</head>
+<body>
+    <h1 id="-terms-of-service-"><strong>Terms of Service</strong></h1>
+    <p>By using Stoozebot, you agree to these Terms of Service.</p>
+    <h2 id="service-description">Service Description</h2>
+    <p>Stoozebot is a Telegram bot that allows students to access student portal information in a faster and smoother manner. The service may also temporarily or persistently store certain data to improve speed, reliability, and availability during outages of the university website.</p>
+    <h2 id="eligibility-and-authorized-use">Eligibility and Authorized Use</h2>
+    <p>You may only use Stoozebot to access your own student information or information that you are legally and properly authorized to access.</p>
+    <h2 id="acceptable-use">Acceptable Use</h2>
+    <p>You agree not to:</p>
+    <ul>
+    <li>use the bot for unauthorized access to another person’s data</li>
+    <li>misuse, disrupt, overload, or interfere with the service</li>
+    <li>attempt to extract, copy, resell, or exploit the service unlawfully</li>
+    <li>use the bot for fraud, harassment, or any illegal activity</li>
+    </ul>
+    <h2 id="data-storage-acknowledgment">Data Storage Acknowledgment</h2>
+    <p>By using Stoozebot, you understand and agree that the bot may store certain student portal data to improve access speed and maintain availability when the university website is unavailable.</p>
+    <h2 id="no-guarantee">No Guarantee</h2>
+    <p>Stoozebot is provided on an as-is and as-available basis. We do not guarantee uninterrupted access, complete accuracy, or permanent availability of any information.</p>
+    <h2 id="third-party-dependency">Third-Party Dependency</h2>
+    <p>The service depends on Telegram, the university portal, and related infrastructure. Changes, downtime, access restrictions, or failures in those systems may affect the bot’s performance.</p>
+    <h2 id="limitation-of-liability">Limitation of Liability</h2>
+    <p>To the maximum extent permitted by law, Stoozebot and its operators are not liable for any loss, damage, inaccuracy, delay, service interruption, or consequences resulting from use of the service.</p>
+    <h2 id="suspension-or-termination">Suspension or Termination</h2>
+    <p>We may restrict, suspend, or terminate access to the service at any time for misuse, security risks, legal concerns, or operational reasons.</p>
+    <h2 id="changes-to-terms">Changes to Terms</h2>
+    <p>We may update these Terms from time to time. Continued use of the bot after changes means you accept the revised Terms.</p>
+    <h2 id="contact">Contact</h2>
+    <p>For support or legal inquiries, contact:  <a href="mailto:stoozebot@gmail.com">stoozebot@gmail.com</a></p>
+</body>
+</html>

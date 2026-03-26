@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy</title>
+    <script src="https://telegram.org/js/telegram-web-app.js?61"></script>
+    <style>
+        :root{
+            --bg-color: #ffffff;
+            --text-color: #000000;
+        }
+        body {
+            font-family: monospace;
+            padding: 20px;
+            line-height: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+    </style>
+    <script>
+        // dark theme
+        const darkTheme = {
+            bg_color: "#1e1e1e",
+            text_color: "#fff",
+        }
+
+        const tg = window.Telegram.WebApp;
+
+        function setDarkTheme(){
+            document.documentElement.style.setProperty("--bg-color", darkTheme.bg_color);
+            document.documentElement.style.setProperty("--text-color", darkTheme.text_color);
+            tg.setBackgroundColor(darkTheme.bg_color);
+        }
+
+        function setLightTheme(){
+            document.documentElement.style.setProperty("--bg-color", "#ffffff");
+            document.documentElement.style.setProperty("--text-color", "#000000");
+        }
+
+        function updateTheme(){
+            if (tg.colorScheme === "dark") {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        }
+
+        tg.ready();
+
+        updateTheme();
+        tg.onEvent("themeChanged", updateTheme);
+    </script>
+</head>
+<body>
+    <h1 id="-privacy-policy-"><strong>Privacy Policy</strong></h1>
+    <p>Stoozebot is a Telegram bot that helps students access information from their university student portal in a faster and smoother way. To improve availability, especially when the university website is unavailable or down, Stoozebot may retrieve and store certain student information on behalf of the student.</p>
+    <h2 id="information-we-collect-and-store">Information We Collect and Store</h2>
+    <p>Stoozebot may collect, process, and store:</p>
+    <ul>
+    <li>Telegram account information such as user ID and chat identifiers</li>
+    <li>student portal information retrieved on behalf of the student</li>
+    <li>Data is stored securely using industry-standard technical and organizational measures. Access is restricted to authorized systems and personnel strictly for operational, maintenance, or security purposes</li>
+    <li>student-related records such as attendance, academic information, or other portal data made available through the university portal</li>
+    <li>user commands, requests, and interaction logs</li>
+    <li>technical logs for debugging, monitoring, and security</li>
+    </ul>
+    <h2 id="why-we-store-data">Why We Store Data</h2>
+    <p>Stoozebot may store student data in order to:</p>
+    <ul>
+    <li>provide faster access to student information</li>
+    <li>improve user experience</li>
+    <li>reduce repeated loading from the university portal</li>
+    <li>keep information accessible during periods when the university website is unavailable, slow, or down</li>
+    <li>maintain service continuity and reliability</li>
+    </ul>
+    <h2 id="authorization">Authorization</h2>
+    <p>By using Stoozebot, you authorize the bot to retrieve, process, and store your student portal information for the purpose of providing the service. You are responsible for ensuring that you are authorized to access the data connected to your account.</p>
+    <h2 id="how-we-use-information">How We Use Information</h2>
+    <p>We use collected information to:</p>
+    <ul>
+    <li>fetch and display student portal information</li>
+    <li>maintain stored copies for improved availability and performance</li>
+    <li>improve the bot’s functionality and reliability</li>
+    <li>detect misuse and protect system security</li>
+    <li>provide user support and troubleshoot issues</li>
+    </ul>
+    <h2 id="data-sharing">Data Sharing</h2>
+    <p>Stoozebot does not sell personal data. Information may be shared only:</p>
+    <ul>
+    <li>with infrastructure or hosting providers required to operate the bot</li>
+    <li>when required by law, regulation, or legal request</li>
+    <li>to protect the rights, security, or operation of the service</li>
+    </ul>
+    <h2 id="data-security">Data Security</h2>
+    <p>We take reasonable technical and organizational steps to protect stored information from unauthorized access, loss, misuse, or disclosure. However, no digital platform can guarantee absolute security.</p>
+    <h2 id="data-retention">Data Retention</h2>
+    <p>Student information may be stored for as long as necessary to provide the service, maintain continuity, improve performance, or comply with legal and operational obligations. Data may be deleted periodically, upon request, or when no longer needed.</p>
+    <h2 id="third-party-services">Third-Party Services</h2>
+    <p>Stoozebot relies on Telegram and the university student portal, and may also use hosting, database, analytics, or infrastructure services. These third parties may have their own terms and privacy policies.</p>
+    <h2 id="no-affiliation">No Affiliation</h2>
+    <p>Stoozebot is an independent tool and is not necessarily owned, operated, or officially affiliated with the university unless explicitly stated.</p>
+    <h2 id="user-rights">User Rights</h2>
+    <p>Users may request deletion of their stored data, subject to technical, legal, or operational limitations. Users may also stop using the bot at any time.</p>
+    <h2 id="changes-to-this-policy">Changes to This Policy</h2>
+    <p>This Privacy Policy may be updated from time to time. Continued use of Stoozebot after updates means acceptance of the revised policy.</p>
+    <h2 id="contact">Contact</h2>
+    <p>For privacy related questions, contact:  <a href="mailto:stoozebot@gmail.com">stoozebot@gmail.com</a></p>
+</body>
+</html>
