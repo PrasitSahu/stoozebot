@@ -61,7 +61,8 @@ export function updateCreds(bot: Bot<BotContext>, db: DB) {
 			try {
 				const userData = await soaPortalService.genToken();
 				if (userData?.status?.responseStatus !== "Success") {
-					throw new Error(Err.ErrInvalidCred);
+					await ctx.reply("❌ Invalid credentials.");
+					return;
 				}
 
 				const regdata = userData?.response?.regdata;
