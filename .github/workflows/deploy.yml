@@ -66,7 +66,7 @@ jobs:
     name: prod
     needs: dev
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
@@ -90,6 +90,8 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           environment: prod
           secrets: |
+            APP_URL
+            PAGES_URL
             BOT_TOKEN
             BOT_SECRET
             BOT_DEVELOPER
@@ -101,6 +103,8 @@ jobs:
             INSTITUTE_ID
             LIMIT_PER_DAY
         env:
+          APP_URL: ${{ secrets.APP_URL }}
+          PAGES_URL: ${{ secrets.PAGES_URL }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           BOT_SECRET: ${{ secrets.BOT_SECRET }}
           BOT_DEVELOPER: ${{ secrets.BOT_DEVELOPER }}
