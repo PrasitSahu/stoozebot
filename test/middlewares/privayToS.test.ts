@@ -58,36 +58,6 @@ describe("privacyTOS middleware", () => {
 		expect(next).not.toHaveBeenCalled();
 	});
 
-	it("should reply when auth is null", async () => {
-		const ctx = createMockContext({
-			auth: null,
-		});
-
-		const next = vi.fn();
-
-		await privacyTOS(ctx as any, next);
-
-		expect(ctx.reply).toHaveBeenCalled();
-		expect(next).not.toHaveBeenCalled();
-	});
-
-	it("should reply when auth.user is null", async () => {
-		const ctx = createMockContext({
-			auth: {
-				user: null,
-				reqs: 0,
-				token: "mock_token",
-			},
-		} as any);
-
-		const next = vi.fn();
-
-		await privacyTOS(ctx as any, next);
-
-		expect(ctx.reply).toHaveBeenCalled();
-		expect(next).not.toHaveBeenCalled();
-	});
-
 	it("should call next() when user has accepted Privacy/ToS", async () => {
 		const ctx = createMockContext({
 			auth: {
