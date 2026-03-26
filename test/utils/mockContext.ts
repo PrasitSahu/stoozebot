@@ -16,6 +16,7 @@ export function createMockContext(overrides: Partial<BotContext> = {}): BotConte
 		reply: vi.fn(),
 		answerCallbackQuery: vi.fn(),
 		replyWithChatAction: vi.fn(),
+		hasCallbackQuery: vi.fn(),
 		...overrides,
 	} as unknown as BotContext;
 }

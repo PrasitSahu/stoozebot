@@ -1,7 +1,7 @@
 import { Bot } from "grammy";
 import { BotCommand } from "grammy/types";
 import { BotContext, DB } from "../config";
-import { attendanceRegex } from "../constants";
+import { AcceptPrivacyToS, attendanceRegex, CancelPrivacyToS } from "../constants";
 import { filterNAuth } from "../middlewares/auth";
 import { updateCreds } from "./auth/updateCreds";
 import { login } from "./auth/login";
@@ -10,6 +10,7 @@ import { attendance } from "./commands/attendance/listSem";
 import { help } from "./commands/help";
 import { start } from "./commands/start";
 import { logout } from "./commands/logout";
+import { acceptPrivacyToS, cancelPrivacyToS } from "./PToS";
 
 export const enum Commands {
 	Start = "start",
@@ -28,8 +29,10 @@ export const CommandsDesc: Record<Commands, string> = {
 export function registerCommands(bot: Bot<BotContext>, db: DB) {
 	bot.command(Commands.Start, (ctx) => start(ctx, db));
 	bot.command(Commands.Help, (ctx) => help(ctx));
- 
+	
 	bot.use(filterNAuth);
+	bot.callbackQuery(AcceptPrivacyToS, (ctx) => acceptPrivacyToS(ctx, db));
+	bot.callbackQuery(CancelPrivacyToS, (ctx) => cancelPrivacyToS(ctx, db));
 	bot.command(Commands.Logout, (ctx) => logout(ctx, db))
 	bot.command(Commands.Attendance, (ctx) => attendance(ctx, db));
 	bot.callbackQuery(attendanceRegex, (ctx) => getAttendance(ctx, db));

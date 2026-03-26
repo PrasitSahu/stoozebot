@@ -1,3 +1,4 @@
+export { BotThrottler } from "./BotThrottler";
 import { drizzle } from "drizzle-orm/d1";
 import { Bot, webhookCallback } from "grammy";
 import { BotContext } from "./config";
@@ -7,7 +8,7 @@ import { auth } from "./middlewares/auth";
 import { manageToken } from "./middlewares/authToken";
 import developer from "./middlewares/developer";
 import { botApiLimit, limits } from "./middlewares/limits";
-export { BotThrottler } from "./BotThrottler";
+import { privacyTOS } from "./middlewares/privayToS";
 
 let isCold = true;
 
@@ -37,6 +38,7 @@ export default {
 		// middlewares
 		bot.use(developer);
 		bot.use(auth(db));
+		bot.use(privacyTOS);
 		bot.use(limits);
 		bot.use(manageToken(db));
 		bot.use(botApiLimit(env));

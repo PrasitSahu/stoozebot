@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { AnySQLiteColumn, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createId } from "./helper";
 
 export const users = sqliteTable("users", {
@@ -17,6 +17,10 @@ export const users = sqliteTable("users", {
 	category: text("category").notNull(),
 	phone: text("phone").notNull(),
 	email: text("email").notNull(),
+	referredBy: text("referred_by").references((): AnySQLiteColumn => users.id, {
+		onDelete: "set null",
+	}),
+	privacyToS: integer("privacy_tos", { mode: "boolean" }).notNull().default(false),
 	createdAt: text("created_at")
 		.notNull()
 		.default(sql`(datetime('now'))`),
