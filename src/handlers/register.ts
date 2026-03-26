@@ -29,10 +29,10 @@ export const CommandsDesc: Record<Commands, string> = {
 export function registerCommands(bot: Bot<BotContext>, db: DB) {
 	bot.command(Commands.Start, (ctx) => start(ctx, db));
 	bot.command(Commands.Help, (ctx) => help(ctx));
+	
+	bot.use(filterNAuth);
 	bot.callbackQuery(AcceptPrivacyToS, (ctx) => acceptPrivacyToS(ctx, db));
 	bot.callbackQuery(CancelPrivacyToS, (ctx) => cancelPrivacyToS(ctx, db));
- 
-	bot.use(filterNAuth);
 	bot.command(Commands.Logout, (ctx) => logout(ctx, db))
 	bot.command(Commands.Attendance, (ctx) => attendance(ctx, db));
 	bot.callbackQuery(attendanceRegex, (ctx) => getAttendance(ctx, db));

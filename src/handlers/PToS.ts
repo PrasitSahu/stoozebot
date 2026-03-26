@@ -5,13 +5,19 @@ import { DB } from "../config";
 import { GrammyError } from "grammy";
 
 export async function acceptPrivacyToS(ctx: BotContext, db: DB) {
-    if(!ctx.auth?.user?.id) {
-        await ctx.answerCallbackQuery()
-        await ctx.editMessageText("You are not logged in")
-        return
-    }
-    
     try {
+        if(!ctx.auth?.user?.id) {
+            await ctx.answerCallbackQuery()
+            await ctx.editMessageText("You are not logged in")
+            return
+        }
+
+        if(ctx.auth.user.privacyToS){
+            await ctx.answerCallbackQuery()
+            await ctx.editMessageText("You have already accepted the Privacy Policy and Terms of Service")
+            return
+        }
+        
         await ctx.answerCallbackQuery()
         await ctx.editMessageText("Thank You 🙂")
         await db.update(users).set({
@@ -33,6 +39,6 @@ export async function cancelPrivacyToS(ctx: BotContext, db: DB) {
         await ctx.answerCallbackQuery()
         await ctx.deleteMessage()
     } catch (error) {
-        console.error("Error in cancelPrivacyToS", error)
+        console.error("Error in cancelPrivacyToS: ", error)
     }
 }

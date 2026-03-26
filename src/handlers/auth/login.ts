@@ -13,7 +13,9 @@ export function login(bot: Bot<BotContext>, db: DB) {
 		const message = ctx.message?.text;
 		if (!message) return;
 
-		await ctx.deleteMessage();
+		try {
+			await ctx.deleteMessage();
+		} catch (error) { }
 
 		if (ctx.chat?.type === "private") {
 			if (!!ctx.auth?.user) {
