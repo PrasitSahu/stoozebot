@@ -6,7 +6,7 @@ import soaPService, { Attendance, AttendanceResponse, Response } from "../../../
 import { text } from "../../../utils";
 import { handleErrors } from "../../errorHandler";
 import { attendances as attendancesTable } from "../../../db/schema/attendances";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 interface ReplyAttendanceParam {
 	index: number;
@@ -71,7 +71,7 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 		} catch (error) {
 			if (error instanceof Error && error.message === Err.ErrReqFail) {
 				fromSource = false;
-				const a = await db.select().from(attendancesTable).where(eq(attendancesTable.userId, user.id));
+				const a = await db.select().from(attendancesTable).where(and(eq(attendancesTable.userId, user.id), eq(attendancesTable.regId, regId), eq(attendancesTable.regCode, regCode)));
 				attendances = a.map((a) => {
 					return {
 						slno: a.slNo,
