@@ -36,7 +36,7 @@ You have exhausted your daily request limit. No further replies will be sent unt
 export const ReplySiteDown = text("⚠️ The site is Down");
 
 // regex
-export const attendanceRegex = /#attendance\s+([A-Z0-9]+)-(.+)/;
+export const attendanceRegex = /#attendance\s+([A-Z0-9]+)-(.+?)(?:-(r))?$/;
 export const UpdateCredsRegex = /#updatecreds\s+([A-Z0-9]+)_([^\s]+)/;
 export const LoginRegex = /#login\s+([A-Z0-9]+)_([^\s]+)/;
 
