@@ -1,12 +1,12 @@
-import { InferSelectModel } from "drizzle-orm";
+import { and, eq, InferSelectModel } from "drizzle-orm";
+import { InlineKeyboard } from "grammy";
 import { BotContext, DB } from "../../../config";
 import { Err, ReplyNoAuth, ReplySiteDown } from "../../../constants";
 import { users } from "../../../db";
 import SoaPService, { Attendance, AttendanceResponse, Response } from "../../../services/soaPortals";
+import { attendances as attendancesTable } from "../../../db/schema/attendances";
 import { text } from "../../../utils";
 import { handleErrors } from "../../errorHandler";
-import { attendances as attendancesTable } from "../../../db/schema/attendances";
-import { eq, and } from "drizzle-orm";
 
 interface ReplyAttendanceParam {
 	index: number;
@@ -44,6 +44,7 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 		}
 		const regId = ctx.match[1];
 		const regCode = ctx.match[2];
+		const refresh = ctx.match[3];
 
 		if (!ctx.auth?.token) {
 			console.error("token not found in auth");
@@ -72,7 +73,10 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 		} catch (error) {
 			if (error instanceof Error && error.message === Err.ErrReqFail) {
 				fromSource = false;
-				const a = await db.select().from(attendancesTable).where(and(eq(attendancesTable.userId, user.id), eq(attendancesTable.regId, regId), eq(attendancesTable.regCode, regCode)));
+				const a = await db
+					.select()
+					.from(attendancesTable)
+					.where(and(eq(attendancesTable.userId, user.id), eq(attendancesTable.regId, regId), eq(attendancesTable.regCode, regCode)));
 				attendances = a.map((a) => {
 					return {
 						slno: a.slNo,
@@ -135,10 +139,28 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 			});
 		});
 
+		// refresh inline keyboard
+		const inlineKeyboard = new InlineKeyboard().text("🔄️ Refresh", `#attendance ${regId}-${regCode}-r`).row().text("Cancel", "#cancel");
+
 		const reply = (await Promise.all(replies)).join(sep);
-		await ctx.reply(reply, {
-			parse_mode: "Markdown",
-		});
+
+		if (refresh) {
+			if (ctx.msg?.text === reply) return;
+			try {
+				await ctx.editMessageText(reply, {
+					parse_mode: "Markdown",
+					reply_markup: inlineKeyboard,
+				});
+			} catch (error: any) {
+				if (error.description?.includes("message is not modified")) return;
+				throw error;
+			}
+		} else {
+			await ctx.reply(reply, {
+				parse_mode: "Markdown",
+				reply_markup: inlineKeyboard,
+			});
+		}
 	} catch (error) {
 		await handleErrors(ctx, error as Error);
 	}
