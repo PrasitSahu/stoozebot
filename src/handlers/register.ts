@@ -28,7 +28,8 @@ export const CommandsDesc: Record<Commands, string> = {
 
 export function registerCommands(bot: Bot<BotContext>, db: DB) {
 	bot.command(Commands.Start, (ctx) => start(ctx, db));
-	bot.command(Commands.Help, (ctx) => help(ctx));
+	bot.command(Commands.Help, help);
+	bot.callbackQuery("#cancel", cancelHandler);
 	
 	bot.use(filterNAuth);
 	bot.callbackQuery(AcceptPrivacyToS, (ctx) => acceptPrivacyToS(ctx, db));
@@ -52,4 +53,11 @@ export async function setCommandList(bot: Bot<BotContext>) {
 	try {
 		await bot.api.setMyCommands(commands);
 	} catch (error) {}
+}
+
+
+async function cancelHandler(ctx: BotContext) {
+	try {
+		await ctx.deleteMessage()
+	} catch (error) { }
 }
