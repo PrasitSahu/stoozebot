@@ -125,6 +125,7 @@ export default class SoaPService {
 		let text = await res.text();
 		text = text.trim();
 		this.handleProxyErrs(text);
+		console.log(text);
 
 		try {
 			const parsedResponse = Response(type).parse(JSON.parse(text));
@@ -132,7 +133,6 @@ export default class SoaPService {
 		} catch (error) {
 			if (error instanceof Error) {
 				if (error instanceof z.ZodError) {
-					console.error(error.issues);
 					resolveTypeIssues(error.issues);
 				}
 

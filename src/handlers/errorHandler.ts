@@ -1,5 +1,5 @@
 import { BotContext } from "../config";
-import { Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplySiteDown, ReplySomethingWentWrong } from "../constants";
+import { Err, ReplyFailRes, ReplyInvalidCreds, ReplyInvalidFormat, ReplySiteDown, ReplySomethingWentWrong } from "../constants";
 
 export async function handleErrors(ctx: BotContext, error: Error) {
 	try {
@@ -17,6 +17,9 @@ export async function handleErrors(ctx: BotContext, error: Error) {
 				case Err.ErrReqFail:
 					await ctx.reply(ReplySiteDown, { parse_mode: "Markdown" });
 					break;
+				case Err.ErrFailRes:
+					await ctx.reply(ReplyFailRes)
+					break
 				default:
 					console.error(error);
 					await ctx.reply(ReplySomethingWentWrong, { parse_mode: "Markdown" });

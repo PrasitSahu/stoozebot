@@ -42,7 +42,7 @@ export const GenTokenResponse = z.object({
 		memberid: z.string(),
 		token: z.string(), // JWT
 	}),
-	OTP: z.union([z.literal("Y"), z.literal("N")]),
+	OTP: z.union([z.literal("Y"), z.literal("N")]).optional(),
 });
 
 export const PersonalInfoResponse = z.object({
