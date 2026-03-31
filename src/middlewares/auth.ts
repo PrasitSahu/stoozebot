@@ -6,15 +6,16 @@ import { platformUsers } from "../db/schema/platformUsers";
 
 export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<void> {
 	return async (ctx: BotContext, next: NextFunction) => {
-		if(!ctx.chat){
-			return
+		if (!ctx.chat) {
+			return;
 		}
 
 		const max = Number(process.env.LIMIT_PER_DAY);
 		try {
-			const reqs = await db.update(platformUsers)
-			.set({
-				reqs: sql`
+			const reqs = await db
+				.update(platformUsers)
+				.set({
+					reqs: sql`
 					CASE
 						WHEN ${platformUsers.lastReqAt} < datetime('now', 'start of day')
 						THEN 1
@@ -23,27 +24,23 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 						ELSE ${platformUsers.reqs} + 1
 					END
 				`,
-				lastReqAt: sql`datetime('now')`,
-			})
-			.where(
-				and(
-					eq(platformUsers.platformId, ctx.chat.id.toString()),
-					eq(platformUsers.platform, Platform.Telegram)
-				),
-			)
-			.returning({reqs: platformUsers.reqs})
-	
-			if(reqs.length === 0) {
-				await db.insert(platformUsers)
-				.values({
-					platform: Platform.Telegram,
-					platformId: ctx.chat.id.toString(),
-					reqs: 1,
 					lastReqAt: sql`datetime('now')`,
 				})
-				.onConflictDoNothing();
+				.where(and(eq(platformUsers.platformId, ctx.chat.id.toString()), eq(platformUsers.platform, Platform.Telegram)))
+				.returning({ reqs: platformUsers.reqs });
+
+			if (reqs.length === 0) {
+				await db
+					.insert(platformUsers)
+					.values({
+						platform: Platform.Telegram,
+						platformId: ctx.chat.id.toString(),
+						reqs: 1,
+						lastReqAt: sql`datetime('now')`,
+					})
+					.onConflictDoNothing();
 			}
-	
+
 			const platformUserWithuser = await db.query.platformUsers.findFirst({
 				where({ platformId }, { eq }) {
 					return eq(platformId, ctx.chat?.id.toString() || "");
@@ -51,18 +48,18 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 				with: {
 					user: {
 						with: {
-							authToken: true
-						}
-					}
+							authToken: true,
+						},
+					},
 				},
 			});
-	
-			if(!platformUserWithuser) {
+
+			if (!platformUserWithuser) {
 				ctx.auth = null;
 				await next();
 				return;
 			}
-	
+
 			const auth: Auth = {
 				user: platformUserWithuser.user,
 				// Fix: if no reqs, set to max
@@ -70,15 +67,14 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 				token: platformUserWithuser.user?.authToken?.token || null,
 			};
 			ctx.auth = auth;
-	
 		} catch (error) {
-			if(error instanceof Error){
-				if(error.message === Err.ErrReqFail){
-					await next()
-					return
+			if (error instanceof Error) {
+				if (error.message === Err.ErrReqFail) {
+					await next();
+					return;
 				}
 			}
-			console.error(error)
+			console.error(error);
 		}
 		await next();
 	};

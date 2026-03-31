@@ -65,7 +65,7 @@ export function updateCreds(bot: Bot<BotContext>, db: DB) {
 					return;
 				}
 
-				const regdata = userData?.response?.regdata;
+				const regdata = userData.response.regdata;
 				if (!regdata) {
 					console.error("failed to detect data format for regdata in 'genToken' response");
 					throw new Error(Err.ErrFormat);

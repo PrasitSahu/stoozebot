@@ -2,7 +2,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { BotContext, DB } from "../../../config";
 import { Err, ReplyNoAuth, ReplySiteDown } from "../../../constants";
 import { users } from "../../../db";
-import soaPService, { Attendance, AttendanceResponse, Response } from "../../../services/soaPortals";
+import SoaPService, { Attendance, AttendanceResponse, Response } from "../../../services/soaPortals";
 import { text } from "../../../utils";
 import { handleErrors } from "../../errorHandler";
 import { attendances as attendancesTable } from "../../../db/schema/attendances";
@@ -38,7 +38,6 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 		}
 
 		user = ctx.auth.user;
-		const soaPortalService = new soaPService(user.password);
 
 		if (!ctx.match) {
 			return;
@@ -53,17 +52,19 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 
 		await ctx.replyWithChatAction("typing");
 
+		const soaPortalService = new SoaPService(user.password);
 		let attendancesRes: Response<AttendanceResponse>;
 		let attendances: Attendance[];
 		let fromSource: boolean = true;
 		try {
 			attendancesRes = await soaPortalService.getAttendance(ctx.auth.token, regId);
-			if (attendancesRes?.status?.responseStatus !== "Success") {
+
+			if (attendancesRes.status.responseStatus !== "Success") {
 				console.error("failed to fetch attendance");
 				throw new Error(Err.ErrFailRes);
 			}
 
-			attendances = attendancesRes?.response?.studentattendancelist;
+			attendances = attendancesRes.response.studentattendancelist;
 			if (!attendances) {
 				console.error("failed to detect attendance sem list type in 'attendance' command");
 				throw new Error(Err.ErrFormat);

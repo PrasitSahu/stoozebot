@@ -15,7 +15,9 @@ export function login(bot: Bot<BotContext>, db: DB) {
 
 		try {
 			await ctx.deleteMessage();
-		} catch (error) { }
+		} catch (error) {
+			// ignored
+		}
 
 		if (ctx.chat?.type === "private") {
 			if (!!ctx.auth?.user) {
@@ -59,23 +61,23 @@ export function login(bot: Bot<BotContext>, db: DB) {
 			try {
 				if (!user) {
 					const userData = await soaPortalService.genToken();
-					if (userData?.status?.responseStatus !== "Success") {
+					if (userData.status.responseStatus !== "Success") {
 						throw new Error(Err.ErrInvalidCred);
 					}
 
-					const regdata = userData?.response?.regdata;
+					const regdata = userData.response.regdata;
 					if (!regdata) {
 						console.error("failed to detect data format for regdata in 'genToken' response");
 						throw new Error(Err.ErrFormat);
 					}
 
 					const studentInfo = await soaPortalService.getPersonalInfo(regdata.token);
-					if (studentInfo?.status?.responseStatus !== "Success") {
+					if (studentInfo.status.responseStatus !== "Success") {
 						await ctx.reply("failed to fetch user data.");
 						return;
 					}
 
-					const generalInfo = studentInfo?.response?.generalinformation;
+					const generalInfo = studentInfo.response.generalinformation;
 					if (!generalInfo) {
 						console.error("failed to detect data format for generalInfo in 'getPersonalInfo' response");
 						throw new Error(Err.ErrFormat);
@@ -102,7 +104,7 @@ export function login(bot: Bot<BotContext>, db: DB) {
 						throw new Error(Err.ErrInvalidCred);
 					}
 
-					const regdata = userData?.response?.regdata;
+					const regdata = userData.response.regdata;
 					if (!regdata) {
 						console.error("failed to detect data format for regdata in 'genToken' response");
 						throw new Error(Err.ErrFormat);

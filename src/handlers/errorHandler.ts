@@ -4,21 +4,25 @@ import { Err, ReplyInvalidCreds, ReplyInvalidFormat, ReplySiteDown, ReplySomethi
 export async function handleErrors(ctx: BotContext, error: Error) {
 	try {
 		if (error instanceof Error) {
-			if (error.message === Err.ErrInvalidCred) {
-				await ctx.reply(ReplyInvalidCreds, { parse_mode: "Markdown" });
-				return;
-			}
-			if (error.message === Err.ErrFormat) {
-				await ctx.reply(ReplyInvalidFormat, { parse_mode: "Markdown" });
-				return;
-			}
-			if (error.message === Err.ErrReqFail) {
-				await ctx.reply(ReplySiteDown, { parse_mode: "Markdown" });
-				return;
+			switch (error.message) {
+				case Err.ErrAuth:
+					await ctx.reply(Err.ErrAuth, { parse_mode: "Markdown" });
+					break;
+				case Err.ErrInvalidCred:
+					await ctx.reply(ReplyInvalidCreds, { parse_mode: "Markdown" });
+					break;
+				case Err.ErrFormat:
+					await ctx.reply(ReplyInvalidFormat, { parse_mode: "Markdown" });
+					break;
+				case Err.ErrReqFail:
+					await ctx.reply(ReplySiteDown, { parse_mode: "Markdown" });
+					break;
+				default:
+					console.error(error);
+					await ctx.reply(ReplySomethingWentWrong, { parse_mode: "Markdown" });
+					break;
 			}
 		}
-		console.error(error);
-		await ctx.reply(ReplySomethingWentWrong, { parse_mode: "Markdown" });
 	} catch (error) {
 		console.error(error);
 	}
