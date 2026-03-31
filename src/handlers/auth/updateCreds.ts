@@ -1,6 +1,6 @@
 import { Bot } from "grammy";
 import { BotContext, DB } from "../../config";
-import { Err, UpdateCredsRegex } from "../../constants";
+import { Err, ReplyNoAuth, UpdateCredsRegex } from "../../constants";
 import soaPortals from "../../services/soaPortals";
 import { aesEnc } from "../../utils";
 import { handleErrors } from "../errorHandler";
@@ -11,7 +11,16 @@ export function updateCreds(bot: Bot<BotContext>, db: DB) {
 		const message = ctx.message?.text;
 		if (!message) return;
 
-		await ctx.deleteMessage();
+		try {
+			await ctx.deleteMessage();
+		} catch (error) {
+			// ignored
+		}
+
+		if (!ctx.auth?.user) {
+			await ctx.reply(ReplyNoAuth);
+			return;
+		}
 
 		if (ctx.chat?.type === "private") {
 			const chatId = ctx.chat.id.toString();
@@ -25,6 +34,11 @@ export function updateCreds(bot: Bot<BotContext>, db: DB) {
 
 			const regNoInp = match[1].toUpperCase();
 			const password = match[2];
+
+			if (ctx.auth.user.regNo !== regNoInp) {
+				await ctx.reply("❌ Unauthorized to update this account's credentials.");
+				return;
+			}
 
 			const user = await db.query.users.findFirst({
 				where({ regNo }, { eq }) {
@@ -41,12 +55,7 @@ export function updateCreds(bot: Bot<BotContext>, db: DB) {
 			});
 
 			if (!user) {
-				await ctx.reply("❌ User not found. Please log in first using #login REGNO_PASSWORD");
-				return;
-			}
-
-			if (!user.platformUsers.length) {
-				await ctx.reply("❌ Unauthorized to update this account's credentials.");
+				await ctx.reply("❌ User not found. Please log in first using \`#login REGNO_PASSWORD\`", { parse_mode: "Markdown" });
 				return;
 			}
 
@@ -65,7 +74,7 @@ export function updateCreds(bot: Bot<BotContext>, db: DB) {
 					return;
 				}
 
-				const regdata = userData?.response?.regdata;
+				const regdata = userData.response.regdata;
 				if (!regdata) {
 					console.error("failed to detect data format for regdata in 'genToken' response");
 					throw new Error(Err.ErrFormat);

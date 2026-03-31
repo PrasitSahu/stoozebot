@@ -3,7 +3,7 @@ import { InlineKeyboard } from "grammy";
 import { BotContext, DB } from "../../../config";
 import { Err, ReplyNoAuth } from "../../../constants";
 import { attendances } from "../../../db/schema/attendances";
-import soaPService, { Response, Sem, SemListResponse } from "../../../services/soaPortals";
+import SoaPService, { Response, Sem, SemListResponse } from "../../../services/soaPortals";
 import { handleErrors } from "../../errorHandler";
 
 export async function attendance(ctx: BotContext, db: DB) {
@@ -22,18 +22,18 @@ export async function attendance(ctx: BotContext, db: DB) {
 
 		await ctx.replyWithChatAction("typing");
 
-		const soaPortalService = new soaPService(ctx.auth.user.password);
+		const soaPortalService = new SoaPService(ctx.auth.user.password);
 
 		let attendanceSemList: Response<SemListResponse>;
 		let semList: Sem[] = [];
 		try {
 			attendanceSemList = await soaPortalService.getAttendanceSemList(ctx.auth.token);
-			if (attendanceSemList?.status?.responseStatus !== "Success") {
+			if (attendanceSemList.status.responseStatus !== "Success") {
 				console.error("failed to fetch attendance");
 				throw new Error(Err.ErrFailRes);
 			}
 
-			semList = attendanceSemList?.response?.semlist;
+			semList = attendanceSemList.response.semlist;
 			if (!semList) {
 				console.error("failed to detect attendance sem list type in 'attendance' command");
 				throw new Error(Err.ErrFormat);
