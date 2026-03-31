@@ -46,7 +46,7 @@ export const GenTokenResponse = z.object({
 });
 
 export const PersonalInfoResponse = z.object({
-	qualification: z.object({}),
+	qualification: z.array(z.object()),
 	"photo&signature": z.object({}),
 	generalinformation: z.object({
 		registrationno: z.string(),

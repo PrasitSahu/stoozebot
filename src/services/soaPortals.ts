@@ -127,11 +127,12 @@ export default class SoaPService {
 		this.handleProxyErrs(text);
 
 		try {
-			const parsedResponse = Response(type).parse(JSON.parse('{"status": 401}'));
+			const parsedResponse = Response(type).parse(JSON.parse(text));
 			return parsedResponse;
 		} catch (error) {
 			if (error instanceof Error) {
 				if (error instanceof z.ZodError) {
+					console.error(error.issues);
 					resolveTypeIssues(error.issues);
 				}
 
