@@ -1,35 +1,66 @@
+name: Release
+
 on:
   push:
     branches:
       - main
 
-  workflow_dispatch:
-
 jobs:
-  dev:
-    environment: dev
+  release:
     runs-on: ubuntu-latest
-    name: dev
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
     steps:
-      - uses: actions/checkout@v6
-      - uses: oven-sh/setup-bun@v2
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      - name: install dependencies
+      - name: Install dependencies
         run: bun install
 
-      - name: run tests
+      - name: Run tests
         run: bun vitest
 
-      - name: apply migration
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun semantic-release
+
+  deploy-dev:
+    needs: release
+    runs-on: ubuntu-latest
+    environment: dev
+    if: needs.release.outputs.new_release_published == 'true' || needs.release.result == 'success'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Apply migrations
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           bun wrangler d1 migrations apply DB --remote --env dev
 
-      - name: Deploy
+      - name: Deploy to dev
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -60,31 +91,32 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           INSTITUTE_ID: ${{ secrets.INSTITUTE_ID }}
           LIMIT_PER_DAY: ${{ secrets.LIMIT_PER_DAY }}
-  prod:
-    environment: prod
+
+  deploy-prod:
+    needs: [release, deploy-dev]
     runs-on: ubuntu-latest
-    name: prod
-    needs: dev
+    environment: prod
+    if: needs.release.outputs.new_release_published == 'true'
     steps:
-      - uses: actions/checkout@v6
-      - uses: oven-sh/setup-bun@v2
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      - name: install dependencies
+      - name: Install dependencies
         run: bun install
 
-      - name: run tests
-        run: bun vitest
-
-      - name: apply migration
+      - name: Apply migrations
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           bun wrangler d1 migrations apply DB --remote --env prod
 
-      - name: Deploy
+      - name: Deploy to prod
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
