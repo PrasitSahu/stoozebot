@@ -8,14 +8,26 @@
 		"start": "wrangler dev --env dev",
 		"test": "vitest",
 		"cf-typegen": "wrangler types",
-		"generate:migrations": "drizzle-kit generate"
+		"generate:migrations": "drizzle-kit generate",
+		"prepare": "husky",
+		"semantic-release": "semantic-release",
+		"semantic-release:dry": "semantic-release --dry-run"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.12.4",
 		"@cloudflare/workers-types": "^4.20260301.1",
+		"@commitlint/cli": "^20.5.0",
+		"@commitlint/config-conventional": "^20.5.0",
+		"@semantic-release/changelog": "^6.0.3",
+		"@semantic-release/git": "^10.0.1",
+		"@semantic-release/github": "^12.0.6",
 		"@types/crypto-js": "^4.2.2",
 		"@types/node": "^25.3.2",
 		"drizzle-kit": "^0.31.9",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.4.0",
+		"prettier": "^3.8.1",
+		"semantic-release": "^25.0.3",
 		"typescript": "^5.5.2",
 		"vitest": "~3.2.0",
 		"wrangler": "^4.69.0"
@@ -27,6 +39,13 @@
 		"grammy": "^1.40.1",
 		"jsonwebtoken": "^9.0.3",
 		"ksuid": "^3.0.0",
+		"lodash-es": "4.17.21",
 		"zod": "^4.3.6"
+	},
+	"lint-staged": {
+		"*.{ts,js}": "prettier --write"
+	},
+	"overrides": {
+		"lodash-es": "4.17.21"
 	}
 }
