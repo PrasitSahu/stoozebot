@@ -125,7 +125,6 @@ export default class SoaPService {
 		let text = await res.text();
 		text = text.trim();
 		this.handleProxyErrs(text);
-		console.log(text);
 
 		try {
 			const parsedResponse = Response(type).parse(JSON.parse(text));
