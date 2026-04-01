@@ -7,6 +7,8 @@ on:
 
 jobs:
   release:
+    outputs:
+      released: ${{ steps.release.outputs.released }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -29,18 +31,19 @@ jobs:
         run: bun install
 
       - name: Run tests
-        run: bun vitest
+        run: bun run test
 
       - name: Release
+        id: release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun semantic-release
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: bunx semantic-release && echo "released=true" >> $GITHUB_OUTPUT || echo "released=false" >> $GITHUB_OUTPUT
 
   deploy-dev:
     needs: release
     runs-on: ubuntu-latest
     environment: dev
-    if: needs.release.outputs.new_release_published == 'true' || needs.release.result == 'success'
+    if: needs.release.outputs.released == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -96,7 +99,7 @@ jobs:
     needs: [release, deploy-dev]
     runs-on: ubuntu-latest
     environment: prod
-    if: needs.release.outputs.new_release_published == 'true'
+    if: needs.release.outputs.released == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v6

@@ -23,7 +23,7 @@ jobs:
               run: bun install
 
             - name: run tests
-              run: bun vitest
+              run: bun run test
 
             - name: apply migration
               env:
