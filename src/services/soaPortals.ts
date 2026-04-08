@@ -1,180 +1,58 @@
+import z from "zod";
 import { Err } from "../constants";
 import { aesDec, aesEnc } from "../utils";
 import { Method } from "./service";
+import { resolveTypeIssues } from "./types";
+import {
+	Attendance,
+	AttendanceResponse,
+	Creds,
+	DetailedSemesterDataResponse,
+	GenTokenResponse,
+	Institute,
+	PersonalInfoResponse,
+	Response,
+	Sem,
+	SemesterData,
+	SemesterDataResponse,
+	SemesterReportBody,
+	SemListResponse,
+	StudentInfoResponse,
+	SubjectResult,
+} from "./types";
 
-interface Status {
-	responseStatus: "Success" | "Failure";
-	errors: string[] | null;
-	identifier: string | null;
-}
-
-export interface Response<T> {
-	status: Status;
-	response: T;
-}
-
-export interface GenTokenResponse {
-	regdata: {
-		clientid: string;
-		userDOB: string; // yyyy-mm-dd
-		name: string;
-		lastvisitdate: string | null;
-		marqueeList: string;
-		membertype: string;
-		enrollmentno: string;
-		userid: string;
-		expiredpassword: "Y" | "N";
-		institutelist: Institute[];
-		memberid: string;
-		token: string; // JWT
-	};
-	OTP: "Y" | "N";
-}
-
-export interface PersonalInfoResponse {
-	qualification: {};
-	"photo&signature": {};
-	generalinformation: {
-		registrationno: string;
-		gender: string;
-		programcode: string;
-		branch: string;
-		admissionyear: string;
-		category: string;
-		studentcellno: string;
-		studentpersonalemailid: string;
-	};
-}
-
-export interface Sem {
-	registrationcode: string;
-	registrationid: string;
-}
-
-export interface SemListResponse {
-	semlist: Sem[];
-}
-
-export interface Attendance {
-	Attendanceperc: string;
-	TotalClass: string;
-	slno: number;
-	sty_no: string;
-	subject: string;
-	subjectcode: string;
-}
-
-export interface AttendanceResponse {
-	studentattendancelist: Attendance[];
-}
-
-export interface Institute {
-	label: string;
-	value: string;
-}
-
-interface StudentInfoResponse {
-	studentInfo: {
-		branchid: string;
-		branchcode: string;
-		academicyear: string;
-		quotaid: string;
-		lateralentry: "Y" | "N";
-		quotacode: string;
-		stynumber: number;
-		programcode: string;
-		programdesc: string;
-		name: string;
-		instituteid: string;
-		enrollmentno: string;
-		branchdesc: string;
-		programid: string;
-	}[];
-}
-
-export interface SemesterData {
-	totalpointsecuredsgpa: number;
-	totalcoursecredit: number;
-	totalearnedcredits: number;
-	totalpointsecuredcgpa: number;
-	totalearnedcredit: number;
-	semesterDesc: string;
-	sgpa: number;
-	stynumber: number;
-	totalregisteredcredit: number;
-	prograsivegradepoints: number;
-	registeredcredit: number;
-	totalgradepoints: number;
-	cgpa: number;
-	prograsivetotalearnedcredit: number;
-	earnedgradepoints: number;
-	prograde: number;
-}
-
-export interface SemesterDataResponse {
-	semesterList: SemesterData[];
-}
-
-export interface SubjectResult {
-	gradepoint: string;
-	equivalent_grade_point: number;
-	subjectcode: string;
-	"Progressive Grade Points Earned (Upto the current semester) ": string;
-	minorsubject: string;
-	passfail: string;
-	creditEarnedInSemeseter: number;
-	subjectdesc: string;
-	course_credits: number;
-	earned_credit: number;
-	gradePointEarnedInSemeseter: string;
-	cgpapoint: number;
-	grade: string;
-	sgpapoint: number;
-	status: string;
-}
-
-export interface DetailedSemesterDataResponse {
-	semesterList: SubjectResult[];
-}
-
-export interface SemesterReportBody {
-	studentname: string;
-	instituteid: string;
-	studentinfolist: SubjectResult[];
-	cgpa: number;
-	sgpa: number;
-	enrollmentno: string;
-	programmcode: string;
-	branchcode: string;
-	stynumber: number;
-	branchdesc: string;
-	totalsgpa: number;
-	totalearnedcredit: number;
-	totalcoursecredit: number;
-}
-
-export interface Creds {
-	otppwd: string;
-	username: string;
-	passwordotpvalue: string;
-	Modulename: string;
-}
+export type Response<T> = z.infer<ReturnType<typeof Response<z.ZodType<T>>>>;
+export type GenTokenResponse = z.infer<typeof GenTokenResponse>;
+export type PersonalInfoResponse = z.infer<typeof PersonalInfoResponse>;
+export type Sem = z.infer<typeof Sem>;
+export type SemListResponse = z.infer<typeof SemListResponse>;
+export type Attendance = z.infer<typeof Attendance>;
+export type AttendanceResponse = z.infer<typeof AttendanceResponse>;
+export type Institute = z.infer<typeof Institute>;
+export type Creds = z.infer<typeof Creds>;
+export type StudentInfoResponse = z.infer<typeof StudentInfoResponse>;
+export type SemesterData = z.infer<typeof SemesterData>;
+export type SemesterDataResponse = z.infer<typeof SemesterDataResponse>;
+export type SubjectResult = z.infer<typeof SubjectResult>;
+export type DetailedSemesterDataResponse = z.infer<typeof DetailedSemesterDataResponse>;
+export type SemesterReportBody = z.infer<typeof SemesterReportBody>;
 
 export default class SoaPService {
 	proxyOrigin = new URL(process.env.PROXY);
 	rootUrl = new URL("https://soaportals.com/StudentPortalSOAAPI");
 	passToken: string = "";
 
-	public constructor(creds: Creds | string) {
+	public constructor(creds: Creds | string, others: { proxyUrl: string } = { proxyUrl: process.env.PROXY }) {
 		if (typeof creds === "string") {
 			this.passToken = creds;
 			return;
 		}
 		this.passToken = aesEnc(creds);
+		this.proxyOrigin = new URL(others.proxyUrl);
 	}
 
 	private getProxyUrl(url: URL): string {
-		const proxyUrl = new URL(this.proxyOrigin);
+		const proxyUrl = new URL(process.env.PROXY);
 		proxyUrl.searchParams.set("url", url.href);
 
 		return proxyUrl.href;
@@ -193,7 +71,7 @@ export default class SoaPService {
 		});
 
 		const res = await fetch(req);
-		return await this.setReturn<Response<GenTokenResponse>>(res);
+		return await this.setReturn<GenTokenResponse>(res, GenTokenResponse);
 	}
 
 	async getPersonalInfo(token: string): Promise<Response<PersonalInfoResponse>> {
@@ -213,7 +91,7 @@ export default class SoaPService {
 		});
 
 		const res = await fetch(req);
-		return await this.setReturn<Response<PersonalInfoResponse>>(res);
+		return await this.setReturn<PersonalInfoResponse>(res, PersonalInfoResponse);
 	}
 
 	async getAttendanceSemList(token: string): Promise<Response<SemListResponse>> {
@@ -232,7 +110,7 @@ export default class SoaPService {
 		});
 
 		const res = await fetch(req);
-		return await this.setReturn<Response<SemListResponse>>(res);
+		return await this.setReturn<SemListResponse>(res, SemListResponse);
 	}
 
 	async getAttendance(token: string, regId: string): Promise<Response<AttendanceResponse>> {
@@ -252,7 +130,7 @@ export default class SoaPService {
 		});
 
 		const res = await fetch(req);
-		return await this.setReturn<Response<AttendanceResponse>>(res);
+		return await this.setReturn<AttendanceResponse>(res, AttendanceResponse);
 	}
 
 	async getAllSemesterData(token: string): Promise<Response<SemesterDataResponse>> {
@@ -271,7 +149,7 @@ export default class SoaPService {
 		});
 
 		const res = await fetch(req);
-		return await this.setReturn<Response<SemesterDataResponse>>(res, true);
+		return await this.setReturn(res, SemesterDataResponse, true);
 	}
 
 	private async getDetailedSemesterData(token: string, stynumber: number): Promise<Response<DetailedSemesterDataResponse>> {
@@ -290,7 +168,7 @@ export default class SoaPService {
 		});
 
 		const res = await fetch(req);
-		return await this.setReturn<Response<DetailedSemesterDataResponse>>(res, true);
+		return await this.setReturn(res, DetailedSemesterDataResponse, true);
 	}
 
 	private async loadData(token: string): Promise<Response<StudentInfoResponse>> {
@@ -309,7 +187,7 @@ export default class SoaPService {
 		});
 
 		const res = await fetch(req);
-		return await this.setReturn<Response<StudentInfoResponse>>(res);
+		return await this.setReturn(res, StudentInfoResponse);
 	}
 
 	private throwError(obj: Response<any>) {
@@ -367,23 +245,48 @@ export default class SoaPService {
 		return await res.arrayBuffer();
 	}
 
-	private async setReturn<T>(res: globalThis.Response, isEnc: boolean = false) {
+	private async setReturn<T>(res: globalThis.Response, type: z.ZodType<T>, isEnc: boolean = false) {
 		let text = await res.text();
 		text = text.trim();
-		if (text === Err.ErrReqFail) {
-			throw new Error(Err.ErrReqFail);
-		}
+		this.handleProxyErrs(text);
 
-		let data: string = text;
 		if (isEnc) {
-			const jsonData = JSON.parse(data);
-			if (jsonData.status?.responseStatus === "Success" && typeof jsonData.response === "string") {
+			const jsonData = JSON.parse(text);
+			if (jsonData?.status?.responseStatus === "Success" && typeof jsonData.response === "string") {
 				const res = aesDec(jsonData.response);
 				jsonData.response = JSON.parse(res);
 			}
 			return jsonData;
 		}
 
-		return JSON.parse(data) as T;
+		try {
+			const parsedResponse = Response(type).parse(JSON.parse(text));
+			return parsedResponse;
+		} catch (error) {
+			if (error instanceof Error) {
+				if (error instanceof z.ZodError) {
+					resolveTypeIssues(error.issues);
+				}
+
+				if (error instanceof SyntaxError) {
+					console.error("failed to parse json for request: ", type.meta());
+					console.error(error);
+				}
+			}
+			throw error;
+		}
+	}
+
+	private handleProxyErrs(text: string) {
+		switch (text) {
+			case Err.ErrReqFail:
+				throw new Error(Err.ErrReqFail);
+			case Err.ErrInvalidURL:
+				throw new Error(Err.ErrInvalidURL);
+			case Err.ErrNoURL:
+				throw new Error(Err.ErrNoURL);
+			case Err.ErrAuth:
+				throw new Error(Err.ErrAuth);
+		}
 	}
 }

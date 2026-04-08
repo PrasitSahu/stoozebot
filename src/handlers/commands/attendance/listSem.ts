@@ -28,12 +28,12 @@ export async function attendance(ctx: BotContext, db: DB) {
 		let semList: Sem[] = [];
 		try {
 			attendanceSemList = await soaPortalService.getAttendanceSemList(ctx.auth.token);
-			if (attendanceSemList?.status?.responseStatus !== "Success") {
+			if (attendanceSemList.status.responseStatus !== "Success") {
 				console.error("failed to fetch attendance");
 				throw new Error(Err.ErrFailRes);
 			}
 
-			semList = attendanceSemList?.response?.semlist;
+			semList = attendanceSemList.response.semlist;
 			if (!semList) {
 				console.error("failed to detect attendance sem list type in 'attendance' command");
 				throw new Error(Err.ErrFormat);

@@ -22,12 +22,6 @@ Welcome! Here are the commands you can use:
 2️⃣ Use /attendance to check attendance
 3️⃣ Select the semester from the menu
 
-━━━━━━━━━━━━━━
-
-⚠️ Notes
-
-• Your credentials are hashed securely
-
     `,
 );
 

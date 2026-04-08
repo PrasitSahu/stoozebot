@@ -1,7 +1,7 @@
 import { Bot } from "grammy";
 import { BotCommand } from "grammy/types";
 import { BotContext, DB } from "../config";
-import { attendanceRegex, ResultRegex } from "../constants";
+import { AcceptPrivacyToS, attendanceRegex, CancelPrivacyToS, ResultRegex } from "../constants";
 import { filterNAuth } from "../middlewares/auth";
 import { login } from "./auth/login";
 import { updateCreds } from "./auth/updateCreds";
@@ -12,6 +12,7 @@ import { logout } from "./commands/logout";
 import { downloadResult } from "./commands/result/downloadResult";
 import { result } from "./commands/result/result";
 import { start } from "./commands/start";
+import { acceptPrivacyToS, cancelPrivacyToS } from "./PToS";
 
 export const enum Commands {
 	Start = "start",
@@ -49,6 +50,10 @@ export function registerCommands(bot: Bot<BotContext>, db: DB) {
 		bot.command(Commands.Result, (ctx) => result(ctx, db));
 		bot.callbackQuery(ResultRegex, (ctx) => downloadResult(ctx, db));
 	});
+	bot.callbackQuery("#cancel", cancelHandler);
+
+	bot.callbackQuery(AcceptPrivacyToS, (ctx) => acceptPrivacyToS(ctx, db));
+	bot.callbackQuery(CancelPrivacyToS, (ctx) => cancelPrivacyToS(ctx, db));
 }
 
 export function registerAuth(bot: Bot<BotContext>, db: DB) {
@@ -64,5 +69,11 @@ export async function setCommandList(bot: Bot<BotContext>) {
 
 	try {
 		await bot.api.setMyCommands(commands);
+	} catch (error) {}
+}
+
+async function cancelHandler(ctx: BotContext) {
+	try {
+		await ctx.deleteMessage();
 	} catch (error) {}
 }
