@@ -4,7 +4,7 @@ import { text } from "../../utils";
 export async function start(ctx: BotContext, db: DB) {
 	if (ctx.chat?.type === "private") {
 		try {
-		await ctx.reply(greet(ctx.chat.first_name), { parse_mode: "Markdown" });
+			await ctx.reply(greet(ctx.chat.first_name), { parse_mode: "Markdown" });
 		} catch (error) {
 			console.log(error);
 		}
@@ -20,6 +20,7 @@ Hello ${name} 👋,
 *Here's what I can help you with:*
 
 📅 Track attendance - /attendance
+🎓 Check results - /result
 
 For help - /help
 		`,

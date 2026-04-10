@@ -26,6 +26,7 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 	let loadingMsg: Message.TextMessage | null = null;
 	let errMsg = "";
 	try {
+		await ctx.answerCallbackQuery();
 		loadingMsg = await ctx.reply("Downloading result PDF...");
 		pdfBuffer = await fetchAndCache(ctx, db, stynumber, r2Key);
 	} catch (error) {
