@@ -22,6 +22,12 @@
 					"remote": false,
 				},
 			],
+			// "r2_buckets": [
+			// 	{
+			// 		"binding": "BUCKET",
+			// 		"bucket_name": "stoozebot-dev",
+			// 	},
+			// ],
 			"durable_objects": {
 				"bindings": [
 					{
@@ -48,6 +54,12 @@
 					"remote": false,
 				},
 			],
+			// "r2_buckets": [
+			// 	{
+			// 		"binding": "BUCKET",
+			// 		"bucket_name": "stoozebot",
+			// 	},
+			// ],
 			"durable_objects": {
 				"bindings": [
 					{
