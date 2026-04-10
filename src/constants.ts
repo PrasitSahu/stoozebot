@@ -14,13 +14,10 @@ export const enum Err {
 	ErrAuth = "UNAUTHORIZED",
 }
 
-
 // replies
 export const ReplyDone = text("✅ Done");
 export const ReplyInvalidFormat = text("portal provided unexpected data. Please have patience fix is on the way 🙂");
-export const ReplyInvalidCreds = text(
-	"🙃 Looks like youv'e entered a wrong password",
-);
+export const ReplyInvalidCreds = text("🙃 Looks like youv'e entered a wrong password");
 export const ReplySomethingWentWrong = text("something went wrong! Fix is on the way 🙂");
 export const ReplyLimitReached = text(
 	`
@@ -34,12 +31,13 @@ export const ReplyNoAuth = text(
 `,
 );
 export const ReplySiteDown = text("⚠️ The site is Down");
-export const ReplyFailRes = text(`⚠️ Received a failed response from the site`)
+export const ReplyFailRes = text(`⚠️ Received a failed response from the site`);
 
 // regex
 export const attendanceRegex = /#attendance\s+([A-Z0-9]+)-(.+?)(?:-(r))?$/;
 export const UpdateCredsRegex = /#updatecreds\s+([A-Z0-9]+)_([^\s]+)/;
 export const LoginRegex = /#login\s+([A-Z0-9]+)_([^\s]+)/;
+export const ResultRegex = /^#result\s+(\d+)$/;
 
 export const AcceptPrivacyToS = "#accept privacy_tos";
 export const CancelPrivacyToS = "#cancel privacy_tos";

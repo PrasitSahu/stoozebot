@@ -82,6 +82,88 @@ export const AttendanceResponse = z.object({
 	studentattendancelist: z.array(Attendance),
 });
 
+export const StudentInfo = z.object({
+	branchid: z.string(),
+	branchcode: z.string(),
+	academicyear: z.string(),
+	quotaid: z.string(),
+	lateralentry: z.union([z.literal("Y"), z.literal("N")]),
+	quotacode: z.string(),
+	stynumber: z.number(),
+	programcode: z.string(),
+	programdesc: z.string(),
+	name: z.string(),
+	instituteid: z.string(),
+	enrollmentno: z.string(),
+	branchdesc: z.string(),
+	programid: z.string(),
+});
+
+export const StudentInfoResponse = z.object({
+	studentInfo: z.array(StudentInfo),
+});
+
+export const SemesterData = z.object({
+	totalpointsecuredsgpa: z.number(),
+	totalcoursecredit: z.number(),
+	totalearnedcredits: z.number(),
+	totalpointsecuredcgpa: z.number(),
+	totalearnedcredit: z.number(),
+	semesterDesc: z.string(),
+	sgpa: z.number(),
+	stynumber: z.number(),
+	totalregisteredcredit: z.number(),
+	prograsivegradepoints: z.number(),
+	registeredcredit: z.number(),
+	totalgradepoints: z.number(),
+	cgpa: z.number(),
+	prograsivetotalearnedcredit: z.number(),
+	earnedgradepoints: z.number(),
+	prograde: z.number(),
+});
+
+export const SemesterDataResponse = z.object({
+	semesterList: z.array(SemesterData),
+});
+
+export const SubjectResult = z.object({
+	gradepoint: z.string(),
+	equivalent_grade_point: z.number(),
+	subjectcode: z.string(),
+	"Progressive Grade Points Earned (Upto the current semester) ": z.string(),
+	minorsubject: z.string(),
+	passfail: z.string(),
+	creditEarnedInSemeseter: z.number(),
+	subjectdesc: z.string(),
+	course_credits: z.number(),
+	earned_credit: z.number(),
+	gradePointEarnedInSemeseter: z.string(),
+	cgpapoint: z.number(),
+	grade: z.string(),
+	sgpapoint: z.number(),
+	status: z.string(),
+});
+
+export const DetailedSemesterDataResponse = z.object({
+	semesterList: z.array(SubjectResult),
+});
+
+export const SemesterReportBody = z.object({
+	studentname: z.string(),
+	instituteid: z.string(),
+	studentinfolist: z.array(SubjectResult),
+	cgpa: z.number(),
+	sgpa: z.number(),
+	enrollmentno: z.string(),
+	programmcode: z.string(),
+	branchcode: z.string(),
+	stynumber: z.number(),
+	branchdesc: z.string(),
+	totalsgpa: z.number(),
+	totalearnedcredit: z.number(),
+	totalcoursecredit: z.number(),
+});
+
 export const Creds = z.object({
 	otppwd: z.string(),
 	username: z.string(),

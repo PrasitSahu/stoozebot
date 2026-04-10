@@ -18,8 +18,8 @@ export async function handleErrors(ctx: BotContext, error: Error) {
 					await ctx.reply(ReplySiteDown, { parse_mode: "Markdown" });
 					break;
 				case Err.ErrFailRes:
-					await ctx.reply(ReplyFailRes)
-					break
+					await ctx.reply(ReplyFailRes);
+					break;
 				default:
 					console.error(error);
 					await ctx.reply(ReplySomethingWentWrong, { parse_mode: "Markdown" });

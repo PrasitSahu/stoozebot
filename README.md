@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/stoozebot.png" alt="Stoozebot" width="280" style="margin-bottom: -50px" />
+  <img src="./assets/stoozebot.png" alt="Stoozebot" width="280" style="margin-bottom: -10px" />
 
   <h1>Stoozebot</h1>
 

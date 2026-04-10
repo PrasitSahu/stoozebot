@@ -27,6 +27,6 @@ export const users = sqliteTable("users", {
 	updatedAt: text("updated_at")
 		.notNull()
 		.default(sql`(datetime('now'))`)
-		.$onUpdateFn(() => new Date().toISOString()),
+		.$onUpdateFn(() => sql`(datetime('now'))`),
 	deletedAt: text("deleted_at"),
 });

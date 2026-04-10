@@ -53,7 +53,7 @@ describe("privacyTOS middleware", () => {
 						]),
 					]),
 				}),
-			})
+			}),
 		);
 		expect(next).not.toHaveBeenCalled();
 	});
