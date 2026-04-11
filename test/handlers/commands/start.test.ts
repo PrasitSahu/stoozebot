@@ -6,10 +6,14 @@ describe("start command", () => {
 
 	beforeEach(() => {
 		sendMessageSpy.mockClear();
+		process.env.BOT_NEWS_CHANNEL = "@stoozenews";
 		bot.api.config.use(async (prev, method, payload, signal) => {
 			if (method === "sendMessage") {
 				sendMessageSpy(payload);
 				return { ok: true, result: { message_id: 1, date: 1, chat: { id: 1, type: "private" } } } as any;
+			}
+			if (method === "getChatMember") {
+				return { ok: true, result: { status: "member" } } as any;
 			}
 			return { ok: true, result: true } as any;
 		});
