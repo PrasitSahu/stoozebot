@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/PrasitSahu/stoozebot/compare/v1.0.0...v1.1.0) (2026-04-11)
+
+
+### Features
+
+* implement result PDF download command with caching and remove unused R2 bucket configurations ([1ece77b](https://github.com/PrasitSahu/stoozebot/commit/1ece77bc3b119db934809bcff0d09b1a599febba))
+
 # 1.0.0 (2026-04-10)
 
 
