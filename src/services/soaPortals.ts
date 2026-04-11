@@ -268,7 +268,7 @@ export default class SoaPService {
 		if (!obj?.response) throw new Error(Err.ErrFormat);
 	}
 
-	async getSemesterResultPdf(token: string, stynumber: number): Promise<ArrayBuffer> {
+	async downloadSemesterResultPdf(token: string, stynumber: number): Promise<ArrayBuffer> {
 		const url = new URL(this.rootUrl + "/studentsgpacgpa/semesterwisestudentresultreport");
 
 		const semDetail = await this.getDetailedSemesterData(token, stynumber);

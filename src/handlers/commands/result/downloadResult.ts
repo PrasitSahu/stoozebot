@@ -44,7 +44,7 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 
 		const loadingMsg = await ctx.reply(isRefresh ? "Refreshing result PDF..." : "Downloading result PDF...");
 		const service = new SoaPService(ctx.auth.user.password);
-		const pdfBuffer = await service.getSemesterResultPdf(ctx.auth.token, stynumber);
+		const pdfBuffer = await service.downloadSemesterResultPdf(ctx.auth.token, stynumber);
 
 		const file = new InputFile(Buffer.from(pdfBuffer), `Result_Semester_${semNumberStr}.pdf`);
 		const sentMsg = await ctx.replyWithDocument(file, {
