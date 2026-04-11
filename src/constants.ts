@@ -37,7 +37,7 @@ export const ReplyFailRes = text(`⚠️ Received a failed response from the sit
 export const attendanceRegex = /#attendance\s+([A-Z0-9]+)-(.+?)(?:-(r))?$/;
 export const UpdateCredsRegex = /#updatecreds\s+([A-Z0-9]+)_([^\s]+)/;
 export const LoginRegex = /#login\s+([A-Z0-9]+)_([^\s]+)/;
-export const ResultRegex = /^#result\s+(\d+)$/;
+export const ResultRegex = /^#result\s+(\d+)(?:\s+(r))?$/;
 
 export const AcceptPrivacyToS = "#accept privacy_tos";
 export const CancelPrivacyToS = "#cancel privacy_tos";
