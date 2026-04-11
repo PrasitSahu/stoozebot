@@ -7,21 +7,18 @@ import { handleErrors } from "../../errorHandler";
 import SoaPService, { SemesterData } from "../../../services/soaPortals";
 
 export async function result(ctx: BotContext, db: DB) {
-	if (!ctx.auth || !ctx.auth.user || !ctx.auth.token) {
-		try {
-			await ctx.reply(ReplyNoAuth, { parse_mode: "Markdown" });
-		} catch (error) {
-			console.error("Error fetching marks:", error);
-		}
-		return;
-	}
-
-	let btns: InlineKeyboard | null = null;
-
 	try {
-		const loadingMsg = await ctx.reply("Fetching your result data...", {
-			reply_parameters: { message_id: ctx.msgId! },
-		});
+		if (!ctx.auth || !ctx.auth.user || !ctx.auth.token) {
+			await ctx.reply(ReplyNoAuth, {
+				parse_mode: "Markdown",
+			});
+			return;
+		}
+
+		let btns: InlineKeyboard | null = null;
+
+		await ctx.replyWithChatAction("typing");
+
 		let semData: SemesterData[] = [];
 
 		const soaPService = new SoaPService(ctx.auth.user.password);
@@ -75,17 +72,17 @@ export async function result(ctx: BotContext, db: DB) {
 					btns = InlineKeyboard.from([...cachedMarks.map((m) => [InlineKeyboard.text(m.semDesc, `#result ${m.sem}`)])]);
 				}
 			} else {
-				console.error("Error generating pdf:", error);
+				console.error("Error generating pdf");
 				return await handleErrors(ctx, error);
 			}
 		}
 
 		if (!btns) {
-			await ctx.api.editMessageText(ctx.chat!.id, loadingMsg.message_id, ReplySiteDown);
+			await ctx.reply(ReplySiteDown);
 			return;
 		}
 
-		await ctx.api.editMessageText(ctx.chat!.id, loadingMsg.message_id, "select your semester", {
+		await ctx.reply("select your semester", {
 			reply_markup: btns,
 		});
 	} catch (error) {

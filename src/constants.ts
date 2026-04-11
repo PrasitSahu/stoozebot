@@ -38,6 +38,9 @@ export const attendanceRegex = /#attendance\s+([A-Z0-9]+)-(.+?)(?:-(r))?$/;
 export const UpdateCredsRegex = /#updatecreds\s+([A-Z0-9]+)_([^\s]+)/;
 export const LoginRegex = /#login\s+([A-Z0-9]+)_([^\s]+)/;
 export const ResultRegex = /^#result\s+(\d+)(?:\s+(r))?$/;
+export const AdmitCardRegRegex = /^#admitcard_reg\s+(.+)$/;
+export const AdmitCardExamTypeRegex = /^#admitcard_exam\s+(.+?)_(.+)$/;
+export const AdmitCardDnRegex = /^#admitcard_dn\s+(.+?)_(.+)$/;
 
 export const AcceptPrivacyToS = "#accept privacy_tos";
 export const CancelPrivacyToS = "#cancel privacy_tos";
