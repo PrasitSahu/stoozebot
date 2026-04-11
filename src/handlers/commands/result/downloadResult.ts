@@ -30,6 +30,7 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 
 		// 1. Check if we already have the file_id cached in the DB (unless refreshing)
 		if (!isRefresh) {
+			await ctx.replyWithChatAction("upload_document");
 			const cached = await db.query.results.findFirst({
 				where: and(eq(results.userId, ctx.auth.user.id), eq(results.sem, stynumber)),
 			});
