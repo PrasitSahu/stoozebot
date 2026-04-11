@@ -6,15 +6,11 @@ import { handleErrors } from "../../errorHandler";
 
 export async function admitcard(ctx: BotContext) {
 	try {
-		if (!ctx.auth?.user) {
+		if (!ctx.auth?.user || !ctx.auth.token) {
 			await ctx.reply(ReplyNoAuth, {
 				parse_mode: "Markdown",
 			});
 			return;
-		}
-
-		if (!ctx.auth.token) {
-			throw new Error(Err.ErrAuth);
 		}
 
 		await ctx.replyWithChatAction("typing");
@@ -44,7 +40,9 @@ export async function admitcard(ctx: BotContext) {
 
 export async function listExamTypes(ctx: BotContext) {
 	try {
-		if (!ctx.auth?.user || !ctx.auth.token || !ctx.match) return;
+		if (!ctx.auth?.user || !ctx.auth.token || !ctx.match) {
+			throw new Error(Err.ErrAuth);
+		}
 
 		const regId = ctx.match[1];
 		await ctx.answerCallbackQuery();
@@ -76,7 +74,9 @@ export async function listExamTypes(ctx: BotContext) {
 
 export async function listExamCodes(ctx: BotContext) {
 	try {
-		if (!ctx.auth?.user || !ctx.auth.token || !ctx.match) return;
+		if (!ctx.auth?.user || !ctx.auth.token || !ctx.match) {
+			throw new Error(Err.ErrAuth);
+		}
 
 		const regId = ctx.match[1];
 		const examTypeId = ctx.match[2];

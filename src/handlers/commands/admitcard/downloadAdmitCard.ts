@@ -1,12 +1,17 @@
 import { InputFile } from "grammy";
 import { BotContext } from "../../../config";
-import { Err } from "../../../constants";
+import { Err, ReplyNoAuth } from "../../../constants";
 import SoaPService, { AdmitCardPayload } from "../../../services/soaPortals";
 import { handleErrors } from "../../errorHandler";
 
 export async function downloadAdmitCard(ctx: BotContext) {
 	try {
-		if (!ctx.auth?.user || !ctx.auth.token || !ctx.match) return;
+		if (!ctx.auth?.user || !ctx.auth.token || !ctx.match) {
+			await ctx.reply(ReplyNoAuth, {
+				parse_mode: "Markdown",
+			});
+			return;
+		}
 
 		const regId = ctx.match[1];
 		const examId = ctx.match[2];

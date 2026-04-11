@@ -7,18 +7,15 @@ import { handleErrors } from "../../errorHandler";
 import SoaPService, { SemesterData } from "../../../services/soaPortals";
 
 export async function result(ctx: BotContext, db: DB) {
-	if (!ctx.auth || !ctx.auth.user || !ctx.auth.token) {
-		try {
-			await ctx.reply(ReplyNoAuth, { parse_mode: "Markdown" });
-		} catch (error) {
-			console.error("Error fetching marks:", error);
-		}
-		return;
-	}
-
-	let btns: InlineKeyboard | null = null;
-
 	try {
+		if (!ctx.auth || !ctx.auth.user || !ctx.auth.token) {
+			await ctx.reply(ReplyNoAuth, {
+				parse_mode: "Markdown",
+			});
+			return;
+		}
+
+		let btns: InlineKeyboard | null = null;
 		const loadingMsg = await ctx.reply("Fetching your result data...", {
 			reply_parameters: { message_id: ctx.msgId! },
 		});

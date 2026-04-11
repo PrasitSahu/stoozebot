@@ -26,11 +26,10 @@ const ReplyAttendance = (param: ReplyAttendanceParam) =>
 const sep = "\n\n➖➖➖➖➖➖➖➖\n\n";
 
 export async function getAttendance(ctx: BotContext, db: DB) {
-	await ctx.answerCallbackQuery();
-	let user: InferSelectModel<typeof users>;
-
 	try {
-		if (!ctx.auth?.user) {
+		await ctx.answerCallbackQuery();
+		let user: InferSelectModel<typeof users>;
+		if (!ctx.auth || !ctx.auth.user || !ctx.match) {
 			await ctx.reply(ReplyNoAuth, {
 				parse_mode: "Markdown",
 			});
@@ -39,9 +38,6 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 
 		user = ctx.auth.user;
 
-		if (!ctx.match) {
-			return;
-		}
 		const regId = ctx.match[1];
 		const regCode = ctx.match[2];
 		const refresh = ctx.match[3];

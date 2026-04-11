@@ -7,21 +7,20 @@ import SoaPService from "../../../services/soaPortals";
 import { handleErrors } from "../../errorHandler";
 
 export async function downloadResult(ctx: BotContext, db: DB) {
-	if (!ctx.auth || !ctx.auth.user || !ctx.auth.token || !ctx.match) {
-		try {
-			await ctx.reply(ReplyNoAuth, { parse_mode: "Markdown" });
-		} catch (error) {
-			console.error("Error generating pdf:", error);
-		}
-		return;
-	}
-
-	const semNumberStr = ctx.match[1];
-	const isRefresh = ctx.match[2] === "r";
-	if (!semNumberStr) return;
-	const stynumber = parseInt(semNumberStr);
-
 	try {
+		if (!ctx.auth || !ctx.auth.user || !ctx.auth.token || !ctx.match) {
+			await ctx.reply(ReplyNoAuth, {
+				parse_mode: "Markdown",
+			});
+			return;
+		}
+
+		const semNumberStr = ctx.match[1];
+		const isRefresh = ctx.match[2] === "r";
+		if (!semNumberStr) {
+			throw new Error(Err.ErrFormat);
+		}
+		const stynumber = parseInt(semNumberStr);
 		await ctx.answerCallbackQuery();
 
 		try {
