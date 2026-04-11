@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/PrasitSahu/stoozebot/compare/v1.2.0...v1.3.0) (2026-04-11)
+
+
+### Bug Fixes
+
+* add correct logic for channel subscription check ([31abf91](https://github.com/PrasitSahu/stoozebot/commit/31abf91b97c8310784532ec1d71b0b5e50447247))
+
+
+### Features
+
+* update start command message with channel subscription check ([ba91e95](https://github.com/PrasitSahu/stoozebot/commit/ba91e9500ef7c50487dbeeab6c5d11a8af55424c))
+
 # [1.2.0](https://github.com/PrasitSahu/stoozebot/compare/v1.1.0...v1.2.0) (2026-04-11)
 
 
