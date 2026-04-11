@@ -30,10 +30,16 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 			});
 
 			if (cached?.doc) {
-				await ctx.replyWithDocument(cached.doc, {
-					caption: resultCaption(semNumberStr, true),
-					reply_markup: new InlineKeyboard().text("Refresh", `#result ${semNumberStr} r`),
-				});
+				await ctx.editMessageMedia(
+					{
+						type: "document",
+						media: cached.doc,
+						caption: resultCaption(semNumberStr, true),
+					},
+					{
+						reply_markup: new InlineKeyboard().text("Refresh", `#result ${semNumberStr} r`),
+					},
+				);
 				return;
 			}
 		}
