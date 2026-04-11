@@ -45,7 +45,11 @@ export async function downloadAdmitCard(ctx: BotContext) {
 		const pdfBuffer = await soaPortalService.downloadAdmitCardPdf(ctx.auth.token, payload);
 		const file = new InputFile(Buffer.from(pdfBuffer), `AdmitCard_${studentInfo.enrollmentno}.pdf`);
 
-		await ctx.editMessageMedia({ type: "document", media: file, caption: `Here is your Admit Card 😊` });
+		const sentMsg = await ctx.editMessageMedia({ type: "document", media: file, caption: `Here is your Admit Card 😊` });
+
+		if (typeof sentMsg == "boolean") {
+			throw new Error("tried to edit a message with inline message");
+		}
 	} catch (error) {
 		console.error("Error downloading admit card PDF");
 		await handleErrors(ctx, error);

@@ -42,14 +42,20 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 			}
 		}
 
-		const loadingMsg = await ctx.reply(isRefresh ? "Refreshing result PDF..." : "Downloading result PDF...");
+		await ctx.editMessageText(isRefresh ? "Refreshing result PDF..." : "Downloading result PDF...");
 		const service = new SoaPService(ctx.auth.user.password);
 		const pdfBuffer = await service.downloadSemesterResultPdf(ctx.auth.token, stynumber);
 
 		const file = new InputFile(Buffer.from(pdfBuffer), `Result_Semester_${semNumberStr}.pdf`);
-		const sentMsg = await ctx.replyWithDocument(file, {
+		const sentMsg = await ctx.editMessageMedia({
+			type: "document",
+			media: file,
 			caption: resultCaption(semNumberStr, false),
 		});
+
+		if (typeof sentMsg == "boolean") {
+			throw new Error("tried to edit a message with inline message");
+		}
 
 		if (sentMsg.document?.file_id) {
 			await db
@@ -57,8 +63,6 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 				.set({ doc: sentMsg.document.file_id })
 				.where(and(eq(results.userId, ctx.auth.user.id), eq(results.sem, stynumber)));
 		}
-
-		await ctx.api.deleteMessage(ctx.chat!.id, loadingMsg.message_id);
 	} catch (error) {
 		if (error instanceof Error) {
 			if (error.message === Err.ErrReqFail || error.message === Err.ErrFormat) {
@@ -71,6 +75,6 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 	}
 
 	function resultCaption(semNumberStr: string, cached: boolean): string {
-		return `Here is your result for Semester ${semNumberStr}${cached ? " (cached)" : ""}`;
+		return `Here is your result for Semester ${semNumberStr}${cached ? " (cached)" : ""} 😊`;
 	}
 }
