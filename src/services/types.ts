@@ -164,6 +164,43 @@ export const SemesterReportBody = z.object({
 	totalcoursecredit: z.number(),
 });
 
+export const AdmitCardReg = z.object({
+	REGISTRATIONID: z.string(),
+	REGISTRATIONCODE: z.string(),
+});
+
+export const AdmitCardExamType = z.object({
+	EXAMTYPEID: z.string(),
+	EXAMTYPEDESC: z.string(),
+});
+
+export const AdmitCardMetaDataResponse = z.object({
+	studentInfo: z.array(StudentInfo),
+	regList: z.array(AdmitCardReg),
+	examTypeList: z.array(AdmitCardExamType),
+});
+
+export const AdmitCardPayload = z.object({
+	instituteid: z.string(),
+	registrationid: z.string(),
+	exameventid: z.string(),
+	enrollmentno: z.string(),
+	studentname: z.string(),
+	programmdesc: z.string(),
+	branchdesc: z.string(),
+});
+
+export const AdmitCardExamCode = z.object({
+	EXAMEVENTCODE: z.string(),
+	EXAMEVENTID: z.string(),
+});
+
+export const AdmitCardExamCodeResponse = z.object({
+	examList: z.object({
+		examCode: z.array(AdmitCardExamCode),
+	}),
+});
+
 export const Creds = z.object({
 	otppwd: z.string(),
 	username: z.string(),

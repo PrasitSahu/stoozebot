@@ -1,7 +1,15 @@
 import { Bot } from "grammy";
 import { BotCommand } from "grammy/types";
 import { BotContext, DB } from "../config";
-import { AcceptPrivacyToS, attendanceRegex, CancelPrivacyToS, ResultRegex } from "../constants";
+import {
+	AcceptPrivacyToS,
+	attendanceRegex,
+	CancelPrivacyToS,
+	ResultRegex,
+	AdmitCardRegRegex,
+	AdmitCardExamTypeRegex,
+	AdmitCardDnRegex,
+} from "../constants";
 import { filterNAuth } from "../middlewares/auth";
 import { login } from "./auth/login";
 import { updateCreds } from "./auth/updateCreds";
@@ -12,6 +20,8 @@ import { logout } from "./commands/logout";
 import { downloadResult } from "./commands/result/downloadResult";
 import { result } from "./commands/result/result";
 import { start } from "./commands/start";
+import { admitcard, listExamTypes, listExamCodes } from "./commands/admitcard/admitcard";
+import { downloadAdmitCard } from "./commands/admitcard/downloadAdmitCard";
 import { acceptPrivacyToS, cancelPrivacyToS } from "./PToS";
 
 export const enum Commands {
@@ -20,12 +30,14 @@ export const enum Commands {
 	Help = "help",
 	Logout = "logout",
 	Result = "result",
+	AdmitCard = "admitcard",
 }
 
 export const CommandsDesc: Record<Commands, string> = {
 	[Commands.Start]: "🚀 Start the bot",
 	[Commands.Attendance]: "📋 View your attendance",
 	[Commands.Result]: "📊 View your SGPA/CGPA",
+	[Commands.AdmitCard]: "🎫 Download your Admit Card",
 	[Commands.Help]: "❓ Get help and usage instructions",
 	[Commands.Logout]: "👋 Logout",
 };
@@ -49,6 +61,12 @@ export function registerCommands(bot: Bot<BotContext>, db: DB) {
 		// result commands
 		bot.command(Commands.Result, (ctx) => result(ctx, db));
 		bot.callbackQuery(ResultRegex, (ctx) => downloadResult(ctx, db));
+
+		// admitcard commands
+		bot.command(Commands.AdmitCard, (ctx) => admitcard(ctx));
+		bot.callbackQuery(AdmitCardRegRegex, (ctx) => listExamTypes(ctx));
+		bot.callbackQuery(AdmitCardExamTypeRegex, (ctx) => listExamCodes(ctx));
+		bot.callbackQuery(AdmitCardDnRegex, (ctx) => downloadAdmitCard(ctx));
 	});
 	bot.callbackQuery("#cancel", cancelHandler);
 

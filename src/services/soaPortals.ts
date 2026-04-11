@@ -19,6 +19,11 @@ import {
 	SemListResponse,
 	StudentInfoResponse,
 	SubjectResult,
+	AdmitCardReg,
+	AdmitCardExamType,
+	AdmitCardMetaDataResponse,
+	AdmitCardPayload,
+	AdmitCardExamCodeResponse,
 } from "./types";
 
 export type Response<T> = z.infer<ReturnType<typeof Response<z.ZodType<T>>>>;
@@ -36,6 +41,11 @@ export type SemesterDataResponse = z.infer<typeof SemesterDataResponse>;
 export type SubjectResult = z.infer<typeof SubjectResult>;
 export type DetailedSemesterDataResponse = z.infer<typeof DetailedSemesterDataResponse>;
 export type SemesterReportBody = z.infer<typeof SemesterReportBody>;
+export type AdmitCardReg = z.infer<typeof AdmitCardReg>;
+export type AdmitCardExamType = z.infer<typeof AdmitCardExamType>;
+export type AdmitCardMetaDataResponse = z.infer<typeof AdmitCardMetaDataResponse>;
+export type AdmitCardPayload = z.infer<typeof AdmitCardPayload>;
+export type AdmitCardExamCodeResponse = z.infer<typeof AdmitCardExamCodeResponse>;
 
 export default class SoaPService {
 	proxyOrigin = new URL(process.env.PROXY);
@@ -171,7 +181,7 @@ export default class SoaPService {
 		return await this.setReturn(res, DetailedSemesterDataResponse, true);
 	}
 
-	private async loadData(token: string): Promise<Response<StudentInfoResponse>> {
+	private async getResultMetaData(token: string): Promise<Response<StudentInfoResponse>> {
 		const url = new URL(this.rootUrl + "/studentsgpacgpa/loadData");
 
 		const req = new Request(this.getProxyUrl(url), {
@@ -190,6 +200,68 @@ export default class SoaPService {
 		return await this.setReturn(res, StudentInfoResponse);
 	}
 
+	async getAdmitCardMetaData(token: string): Promise<Response<AdmitCardMetaDataResponse>> {
+		const url = new URL(this.rootUrl + "/studentadmitcard/loadData");
+
+		const req = new Request(this.getProxyUrl(url), {
+			method: Method.Post,
+			headers: {
+				"Content-Type": "application/json",
+				Signature: process.env.PROXY_SIGNATURE,
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({
+				instituteid: process.env.INSTITUTE_ID,
+			}),
+		});
+
+		const res = await fetch(req);
+		return await this.setReturn(res, AdmitCardMetaDataResponse);
+	}
+
+	async getAdmitCardExamCodes(token: string, regId: string, examTypeId: string): Promise<Response<AdmitCardExamCodeResponse>> {
+		const url = new URL(this.rootUrl + "/studentadmitcard/getexamcode");
+
+		const req = new Request(this.getProxyUrl(url), {
+			method: Method.Post,
+			headers: {
+				"Content-Type": "application/json",
+				Signature: process.env.PROXY_SIGNATURE,
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({
+				registrationid: regId,
+				examtypeid: examTypeId,
+			}),
+		});
+
+		const res = await fetch(req);
+		return await this.setReturn(res, AdmitCardExamCodeResponse);
+	}
+
+	async downloadAdmitCardPdf(token: string, payload: AdmitCardPayload): Promise<ArrayBuffer> {
+		const url = new URL(this.rootUrl + "/studentadmitcard/downloadAdmitCardpdf");
+
+		const encryptedPayload = aesEnc(payload);
+
+		const req = new Request(this.getProxyUrl(url), {
+			method: Method.Post,
+			headers: {
+				"Content-Type": "application/json",
+				Signature: process.env.PROXY_SIGNATURE,
+				Authorization: `Bearer ${token}`,
+			},
+			body: encryptedPayload,
+		});
+
+		const res = await fetch(req);
+		if (!res.ok) {
+			throw new Error(Err.ErrReqFail);
+		}
+
+		return await res.arrayBuffer();
+	}
+
 	private throwError(obj: Response<any>) {
 		if (!obj?.status?.responseStatus) throw new Error(Err.ErrFormat);
 		if (obj.status.responseStatus !== "Success") throw new Error(Err.ErrFailRes);
@@ -202,7 +274,7 @@ export default class SoaPService {
 		const semDetail = await this.getDetailedSemesterData(token, stynumber);
 		this.throwError(semDetail);
 
-		const studentInfo = await this.loadData(token);
+		const studentInfo = await this.getResultMetaData(token);
 		this.throwError(studentInfo);
 
 		const allSemDetail = await this.getAllSemesterData(token);
