@@ -23,10 +23,6 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 		const stynumber = parseInt(semNumberStr);
 		await ctx.answerCallbackQuery();
 
-		try {
-			await ctx.deleteMessage();
-		} catch (err) {}
-
 		if (!isRefresh) {
 			await ctx.replyWithChatAction("upload_document");
 			const cached = await db.query.results.findFirst({
