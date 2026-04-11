@@ -43,6 +43,7 @@ jobs:
                       BOT_TOKEN
                       BOT_SECRET
                       BOT_DEVELOPER
+                      BOT_NEWS_CHANNEL
                       KEY
                       IV
                       PROXY
@@ -56,6 +57,7 @@ jobs:
                   BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
                   BOT_SECRET: ${{ secrets.BOT_SECRET }}
                   BOT_DEVELOPER: ${{ secrets.BOT_DEVELOPER }}
+                  BOT_NEWS_CHANNEL: ${{ secrets.BOT_NEWS_CHANNEL }}
                   KEY: ${{ secrets.KEY }}
                   IV: ${{ secrets.IV }}
                   PROXY: ${{ secrets.PROXY }}

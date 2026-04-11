@@ -46,3 +46,4 @@ export const AcceptPrivacyToS = "#accept privacy_tos";
 export const CancelPrivacyToS = "#cancel privacy_tos";
 
 export const GlobalThrottlerKey = "global_bot_throttler";
+export const NewsChannel = process.env.BOT_NEWS_CHANNEL;
