@@ -24,6 +24,10 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 	try {
 		await ctx.answerCallbackQuery();
 
+		try {
+			await ctx.deleteMessage();
+		} catch (err) {}
+
 		// 1. Check if we already have the file_id cached in the DB (unless refreshing)
 		if (!isRefresh) {
 			const cached = await db.query.results.findFirst({
@@ -40,9 +44,6 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 		}
 
 		// 2. If not cached or refreshing, download and send
-		try {
-			await ctx.deleteMessage();
-		} catch (err) {}
 		const loadingMsg = await ctx.reply(isRefresh ? "Refreshing result PDF..." : "Downloading result PDF...");
 		const service = new SoaPService(ctx.auth.user.password);
 		const pdfBuffer = await service.getSemesterResultPdf(ctx.auth.token, stynumber);
