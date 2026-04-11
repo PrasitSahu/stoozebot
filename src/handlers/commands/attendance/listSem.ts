@@ -51,7 +51,6 @@ export async function attendance(ctx: BotContext, db: DB) {
 					semList = removeDup(semList);
 				}
 			} else {
-				console.log(error);
 				throw error;
 			}
 		}
@@ -68,7 +67,8 @@ export async function attendance(ctx: BotContext, db: DB) {
 			reply_markup: semInlineKeyboard,
 		});
 	} catch (error) {
-		await handleErrors(ctx, error as Error);
+		console.error("Error fetching attendance sem list");
+		await handleErrors(ctx, error);
 	}
 }
 

@@ -73,13 +73,10 @@ export async function result(ctx: BotContext, db: DB) {
 					});
 					console.log(cachedMarks);
 					btns = InlineKeyboard.from([...cachedMarks.map((m) => [InlineKeyboard.text(m.semDesc, `#result ${m.sem}`)])]);
-				} else {
-					await handleErrors(ctx, error as Error);
-					return;
 				}
 			} else {
 				console.error("Error generating pdf:", error);
-				return;
+				return await handleErrors(ctx, error);
 			}
 		}
 

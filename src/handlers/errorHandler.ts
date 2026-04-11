@@ -1,7 +1,7 @@
 import { BotContext } from "../config";
 import { Err, ReplyFailRes, ReplyInvalidCreds, ReplyInvalidFormat, ReplySiteDown, ReplySomethingWentWrong } from "../constants";
 
-export async function handleErrors(ctx: BotContext, error: Error) {
+export async function handleErrors(ctx: BotContext, error: any) {
 	try {
 		if (error instanceof Error) {
 			switch (error.message) {

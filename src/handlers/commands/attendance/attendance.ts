@@ -52,10 +52,13 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 		}
 
 		await ctx.replyWithChatAction("typing");
+		try {
+			await ctx.deleteMessage();
+		} catch (err) {}
 
 		const soaPortalService = new SoaPService(user.password);
 		let attendancesRes: Response<AttendanceResponse>;
-		let attendances: Attendance[];
+		let attendances: Attendance[] = [];
 		let fromSource: boolean = true;
 		try {
 			attendancesRes = await soaPortalService.getAttendance(ctx.auth.token, regId);
