@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/PrasitSahu/stoozebot/compare/v1.1.0...v1.2.0) (2026-04-11)
+
+
+### Bug Fixes
+
+* remove delete message ([634ee26](https://github.com/PrasitSahu/stoozebot/commit/634ee26b768da21a538f411b6e5ba76bd5a8a530))
+
+
+### Features
+
+* add admit card download functionality and integrate SOA portals API services ([3a3ed99](https://github.com/PrasitSahu/stoozebot/commit/3a3ed9954ca5a8e13196dcfe6bc01c3c70d56062))
+
 # [1.1.0](https://github.com/PrasitSahu/stoozebot/compare/v1.0.0...v1.1.0) (2026-04-11)
 
 
