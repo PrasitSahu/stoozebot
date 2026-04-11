@@ -57,7 +57,7 @@ export async function listExamTypes(ctx: BotContext) {
 
 		const examTypes = metaDataRes.response.examTypeList;
 		if (!examTypes || examTypes.length === 0) {
-			await ctx.reply("No exam types found for this registration.");
+			await ctx.editMessageText("No exam types found for this registration.");
 			return;
 		}
 
