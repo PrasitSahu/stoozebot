@@ -65,11 +65,10 @@ export async function downloadResult(ctx: BotContext, db: DB) {
 		if (error instanceof Error) {
 			if (error.message === Err.ErrReqFail || error.message === Err.ErrFormat) {
 				await ctx.reply(ReplySiteDown);
-			} else {
-				return await handleErrors(ctx, error as Error);
 			}
 		} else {
-			console.error("Error generating pdf:", error);
+			console.error("Error generating pdf");
+			return await handleErrors(ctx, error);
 		}
 	}
 
