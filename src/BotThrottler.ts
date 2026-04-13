@@ -1,5 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
-
+import { checkEnv } from "./index";
 
 export class BotThrottler extends DurableObject {
 	private globalRequests: number[] = [];
@@ -7,13 +7,14 @@ export class BotThrottler extends DurableObject {
 
 	constructor(ctx: DurableObjectState, env: Env) {
 		super(ctx, env);
+		checkEnv();
 		this.ctx.blockConcurrencyWhile(async () => {
-			this.globalRequests = await ctx.storage.get<number[]>("globalRequests") || [];
-			this.chatRequests = await ctx.storage.get<Map<string, number[]>>("chatRequests") || new Map();
+			this.globalRequests = (await ctx.storage.get<number[]>("globalRequests")) || [];
+			this.chatRequests = (await ctx.storage.get<Map<string, number[]>>("chatRequests")) || new Map();
 		});
 	}
 
-	async getDelay(chatId: string): Promise<{ delay: number; }> {
+	async getDelay(chatId: string): Promise<{ delay: number }> {
 		const now = Date.now();
 		const oneSecondAgo = now - 1000;
 
