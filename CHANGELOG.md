@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/PrasitSahu/stoozebot/compare/v1.2.1...v1.2.2) (2026-04-14)
+
+
+### Bug Fixes
+
+* add BOT_LIMIT to CI workflow ([f8e3626](https://github.com/PrasitSahu/stoozebot/commit/f8e3626be918079b26099d7ca78890caa4d9438d))
+
 # [1.2.1](https://github.com/PrasitSahu/stoozebot/compare/v1.2.0...v1.2.1) (2026-04-11)
 
 ### Bug Fixes
