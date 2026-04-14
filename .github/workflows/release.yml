@@ -87,6 +87,7 @@ jobs:
             APP_URL
             PAGES_URL
             BOT_TOKEN
+            BOT_LIMIT
             BOT_SECRET
             BOT_DEVELOPER
             BOT_NEWS_CHANNEL
@@ -101,6 +102,7 @@ jobs:
           APP_URL: ${{ secrets.APP_URL }}
           PAGES_URL: ${{ secrets.PAGES_URL }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          BOT_LIMIT: ${{ secrets.BOT_LIMIT }}
           BOT_SECRET: ${{ secrets.BOT_SECRET }}
           BOT_DEVELOPER: ${{ secrets.BOT_DEVELOPER }}
           BOT_NEWS_CHANNEL: ${{ secrets.BOT_NEWS_CHANNEL }}
@@ -145,6 +147,7 @@ jobs:
             APP_URL
             PAGES_URL
             BOT_TOKEN
+            BOT_LIMIT
             BOT_SECRET
             BOT_DEVELOPER
             BOT_NEWS_CHANNEL
@@ -159,6 +162,7 @@ jobs:
           APP_URL: ${{ secrets.APP_URL }}
           PAGES_URL: ${{ secrets.PAGES_URL }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          BOT_LIMIT: ${{ secrets.BOT_LIMIT }}
           BOT_SECRET: ${{ secrets.BOT_SECRET }}
           BOT_DEVELOPER: ${{ secrets.BOT_DEVELOPER }}
           BOT_NEWS_CHANNEL: ${{ secrets.BOT_NEWS_CHANNEL }}

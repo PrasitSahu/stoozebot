@@ -1,67 +1,69 @@
 on:
-    push:
-        branches:
-            - feat/*
-            - fix/*
-            - chore/*
-            - refactor/*
-            - ci/*
-    workflow_dispatch:
+  push:
+    branches:
+      - feat/*
+      - fix/*
+      - chore/*
+      - refactor/*
+      - ci/*
+  workflow_dispatch:
 
 jobs:
-    dev:
-        runs-on: ubuntu-latest
-        environment: dev
-        name: dev
-        steps:
-            - uses: actions/checkout@v6
-            - uses: oven-sh/setup-bun@v2
-              with:
-                  bun-version: latest
+  dev:
+    runs-on: ubuntu-latest
+    environment: dev
+    name: dev
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
-            - name: install dependencies
-              run: bun install
+      - name: install dependencies
+        run: bun install
 
-            - name: run tests
-              run: bun run test
+      - name: run tests
+        run: bun run test
 
-            - name: apply migration
-              env:
-                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-                  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-              run: |
-                  bun wrangler d1 migrations apply DB --remote --env dev
+      - name: apply migration
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          bun wrangler d1 migrations apply DB --remote --env dev
 
-            - name: Deploy
-              uses: cloudflare/wrangler-action@v3
-              with:
-                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-                  environment: dev
-                  secrets: |
-                      APP_URL
-                      PAGES_URL
-                      BOT_TOKEN
-                      BOT_SECRET
-                      BOT_DEVELOPER
-                      BOT_NEWS_CHANNEL
-                      KEY
-                      IV
-                      PROXY
-                      PROXY_SIGNATURE
-                      CLIENT_ID
-                      INSTITUTE_ID
-                      LIMIT_PER_DAY
-              env:
-                  APP_URL: ${{ secrets.APP_URL }}
-                  PAGES_URL: ${{ secrets.PAGES_URL }}
-                  BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-                  BOT_SECRET: ${{ secrets.BOT_SECRET }}
-                  BOT_DEVELOPER: ${{ secrets.BOT_DEVELOPER }}
-                  BOT_NEWS_CHANNEL: ${{ secrets.BOT_NEWS_CHANNEL }}
-                  KEY: ${{ secrets.KEY }}
-                  IV: ${{ secrets.IV }}
-                  PROXY: ${{ secrets.PROXY }}
-                  PROXY_SIGNATURE: ${{ secrets.PROXY_SIGNATURE }}
-                  CLIENT_ID: ${{ secrets.CLIENT_ID }}
-                  INSTITUTE_ID: ${{ secrets.INSTITUTE_ID }}
-                  LIMIT_PER_DAY: ${{ secrets.LIMIT_PER_DAY }}
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          environment: dev
+          secrets: |
+            APP_URL
+            PAGES_URL
+            BOT_TOKEN
+            BOT_LIMIT
+            BOT_SECRET
+            BOT_DEVELOPER
+            BOT_NEWS_CHANNEL
+            KEY
+            IV
+            PROXY
+            PROXY_SIGNATURE
+            CLIENT_ID
+            INSTITUTE_ID
+            LIMIT_PER_DAY
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          PAGES_URL: ${{ secrets.PAGES_URL }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          BOT_LIMIT: ${{ secrets.BOT_LIMIT }}
+          BOT_SECRET: ${{ secrets.BOT_SECRET }}
+          BOT_DEVELOPER: ${{ secrets.BOT_DEVELOPER }}
+          BOT_NEWS_CHANNEL: ${{ secrets.BOT_NEWS_CHANNEL }}
+          KEY: ${{ secrets.KEY }}
+          IV: ${{ secrets.IV }}
+          PROXY: ${{ secrets.PROXY }}
+          PROXY_SIGNATURE: ${{ secrets.PROXY_SIGNATURE }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          INSTITUTE_ID: ${{ secrets.INSTITUTE_ID }}
+          LIMIT_PER_DAY: ${{ secrets.LIMIT_PER_DAY }}
