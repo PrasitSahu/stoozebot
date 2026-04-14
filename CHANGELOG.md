@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/PrasitSahu/stoozebot/compare/v1.2.2...v1.2.3) (2026-04-14)
+
+
+### Bug Fixes
+
+* prevent deletion of attendance messages ([0dac656](https://github.com/PrasitSahu/stoozebot/commit/0dac656766a5718f85a08c0607747d66f1edc63f))
+
 ## [1.2.2](https://github.com/PrasitSahu/stoozebot/compare/v1.2.1...v1.2.2) (2026-04-14)
 
 
