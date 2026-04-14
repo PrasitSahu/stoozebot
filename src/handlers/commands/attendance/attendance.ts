@@ -48,9 +48,6 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 		}
 
 		await ctx.replyWithChatAction("typing");
-		try {
-			await ctx.deleteMessage();
-		} catch (err) {}
 
 		const soaPortalService = new SoaPService(user.password);
 		let attendancesRes: Response<AttendanceResponse>;

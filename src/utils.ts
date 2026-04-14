@@ -23,6 +23,6 @@ export function aesDec(data: string) {
 	return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
-export function text(text: string): string {
-	return text.replace(/^\t+/gm, "");
+export function text(str: string): string {
+	return str.trim();
 }
