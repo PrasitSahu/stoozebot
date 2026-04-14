@@ -15,13 +15,14 @@ export function aesEnc(data: {}): string {
 
 export function aesDec(data: string) {
 	const decrypted = CryptoJS.AES.decrypt(data, key, {
-		iv: iv,
+		iv,
 		mode: CryptoJS.mode.CBC,
 		padding: CryptoJS.pad.Pkcs7,
 	});
 
 	return decrypted.toString(CryptoJS.enc.Utf8);
 }
-export function text(str: string): string {
-	return str.trim();
+
+export function text(text: string): string {
+	return text.replace(/^\t+/gm, "");
 }
