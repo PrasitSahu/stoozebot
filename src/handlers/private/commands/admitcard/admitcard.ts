@@ -1,8 +1,8 @@
 import { InlineKeyboard } from "grammy";
-import { BotContext, DB } from "../../../config";
-import { Err, ReplyNoAuth } from "../../../constants";
-import SoaPService from "../../../services/soaPortals";
-import { handleErrors } from "../../errorHandler";
+import { BotContext, DB } from "../../../../config";
+import { Err, ReplyNoAuth } from "../../../../constants";
+import SoaPService from "../../../../services/soaPortals";
+import { handleErrors } from "../../../errorHandler";
 
 export async function admitcard(ctx: BotContext) {
 	try {

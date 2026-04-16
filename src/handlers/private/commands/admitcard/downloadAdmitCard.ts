@@ -1,8 +1,8 @@
 import { InputFile } from "grammy";
-import { BotContext } from "../../../config";
-import { Err, ReplyNoAuth } from "../../../constants";
-import SoaPService, { AdmitCardPayload } from "../../../services/soaPortals";
-import { handleErrors } from "../../errorHandler";
+import { BotContext } from "../../../../config";
+import { Err, ReplyNoAuth } from "../../../../constants";
+import SoaPService, { AdmitCardPayload } from "../../../../services/soaPortals";
+import { handleErrors } from "../../../errorHandler";
 
 export async function downloadAdmitCard(ctx: BotContext) {
 	try {

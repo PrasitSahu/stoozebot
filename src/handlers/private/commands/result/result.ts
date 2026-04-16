@@ -1,10 +1,10 @@
 import { eq, InferInsertModel } from "drizzle-orm";
-import { BotContext, DB } from "../../../config";
+import { BotContext, DB } from "../../../../config";
 import { InlineKeyboard } from "grammy";
-import { results } from "../../../db/schema/results";
-import { Err, ReplyNoAuth, ReplySiteDown } from "../../../constants";
-import { handleErrors } from "../../errorHandler";
-import SoaPService, { SemesterData } from "../../../services/soaPortals";
+import { results } from "../../../../db/schema/results";
+import { Err, ReplyNoAuth, ReplySiteDown } from "../../../../constants";
+import { handleErrors } from "../../../errorHandler";
+import SoaPService, { SemesterData } from "../../../../services/soaPortals";
 
 export async function result(ctx: BotContext, db: DB) {
 	try {

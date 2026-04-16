@@ -1,20 +1,36 @@
 import { vi } from "vitest";
 import { DB } from "../../src/config";
 
-export function createMockDb(): DB {
-	const dbMock = {
-		select: vi.fn().mockReturnThis(),
-		from: vi.fn().mockReturnThis(),
-		where: vi.fn().mockReturnThis(),
-		limit: vi.fn().mockReturnThis(),
-		insert: vi.fn().mockReturnThis(),
-		values: vi.fn().mockReturnThis(),
-		update: vi.fn().mockReturnThis(),
-		set: vi.fn().mockReturnThis(),
-		delete: vi.fn().mockReturnThis(),
-		onConflictDoUpdate: vi.fn().mockReturnThis(),
-		returning: vi.fn().mockReturnThis(),
-		$client: {} as any,
-	};
-	return dbMock as unknown as DB;
+export function createMockDB(): DB {
+	return {
+		query: {
+			users: {
+				findFirst: vi.fn(),
+			},
+			platformUsers: {
+				findFirst: vi.fn(),
+			},
+		},
+		insert: vi.fn(() => ({
+			values: vi.fn(() => ({
+				onConflictDoUpdate: vi.fn(),
+				returning: vi.fn(),
+			})),
+		})),
+		update: vi.fn(() => ({
+			set: vi.fn(() => ({
+				where: vi.fn(),
+			})),
+		})),
+		delete: vi.fn(() => ({
+			where: vi.fn(),
+		})),
+		select: vi.fn(() => ({
+			from: vi.fn(() => ({
+				where: vi.fn(),
+				limit: vi.fn(),
+			})),
+		})),
+		transaction: vi.fn(async (callback) => await callback(createMockDB())),
+	} as unknown as DB;
 }
