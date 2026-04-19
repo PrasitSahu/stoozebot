@@ -1,8 +1,8 @@
 import { and, eq, sql } from "drizzle-orm";
 import { NextFunction } from "grammy";
-import { Auth, BotContext, DB } from "../config";
-import { Err, Platform, ReplyNoAuth } from "../constants";
-import { platformUsers } from "../db/schema/platformUsers";
+import { Auth, BotContext, DB } from "@/config";
+import { Err, Platform, ReplyNoAuth } from "@/constants";
+import { platformUsers } from "@/db/schema/platformUsers";
 
 export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<void> {
 	return async (ctx: BotContext, next: NextFunction) => {

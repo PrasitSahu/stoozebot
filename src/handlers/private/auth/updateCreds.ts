@@ -1,9 +1,9 @@
 import { Composer } from "grammy";
-import { BotContext, DB } from "../../../config";
-import { Err, ReplyNoAuth, UpdateCredsRegex } from "../../../constants";
-import soaPortals from "../../../services/soaPortals";
-import { aesEnc } from "../../../utils";
-import { handleErrors } from "../../errorHandler";
+import { BotContext, DB } from "@/config";
+import { Err, ReplyNoAuth, UpdateCredsRegex } from "@/constants";
+import soaPortals from "@/services/soaPortals";
+import { aesEnc } from "@/utils";
+import { handleErrors } from "@/handlers/errorHandler";
 import { Platform, updateUserCreds } from "./user";
 
 export function updateCreds(bot: Composer<BotContext>, db: DB) {

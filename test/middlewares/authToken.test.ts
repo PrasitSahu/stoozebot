@@ -5,11 +5,12 @@ import { createMockDB } from "../utils/mockDB";
 import jwt from "jsonwebtoken";
 import SoaPService from "../../src/services/soaPortals";
 
-vi.mock("../../src/services/soaPortals");
+vi.mock("@/services/soaPortals");
 vi.mock("jsonwebtoken", () => ({
 	default: {
 		decode: vi.fn(),
 	},
+	decode: vi.fn(),
 }));
 
 describe("authToken middleware", () => {
@@ -42,9 +43,12 @@ describe("authToken middleware", () => {
 				status: { responseStatus: "Success" },
 				response: { regdata: { token: "new_api_token" } },
 			});
-			(SoaPService as any).mockImplementation(() => ({
-				genToken: mockGenToken,
-			}));
+			vi.mocked(SoaPService).mockImplementation(
+				() =>
+					({
+						genToken: mockGenToken,
+					}) as any,
+			);
 
 			const middleware = manageToken(db);
 			await middleware(ctx as any, next);
@@ -65,16 +69,19 @@ describe("authToken middleware", () => {
 			const next = vi.fn();
 
 			// Mock JWT decode to return expired time
-			(jwt.decode as any).mockReturnValue({ exp: Date.now() / 1000 - 60 });
+			vi.mocked(jwt.decode).mockReturnValue({ exp: Date.now() / 1000 - 60 } as any);
 
 			// Mock SOA Portal service for refresh
 			const mockGenToken = vi.fn().mockResolvedValue({
 				status: { responseStatus: "Success" },
 				response: { regdata: { token: "refreshed_token" } },
 			});
-			(SoaPService as any).mockImplementation(() => ({
-				genToken: mockGenToken,
-			}));
+			vi.mocked(SoaPService).mockImplementation(
+				() =>
+					({
+						genToken: mockGenToken,
+					}) as any,
+			);
 
 			const middleware = manageToken(db);
 			await middleware(ctx as any, next);
@@ -89,9 +96,12 @@ describe("authToken middleware", () => {
 			const mockGenToken = vi.fn().mockResolvedValue({
 				status: { responseStatus: "Error" },
 			});
-			(SoaPService as any).mockImplementation(() => ({
-				genToken: mockGenToken,
-			}));
+			vi.mocked(SoaPService).mockImplementation(
+				() =>
+					({
+						genToken: mockGenToken,
+					}) as any,
+			);
 
 			await expect(upsertNewToken("pwd", db, "user_1")).rejects.toThrow();
 		});

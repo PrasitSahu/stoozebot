@@ -1,8 +1,8 @@
 import { InferInsertModel, eq } from "drizzle-orm";
 import { SQLiteTransaction } from "drizzle-orm/sqlite-core";
-import { DB } from "../../../config";
-import { authTokens, platformUsers, users } from "../../../db";
-import { createId } from "../../../db/schema/helper";
+import { DB } from "@/config";
+import { authTokens, platformUsers, users } from "@/db";
+import { createId } from "@/db/schema/helper";
 
 type Tx = SQLiteTransaction<"async", D1Result<unknown>, any, any>;
 

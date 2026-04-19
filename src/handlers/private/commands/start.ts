@@ -1,7 +1,7 @@
 import { InlineKeyboard } from "grammy";
-import { BotContext, DB } from "../../../config";
-import { NewsChannel } from "../../../constants";
-import { text } from "../../../utils";
+import { BotContext, DB } from "@/config";
+import { NewsChannel } from "@/constants";
+import { text } from "@/utils";
 
 export async function start(ctx: BotContext, db: DB) {
 	if (ctx.chat?.type === "private") {

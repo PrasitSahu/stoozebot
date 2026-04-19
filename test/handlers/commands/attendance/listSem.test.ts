@@ -3,7 +3,7 @@ import { attendance } from "../../../../src/handlers/private/commands/attendance
 import { createMockContext } from "../../../utils/mockContext";
 import { createMockDB } from "../../../utils/mockDB";
 
-vi.mock("../../../../src/services/soaPortals", () => {
+vi.mock("@/services/soaPortals", () => {
 	return {
 		default: vi.fn().mockImplementation(() => ({
 			getAttendanceSemList: vi.fn().mockResolvedValue({

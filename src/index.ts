@@ -1,11 +1,11 @@
-export { BotThrottler } from "./BotThrottler";
+export { BotThrottler } from "@/BotThrottler";
 import { drizzle } from "drizzle-orm/d1";
 import { Bot, webhookCallback } from "grammy";
-import { BotContext } from "./config";
-import * as schema from "./db/index";
-import { registerCommands, setCommandList } from "./handlers/register";
-import developer from "./middlewares/developer";
-import { botApiLimit } from "./middlewares/limits";
+import { BotContext } from "@/config";
+import * as schema from "@/db/index";
+import { registerCommands, setCommandList } from "@/handlers/register";
+import developer from "@/middlewares/developer";
+import { botApiLimit } from "@/middlewares/limits";
 
 let isCold = true;
 let isEnvChecked = false;

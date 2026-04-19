@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { BotContext, DB } from "../../../config";
-import { platformUsers } from "../../../db";
-import { ReplyDone, ReplySomethingWentWrong } from "../../../constants";
+import { BotContext, DB } from "@/config";
+import { platformUsers } from "@/db";
+import { ReplyDone, ReplySomethingWentWrong } from "@/constants";
 
 export async function logout(ctx: BotContext, db: DB) {
 	if (!ctx.chat) {

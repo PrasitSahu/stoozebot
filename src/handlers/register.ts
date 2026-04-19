@@ -1,6 +1,6 @@
 import { Bot } from "grammy";
 import { BotCommand } from "grammy/types";
-import { BotContext, DB } from "../config";
+import { BotContext, DB } from "@/config";
 import { privateComposer } from "./private/index";
 import { groupComposer } from "./groups/index";
 import { channelComposer } from "./channels/index";

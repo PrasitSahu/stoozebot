@@ -4,11 +4,11 @@ import { createMockContext } from "../../../utils/mockContext";
 import { createMockDB } from "../../../utils/mockDB";
 import { Composer } from "grammy";
 import { BotContext } from "../../../../src/config";
-import soaPortals from "../../../../src/services/soaPortals";
+import soaPortals from "@/services/soaPortals";
 import * as userUtils from "../../../../src/handlers/private/auth/user";
 
 // Mock external services and utils
-vi.mock("../../../../src/services/soaPortals");
+vi.mock("@/services/soaPortals");
 vi.mock("../../../../src/utils", () => ({
 	aesEnc: vi.fn(() => "mocked_encrypted_token"),
 	text: (str: string) => str.trim(),
@@ -81,10 +81,13 @@ describe("login handler", () => {
 			},
 		});
 
-		(soaPortals as any).mockImplementation(() => ({
-			genToken: mockGenToken,
-			getPersonalInfo: mockGetPersonalInfo,
-		}));
+		vi.mocked(soaPortals).mockImplementation(
+			() =>
+				({
+					genToken: mockGenToken,
+					getPersonalInfo: mockGetPersonalInfo,
+				}) as any,
+		);
 
 		await handler(ctx);
 
@@ -109,9 +112,12 @@ describe("login handler", () => {
 			response: { regdata: { token: "new_api_token" } },
 		});
 
-		(soaPortals as any).mockImplementation(() => ({
-			genToken: mockGenToken,
-		}));
+		vi.mocked(soaPortals).mockImplementation(
+			() =>
+				({
+					genToken: mockGenToken,
+				}) as any,
+		);
 
 		await handler(ctx);
 
@@ -134,9 +140,12 @@ describe("login handler", () => {
 			status: { responseStatus: "Error" },
 		});
 
-		(soaPortals as any).mockImplementation(() => ({
-			genToken: mockGenToken,
-		}));
+		vi.mocked(soaPortals).mockImplementation(
+			() =>
+				({
+					genToken: mockGenToken,
+				}) as any,
+		);
 
 		await handler(ctx);
 

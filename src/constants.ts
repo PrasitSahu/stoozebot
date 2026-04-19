@@ -1,4 +1,4 @@
-import { text } from "./utils";
+import { text } from "@/utils";
 
 export const enum Platform {
 	Telegram = "telegram",

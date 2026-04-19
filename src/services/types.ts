@@ -1,5 +1,5 @@
 import z from "zod";
-import { Err } from "../constants";
+import { Err } from "@/constants";
 
 const ResponseStatus = z.union([z.literal("Success"), z.literal("Failure")], {
 	error: "resposeStatus must be either 'Success' or 'Failure'",

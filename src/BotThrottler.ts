@@ -1,5 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
-import { checkEnv } from "./index";
+import { checkEnv } from "@/index";
 
 export class BotThrottler extends DurableObject {
 	private globalRequests: number[] = [];

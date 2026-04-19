@@ -1,5 +1,5 @@
 import { Composer } from "grammy";
-import { BotContext, DB } from "../../config";
+import { BotContext, DB } from "@/config";
 import {
 	AcceptPrivacyToS,
 	attendanceRegex,

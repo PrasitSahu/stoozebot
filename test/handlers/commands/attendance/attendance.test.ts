@@ -3,7 +3,7 @@ import { getAttendance } from "../../../../src/handlers/private/commands/attenda
 import { createMockContext } from "../../../utils/mockContext";
 import { createMockDB } from "../../../utils/mockDB";
 
-vi.mock("../../../../src/services/soaPortals", () => {
+vi.mock("@/services/soaPortals", () => {
 	return {
 		default: vi.fn().mockImplementation(() => ({
 			getAttendance: vi.fn().mockResolvedValue({
