@@ -1,20 +1,20 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { login } from "../../../../src/handlers/private/auth/login";
+import { login } from "@/handlers/private/auth/login";
 import { createMockContext } from "../../../utils/mockContext";
 import { createMockDB } from "../../../utils/mockDB";
 import { Composer } from "grammy";
-import { BotContext } from "../../../../src/config";
+import { BotContext } from "@/config";
 import soaPortals from "@/services/soaPortals";
-import * as userUtils from "../../../../src/handlers/private/auth/user";
+import * as userUtils from "@/handlers/private/auth/user";
 
 // Mock external services and utils
 vi.mock("@/services/soaPortals");
-vi.mock("../../../../src/utils", () => ({
+vi.mock("@/utils", () => ({
 	aesEnc: vi.fn(() => "mocked_encrypted_token"),
 	text: (str: string) => str.trim(),
 }));
-vi.mock("../../../../src/handlers/private/auth/user", async () => {
-	const actual = (await vi.importActual("../../../../src/handlers/private/auth/user")) as any;
+vi.mock("@/handlers/private/auth/user", async () => {
+	const actual = (await vi.importActual("@/handlers/private/auth/user")) as any;
 	return {
 		...actual,
 		createUser: vi.fn(),

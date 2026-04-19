@@ -1,9 +1,9 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { manageToken, upsertNewToken } from "../../src/middlewares/authToken";
+import { manageToken, upsertNewToken } from "@/middlewares/authToken";
 import { createMockContext } from "../utils/mockContext";
 import { createMockDB } from "../utils/mockDB";
 import jwt from "jsonwebtoken";
-import SoaPService from "../../src/services/soaPortals";
+import SoaPService from "@/services/soaPortals";
 
 vi.mock("@/services/soaPortals");
 vi.mock("jsonwebtoken", () => ({
