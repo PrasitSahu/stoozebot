@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/PrasitSahu/stoozebot/compare/v1.2.3...v1.3.0) (2026-04-19)
+
+
+### Features
+
+* implement chat type separation and comprehensive testing ([360bb16](https://github.com/PrasitSahu/stoozebot/commit/360bb16458f8d9e044e2bae1eb7be61c60166840))
+
 ## [1.2.3](https://github.com/PrasitSahu/stoozebot/compare/v1.2.2...v1.2.3) (2026-04-14)
 
 
