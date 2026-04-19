@@ -1,6 +1,6 @@
-import { InlineKeyboard, Keyboard, NextFunction } from "grammy";
-import { BotContext } from "../config";
-import { AcceptPrivacyToS, CancelPrivacyToS } from "../constants";
+import { BotContext } from "@/config";
+import { AcceptPrivacyToS, CancelPrivacyToS } from "@/constants";
+import { InlineKeyboard, NextFunction } from "grammy";
 
 export async function privacyTOS(ctx: BotContext, next: NextFunction) {
 	if (!ctx.auth?.user) {

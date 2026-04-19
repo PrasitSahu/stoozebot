@@ -1,9 +1,9 @@
 import { describe, expect, test, vi, beforeEach } from "vitest";
-import { attendance } from "../../../../src/handlers/commands/attendance/listSem";
+import { attendance } from "../../../../src/handlers/private/commands/attendance/listSem";
 import { createMockContext } from "../../../utils/mockContext";
-import { createMockDb } from "../../../utils/mockDb";
+import { createMockDB } from "../../../utils/mockDB";
 
-vi.mock("../../../../src/services/soaPortals", () => {
+vi.mock("@/services/soaPortals", () => {
 	return {
 		default: vi.fn().mockImplementation(() => ({
 			getAttendanceSemList: vi.fn().mockResolvedValue({
@@ -26,7 +26,7 @@ describe("attendance (listSem) command", () => {
 
 	test("replies with no auth if user is missing", async () => {
 		const ctx = createMockContext({ auth: null });
-		const db = createMockDb();
+		const db = createMockDB();
 
 		await attendance(ctx, db);
 		expect(ctx.reply).toHaveBeenCalledOnce();
@@ -42,7 +42,7 @@ describe("attendance (listSem) command", () => {
 				reqs: 0,
 			},
 		});
-		const db = createMockDb();
+		const db = createMockDB();
 
 		await attendance(ctx, db);
 		expect(ctx.reply).toHaveBeenCalledOnce();

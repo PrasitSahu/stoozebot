@@ -1,12 +1,12 @@
 import { and, eq, InferSelectModel } from "drizzle-orm";
 import { InlineKeyboard } from "grammy";
-import { BotContext, DB } from "../../../config";
-import { Err, ReplyNoAuth, ReplySiteDown } from "../../../constants";
-import { users } from "../../../db";
-import SoaPService, { Attendance, AttendanceResponse, Response } from "../../../services/soaPortals";
-import { attendances as attendancesTable } from "../../../db/schema/attendances";
-import { text } from "../../../utils";
-import { handleErrors } from "../../errorHandler";
+import { BotContext, DB } from "@/config";
+import { Err, ReplyNoAuth, ReplySiteDown } from "@/constants";
+import { users } from "@/db";
+import SoaPService, { Attendance, AttendanceResponse, Response } from "@/services/soaPortals";
+import { attendances as attendancesTable } from "@/db/schema/attendances";
+import { text } from "@/utils";
+import { handleErrors } from "@/handlers/errorHandler";
 
 interface ReplyAttendanceParam {
 	index: number;

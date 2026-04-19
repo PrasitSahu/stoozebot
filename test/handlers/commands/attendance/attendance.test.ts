@@ -1,9 +1,9 @@
 import { describe, expect, test, vi, beforeEach } from "vitest";
-import { getAttendance } from "../../../../src/handlers/commands/attendance/attendance";
+import { getAttendance } from "../../../../src/handlers/private/commands/attendance/attendance";
 import { createMockContext } from "../../../utils/mockContext";
-import { createMockDb } from "../../../utils/mockDb";
+import { createMockDB } from "../../../utils/mockDB";
 
-vi.mock("../../../../src/services/soaPortals", () => {
+vi.mock("@/services/soaPortals", () => {
 	return {
 		default: vi.fn().mockImplementation(() => ({
 			getAttendance: vi.fn().mockResolvedValue({
@@ -39,7 +39,7 @@ describe("attendance command (getAttendance callback)", () => {
 			},
 			match: ["#attendance 123-SEM1", "123", "SEM1"],
 		});
-		const db = createMockDb();
+		const db = createMockDB();
 
 		await getAttendance(ctx, db);
 

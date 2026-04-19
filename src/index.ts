@@ -1,14 +1,11 @@
-export { BotThrottler } from "./BotThrottler";
+export { BotThrottler } from "@/BotThrottler";
 import { drizzle } from "drizzle-orm/d1";
 import { Bot, webhookCallback } from "grammy";
-import { BotContext } from "./config";
-import * as schema from "./db/index";
-import { registerAuth, registerCommands, setCommandList } from "./handlers/register";
-import { auth } from "./middlewares/auth";
-import { manageToken } from "./middlewares/authToken";
-import developer from "./middlewares/developer";
-import { botApiLimit, limits } from "./middlewares/limits";
-import { privacyTOS } from "./middlewares/privayToS";
+import { BotContext } from "@/config";
+import * as schema from "@/db/index";
+import { registerCommands, setCommandList } from "@/handlers/register";
+import developer from "@/middlewares/developer";
+import { botApiLimit } from "@/middlewares/limits";
 
 let isCold = true;
 let isEnvChecked = false;
@@ -71,13 +68,8 @@ export default {
 
 		// middlewares
 		bot.use(developer);
-		bot.use(auth(db));
-		bot.use(privacyTOS);
-		bot.use(limits);
-		bot.use(manageToken(db));
 		bot.use(botApiLimit(env));
 
-		registerAuth(bot, db);
 		registerCommands(bot, db);
 
 		return webhookCallback(bot, "cloudflare-mod")(request);

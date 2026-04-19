@@ -20,8 +20,12 @@
 		"strict": true,
 
 		"skipLibCheck": true,
-		"types": ["./worker-configuration.d.ts", "node", "@cloudflare/workers-types", "@cloudflare/vitest-pool-workers"]
+		"types": ["./worker-configuration.d.ts", "node", "@cloudflare/workers-types", "@cloudflare/vitest-pool-workers"],
+		"baseUrl": ".",
+		"paths": {
+			"@": ["./src"],
+			"@/*": ["./src/*"]
+		}
 	},
-	"exclude": ["test"],
 	"include": ["worker-configuration.d.ts", "src/**/*.ts"]
 }

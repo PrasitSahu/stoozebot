@@ -1,28 +1,9 @@
 import { Bot } from "grammy";
 import { BotCommand } from "grammy/types";
-import { BotContext, DB } from "../config";
-import {
-	AcceptPrivacyToS,
-	attendanceRegex,
-	CancelPrivacyToS,
-	ResultRegex,
-	AdmitCardRegRegex,
-	AdmitCardExamTypeRegex,
-	AdmitCardDnRegex,
-} from "../constants";
-import { filterNAuth } from "../middlewares/auth";
-import { login } from "./auth/login";
-import { updateCreds } from "./auth/updateCreds";
-import { getAttendance } from "./commands/attendance/attendance";
-import { attendance } from "./commands/attendance/listSem";
-import { help } from "./commands/help";
-import { logout } from "./commands/logout";
-import { downloadResult } from "./commands/result/downloadResult";
-import { result } from "./commands/result/result";
-import { start } from "./commands/start";
-import { admitcard, listExamTypes, listExamCodes } from "./commands/admitcard/admitcard";
-import { downloadAdmitCard } from "./commands/admitcard/downloadAdmitCard";
-import { acceptPrivacyToS, cancelPrivacyToS } from "./PToS";
+import { BotContext, DB } from "@/config";
+import { privateComposer } from "./private/index";
+import { groupComposer } from "./groups/index";
+import { channelComposer } from "./channels/index";
 
 export const enum Commands {
 	Start = "start",
@@ -42,41 +23,21 @@ export const CommandsDesc: Record<Commands, string> = {
 	[Commands.Logout]: "👋 Logout",
 };
 
-function group(bot: Bot<BotContext>, callback: (bot: Bot<BotContext>) => void) {
-	callback(bot);
-}
-
 export function registerCommands(bot: Bot<BotContext>, db: DB) {
-	bot.command(Commands.Start, (ctx) => start(ctx, db));
-	bot.command(Commands.Help, (ctx) => help(ctx));
+	// Private Chat Layer
+	bot.chatType("private").use(privateComposer(db));
 
-	group(bot, (bot) => {
-		bot.use(filterNAuth);
-		bot.command(Commands.Logout, (ctx) => logout(ctx, db));
+	// Group/Supergroup Layer
+	bot.chatType(["group", "supergroup"]).use(groupComposer(db));
 
-		// attendance commands
-		bot.command(Commands.Attendance, (ctx) => attendance(ctx, db));
-		bot.callbackQuery(attendanceRegex, (ctx) => getAttendance(ctx, db));
-
-		// result commands
-		bot.command(Commands.Result, (ctx) => result(ctx, db));
-		bot.callbackQuery(ResultRegex, (ctx) => downloadResult(ctx, db));
-
-		// admitcard commands
-		bot.command(Commands.AdmitCard, (ctx) => admitcard(ctx));
-		bot.callbackQuery(AdmitCardRegRegex, (ctx) => listExamTypes(ctx));
-		bot.callbackQuery(AdmitCardExamTypeRegex, (ctx) => listExamCodes(ctx));
-		bot.callbackQuery(AdmitCardDnRegex, (ctx) => downloadAdmitCard(ctx));
-	});
-	bot.callbackQuery("#cancel", cancelHandler);
-
-	bot.callbackQuery(AcceptPrivacyToS, (ctx) => acceptPrivacyToS(ctx, db));
-	bot.callbackQuery(CancelPrivacyToS, (ctx) => cancelPrivacyToS(ctx, db));
+	// Channel Layer
+	bot.chatType("channel").use(channelComposer(db));
 }
 
 export function registerAuth(bot: Bot<BotContext>, db: DB) {
-	login(bot, db);
-	updateCreds(bot, db);
+	// Moved to privateComposer, but keeping this export if needed elsewhere or to follow previous pattern
+	// For now, it's called in index.ts, so we should probably keep it or redirect it
+	// Actually, index.ts should just call registerCommands and let composers handle it
 }
 
 export async function setCommandList(bot: Bot<BotContext>) {
@@ -87,11 +48,5 @@ export async function setCommandList(bot: Bot<BotContext>) {
 
 	try {
 		await bot.api.setMyCommands(commands);
-	} catch (error) {}
-}
-
-async function cancelHandler(ctx: BotContext) {
-	try {
-		await ctx.deleteMessage();
 	} catch (error) {}
 }

@@ -1,7 +1,7 @@
-import { BotContext } from "../config";
-import { users } from "../db/schema/users";
+import { BotContext } from "@/config";
+import { users } from "@/db/schema/users";
 import { eq } from "drizzle-orm";
-import { DB } from "../config";
+import { DB } from "@/config";
 import { GrammyError } from "grammy";
 
 export async function acceptPrivacyToS(ctx: BotContext, db: DB) {

@@ -1,9 +1,9 @@
 import { NextFunction } from "grammy";
 import jwt from "jsonwebtoken";
-import { BotContext, DB } from "../config";
-import { Err } from "../constants";
-import { authTokens } from "../db/schema/authTokens";
-import SoaPService from "../services/soaPortals";
+import { BotContext, DB } from "@/config";
+import { Err } from "@/constants";
+import { authTokens } from "@/db/schema/authTokens";
+import SoaPService from "@/services/soaPortals";
 import z, { number } from "zod";
 
 const AuthToken = z.object({

@@ -1,5 +1,5 @@
-import { BotContext } from "../../config";
-import { text } from "../../utils";
+import { BotContext } from "@/config";
+import { text } from "@/utils";
 
 const replyHelp = text(
 	`

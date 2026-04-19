@@ -1,0 +1,78 @@
+import { Composer } from "grammy";
+import { BotContext, DB } from "@/config";
+import {
+	AcceptPrivacyToS,
+	attendanceRegex,
+	CancelPrivacyToS,
+	ResultRegex,
+	AdmitCardRegRegex,
+	AdmitCardExamTypeRegex,
+	AdmitCardDnRegex,
+} from "../../constants";
+import { auth, filterNAuth } from "../../middlewares/auth";
+import { privacyTOS } from "../../middlewares/privayToS";
+import { limits } from "../../middlewares/limits";
+import { manageToken } from "../../middlewares/authToken";
+
+import { login } from "./auth/login";
+import { updateCreds } from "./auth/updateCreds";
+import { getAttendance } from "./commands/attendance/attendance";
+import { attendance } from "./commands/attendance/listSem";
+import { help } from "./commands/help";
+import { logout } from "./commands/logout";
+import { downloadResult } from "./commands/result/downloadResult";
+import { result } from "./commands/result/result";
+import { start } from "./commands/start";
+import { admitcard, listExamTypes, listExamCodes } from "./commands/admitcard/admitcard";
+import { downloadAdmitCard } from "./commands/admitcard/downloadAdmitCard";
+import { acceptPrivacyToS, cancelPrivacyToS } from "./PToS";
+
+export const privateComposer = (db: DB) => {
+	const composer = new Composer<BotContext>();
+
+	// middlewares (moved from global to private specific)
+	composer.use(auth(db));
+	composer.use(privacyTOS);
+	composer.use(limits);
+	composer.use(manageToken(db));
+
+	// Authentication flows
+	login(composer, db);
+	updateCreds(composer, db);
+
+	// commands
+	composer.command("start", (ctx) => start(ctx, db));
+	composer.command("help", (ctx) => help(ctx));
+
+	// Grouping authenticated commands
+	const authGroup = new Composer<BotContext>();
+	authGroup.use(filterNAuth);
+	composer.use(authGroup);
+
+	authGroup.command("logout", (ctx) => logout(ctx, db));
+
+	// attendance commands
+	authGroup.command("attendance", (ctx) => attendance(ctx, db));
+	authGroup.callbackQuery(attendanceRegex, (ctx) => getAttendance(ctx, db));
+
+	// result commands
+	authGroup.command("result", (ctx) => result(ctx, db));
+	authGroup.callbackQuery(ResultRegex, (ctx) => downloadResult(ctx, db));
+
+	// admitcard commands
+	authGroup.command("admitcard", (ctx) => admitcard(ctx));
+	authGroup.callbackQuery(AdmitCardRegRegex, (ctx) => listExamTypes(ctx));
+	authGroup.callbackQuery(AdmitCardExamTypeRegex, (ctx) => listExamCodes(ctx));
+	authGroup.callbackQuery(AdmitCardDnRegex, (ctx) => downloadAdmitCard(ctx));
+
+	composer.callbackQuery("#cancel", async (ctx) => {
+		try {
+			await ctx.deleteMessage();
+		} catch (error) {}
+	});
+
+	composer.callbackQuery(AcceptPrivacyToS, (ctx) => acceptPrivacyToS(ctx, db));
+	composer.callbackQuery(CancelPrivacyToS, (ctx) => cancelPrivacyToS(ctx, db));
+
+	return composer;
+};

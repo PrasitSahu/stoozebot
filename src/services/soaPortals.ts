@@ -1,6 +1,6 @@
 import z from "zod";
-import { Err } from "../constants";
-import { aesDec, aesEnc } from "../utils";
+import { Err } from "@/constants";
+import { aesDec, aesEnc } from "@/utils";
 import { Method } from "./service";
 import { resolveTypeIssues } from "./types";
 import {

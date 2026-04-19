@@ -1,14 +1,14 @@
 import { InferInsertModel } from "drizzle-orm";
-import { Bot } from "grammy";
-import { BotContext, DB } from "../../config";
-import { Err, ReplyDone, LoginRegex } from "../../constants";
-import { users } from "../../db";
-import soaPortals from "../../services/soaPortals";
-import { aesEnc } from "../../utils";
-import { handleErrors } from "../errorHandler";
+import { Composer } from "grammy";
+import { BotContext, DB } from "@/config";
+import { Err, ReplyDone, LoginRegex } from "@/constants";
+import { users } from "@/db";
+import soaPortals from "@/services/soaPortals";
+import { aesEnc } from "@/utils";
+import { handleErrors } from "@/handlers/errorHandler";
 import { Platform, createPlatformUser, createUser, updateUserCreds } from "./user";
 
-export function login(bot: Bot<BotContext>, db: DB) {
+export function login(bot: Composer<BotContext>, db: DB) {
 	bot.hears(LoginRegex, async (ctx: BotContext) => {
 		const message = ctx.message?.text;
 		if (!message) return;

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { BotContext, DB } from "../../config";
-import { platformUsers } from "../../db";
-import { ReplyDone, ReplySomethingWentWrong } from "../../constants";
+import { BotContext, DB } from "@/config";
+import { platformUsers } from "@/db";
+import { ReplyDone, ReplySomethingWentWrong } from "@/constants";
 
 export async function logout(ctx: BotContext, db: DB) {
 	if (!ctx.chat) {
@@ -9,9 +9,12 @@ export async function logout(ctx: BotContext, db: DB) {
 	}
 
 	try {
-		await db.update(platformUsers).set({
-			userId: null,
-		}).where(eq(platformUsers.platformId, ctx.chat.id.toString()));
+		await db
+			.update(platformUsers)
+			.set({
+				userId: null,
+			})
+			.where(eq(platformUsers.platformId, ctx.chat.id.toString()));
 		await ctx.reply(ReplyDone);
 	} catch (error) {
 		try {

@@ -1,5 +1,5 @@
 import { NextFunction } from "grammy";
-import { BotContext, Config } from "../config";
+import { BotContext, Config } from "@/config";
 
 export default async function (ctx: BotContext, next: NextFunction) {
 	const devId = parseInt(process.env.BOT_DEVELOPER);

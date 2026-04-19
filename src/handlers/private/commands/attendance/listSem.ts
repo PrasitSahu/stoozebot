@@ -1,10 +1,10 @@
 import { eq } from "drizzle-orm";
 import { InlineKeyboard } from "grammy";
-import { BotContext, DB } from "../../../config";
-import { Err, ReplyNoAuth } from "../../../constants";
-import { attendances } from "../../../db/schema/attendances";
-import SoaPService, { Response, Sem, SemListResponse } from "../../../services/soaPortals";
-import { handleErrors } from "../../errorHandler";
+import { BotContext, DB } from "@/config";
+import { Err, ReplyNoAuth } from "@/constants";
+import { attendances } from "@/db/schema/attendances";
+import SoaPService, { Response, Sem, SemListResponse } from "@/services/soaPortals";
+import { handleErrors } from "@/handlers/errorHandler";
 
 export async function attendance(ctx: BotContext, db: DB) {
 	try {
