@@ -8,7 +8,7 @@
 		"start": "wrangler dev --env dev",
 		"test": "vitest",
 		"cf-typegen": "wrangler types",
-		"generate:migrations": "drizzle-kit generate",
+		"generate:migrations": "drizzle-kit generate --name stoozebot",
 		"prepare": "husky",
 		"semantic-release": "semantic-release",
 		"semantic-release:dry": "semantic-release --dry-run"

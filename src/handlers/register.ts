@@ -12,6 +12,9 @@ export const enum Commands {
 	Logout = "logout",
 	Result = "result",
 	AdmitCard = "admitcard",
+	SecurityMode = "security_mode",
+	EnableCMode = "enable_cmode",
+	DisableCMode = "disable_cmode",
 }
 
 export const CommandsDesc: Record<Commands, string> = {
@@ -19,6 +22,9 @@ export const CommandsDesc: Record<Commands, string> = {
 	[Commands.Attendance]: "📋 View your attendance",
 	[Commands.Result]: "📊 View your SGPA/CGPA",
 	[Commands.AdmitCard]: "🎫 Download your Admit Card",
+	[Commands.SecurityMode]: "🛡️ Manage security mode",
+	[Commands.EnableCMode]: "🔓 Enable convenience mode",
+	[Commands.DisableCMode]: "🔒 Disable convenience mode",
 	[Commands.Help]: "❓ Get help and usage instructions",
 	[Commands.Logout]: "👋 Logout",
 };
@@ -32,12 +38,6 @@ export function registerCommands(bot: Bot<BotContext>, db: DB) {
 
 	// Channel Layer
 	bot.chatType("channel").use(channelComposer(db));
-}
-
-export function registerAuth(bot: Bot<BotContext>, db: DB) {
-	// Moved to privateComposer, but keeping this export if needed elsewhere or to follow previous pattern
-	// For now, it's called in index.ts, so we should probably keep it or redirect it
-	// Actually, index.ts should just call registerCommands and let composers handle it
 }
 
 export async function setCommandList(bot: Bot<BotContext>) {

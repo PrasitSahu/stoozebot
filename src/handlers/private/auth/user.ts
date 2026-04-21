@@ -3,12 +3,7 @@ import { SQLiteTransaction } from "drizzle-orm/sqlite-core";
 import { DB } from "@/config";
 import { authTokens, platformUsers, users } from "@/db";
 import { createId } from "@/db/schema/helper";
-
-type Tx = SQLiteTransaction<"async", D1Result<unknown>, any, any>;
-
-export enum Platform {
-	Telegram = "telegram",
-}
+import { Platform } from "@/constants";
 
 export async function createUser(db: DB, user: InferInsertModel<typeof users>, platformId: string, authToken: string) {
 	const newId = createId();
@@ -18,7 +13,7 @@ export async function createUser(db: DB, user: InferInsertModel<typeof users>, p
 		db.insert(authTokens).values({ userId: newId, token: authToken }),
 		db
 			.insert(platformUsers)
-			.values({ userId: newId, platform: Platform.Telegram, platformId: platformId })
+			.values({ userId: newId, platform: Platform.Telegram, platformId: platformId, securityMode: "PRIVACY" })
 			.onConflictDoUpdate({
 				target: [platformUsers.platform, platformUsers.platformId],
 				set: { userId: newId },
@@ -36,7 +31,7 @@ export async function createPlatformUser(db: DB, id: string, platformId: string)
 		});
 }
 
-export async function updateUserCreds(db: DB, id: string, passToken: string, authToken: string) {
+export async function updateUserCreds(db: DB, id: string, passToken: string | null, authToken: string) {
 	await db.batch([
 		db.update(users).set({ password: passToken }).where(eq(users.id, id)),
 		db.update(authTokens).set({ token: authToken }).where(eq(authTokens.userId, id)),

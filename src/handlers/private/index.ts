@@ -23,9 +23,11 @@ import { logout } from "./commands/logout";
 import { downloadResult } from "./commands/result/downloadResult";
 import { result } from "./commands/result/result";
 import { start } from "./commands/start";
+import { securityMode, enableCMode, disableCMode } from "./commands/security";
 import { admitcard, listExamTypes, listExamCodes } from "./commands/admitcard/admitcard";
 import { downloadAdmitCard } from "./commands/admitcard/downloadAdmitCard";
 import { acceptPrivacyToS, cancelPrivacyToS } from "./PToS";
+import { Commands } from "../register";
 
 export const privateComposer = (db: DB) => {
 	const composer = new Composer<BotContext>();
@@ -41,26 +43,29 @@ export const privateComposer = (db: DB) => {
 	updateCreds(composer, db);
 
 	// commands
-	composer.command("start", (ctx) => start(ctx, db));
-	composer.command("help", (ctx) => help(ctx));
+	composer.command(Commands.Start, (ctx) => start(ctx, db));
+	composer.command(Commands.Help, (ctx) => help(ctx));
+	composer.command(Commands.SecurityMode, (ctx) => securityMode(ctx));
+	composer.command(Commands.EnableCMode, (ctx) => enableCMode(ctx, db));
+	composer.command(Commands.DisableCMode, (ctx) => disableCMode(ctx, db));
 
 	// Grouping authenticated commands
 	const authGroup = new Composer<BotContext>();
 	authGroup.use(filterNAuth);
 	composer.use(authGroup);
 
-	authGroup.command("logout", (ctx) => logout(ctx, db));
+	authGroup.command(Commands.Logout, (ctx) => logout(ctx, db));
 
 	// attendance commands
-	authGroup.command("attendance", (ctx) => attendance(ctx, db));
+	authGroup.command(Commands.Attendance, (ctx) => attendance(ctx, db));
 	authGroup.callbackQuery(attendanceRegex, (ctx) => getAttendance(ctx, db));
 
 	// result commands
-	authGroup.command("result", (ctx) => result(ctx, db));
+	authGroup.command(Commands.Result, (ctx) => result(ctx, db));
 	authGroup.callbackQuery(ResultRegex, (ctx) => downloadResult(ctx, db));
 
 	// admitcard commands
-	authGroup.command("admitcard", (ctx) => admitcard(ctx));
+	authGroup.command(Commands.AdmitCard, (ctx) => admitcard(ctx));
 	authGroup.callbackQuery(AdmitCardRegRegex, (ctx) => listExamTypes(ctx));
 	authGroup.callbackQuery(AdmitCardExamTypeRegex, (ctx) => listExamCodes(ctx));
 	authGroup.callbackQuery(AdmitCardDnRegex, (ctx) => downloadAdmitCard(ctx));

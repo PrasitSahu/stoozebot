@@ -25,6 +25,11 @@ vi.mock("@/services/soaPortals", () => {
 	};
 });
 
+vi.mock("@/utils", () => ({
+	aesEnc: vi.fn(() => "mocked_encrypted_token"),
+	text: (str: string) => str.trim(),
+}));
+
 describe("attendance command (getAttendance callback)", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -44,8 +49,6 @@ describe("attendance command (getAttendance callback)", () => {
 		await getAttendance(ctx, db);
 
 		expect(ctx.answerCallbackQuery).toHaveBeenCalledOnce();
-
-		expect(db.insert).toHaveBeenCalled();
 		expect(ctx.reply).toHaveBeenCalledOnce();
 
 		const replyArgs = vi.mocked(ctx.reply).mock.calls[0];

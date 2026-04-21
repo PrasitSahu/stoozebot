@@ -8,11 +8,17 @@ import soaPortals from "@/services/soaPortals";
 import * as userUtils from "@/handlers/private/auth/user";
 
 // Mock external services and utils
-vi.mock("@/services/soaPortals");
+vi.mock("@/services/soaPortals", () => {
+	return {
+		default: vi.fn(),
+	};
+});
+
 vi.mock("@/utils", () => ({
 	aesEnc: vi.fn(() => "mocked_encrypted_token"),
 	text: (str: string) => str.trim(),
 }));
+
 vi.mock("@/handlers/private/auth/user", async () => {
 	const actual = (await vi.importActual("@/handlers/private/auth/user")) as any;
 	return {
@@ -36,11 +42,12 @@ describe("login handler", () => {
 		const hearsSpy = vi.spyOn(bot, "hears");
 		login(bot, db);
 		handler = hearsSpy.mock.calls[0][1] as any;
+		vi.clearAllMocks();
 	});
 
 	it("should reply 'Already logged in' if user is already authenticated", async () => {
 		const ctx = createMockContext({
-			auth: { user: { id: "1" } } as any,
+			auth: { user: { id: "1", password: "mocked_password" } } as any,
 			message: { text: "#login REGNO_PASS" } as any,
 		});
 
@@ -150,7 +157,6 @@ describe("login handler", () => {
 		await handler(ctx);
 
 		// Should call error handler or reply with error
-		// Note: handleErrors is imported and called in the handler
 		expect(ctx.reply).toHaveBeenCalledWith(expect.stringContaining("wrong password"), expect.anything());
 	});
 });

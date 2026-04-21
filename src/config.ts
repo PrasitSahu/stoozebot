@@ -12,6 +12,7 @@ export interface Auth {
 	user: InferSelectModel<typeof schema.users> | null;
 	reqs: number;
 	token: string | null;
+	securityMode: string;
 }
 
 export interface BotContext extends Context {

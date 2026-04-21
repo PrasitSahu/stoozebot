@@ -65,6 +65,7 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 				// Fix: if no reqs, set to max
 				reqs: reqs.length ? reqs[0].reqs : 1,
 				token: platformUserWithuser.user?.authToken?.token || null,
+				securityMode: platformUserWithuser.securityMode,
 			};
 			ctx.auth = auth;
 		} catch (error) {

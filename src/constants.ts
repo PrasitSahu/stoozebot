@@ -4,6 +4,11 @@ export const enum Platform {
 	Telegram = "telegram",
 }
 
+export const enum SecurityMode {
+	Privacy = "PRIVACY",
+	Convenience = "CONVENIENCE",
+}
+
 export const enum Err {
 	ErrFormat = "INVALID_FORMAT",
 	ErrInvalidCred = "INVALID_CRED",

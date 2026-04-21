@@ -7,11 +7,17 @@ import { BotContext } from "../../../../src/config";
 import soaPortals from "@/services/soaPortals";
 import * as userUtils from "../../../../src/handlers/private/auth/user";
 
-vi.mock("@/services/soaPortals");
+vi.mock("@/services/soaPortals", () => {
+	return {
+		default: vi.fn(),
+	};
+});
+
 vi.mock("../../../../src/utils", () => ({
 	aesEnc: vi.fn(() => "mocked_encrypted_token"),
 	text: (str: string) => str.trim(),
 }));
+
 vi.mock("../../../../src/handlers/private/auth/user", async () => {
 	const actual = (await vi.importActual("../../../../src/handlers/private/auth/user")) as any;
 	return {

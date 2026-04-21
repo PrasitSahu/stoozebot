@@ -19,6 +19,11 @@ vi.mock("@/services/soaPortals", () => {
 	};
 });
 
+vi.mock("@/utils", () => ({
+	aesEnc: vi.fn(() => "mocked_encrypted_token"),
+	text: (str: string) => str.trim(),
+}));
+
 describe("attendance (listSem) command", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -40,6 +45,7 @@ describe("attendance (listSem) command", () => {
 				token: "fake-token",
 				user: { id: "user1", password: "password", username: "test", name: "test", regno: "123" } as any,
 				reqs: 0,
+				securityMode: "CONVENIENCE",
 			},
 		});
 		const db = createMockDB();
