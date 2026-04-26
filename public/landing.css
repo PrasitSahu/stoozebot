@@ -411,7 +411,7 @@ nav .btn-primary:hover {
     display: flex;
     gap: 1rem;
 }
- @media (max-width: 768px) {
+ @media (max-width: 1024px) {
     .hero-btns {
         flex-direction: column;
         align-items: center; /* Center buttons */
