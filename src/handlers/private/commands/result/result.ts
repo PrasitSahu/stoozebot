@@ -21,7 +21,7 @@ export async function result(ctx: BotContext, db: DB) {
 
 		let semData: SemesterData[] = [];
 
-		const soaPService = new SoaPService(ctx.auth.user.password);
+		const soaPService = new SoaPService(ctx.auth.user.password || "");
 		try {
 			const semDataResp = await soaPService.getAllSemesterData(ctx.auth.token);
 			if (semDataResp?.status?.responseStatus !== "Success") {
@@ -68,7 +68,6 @@ export async function result(ctx: BotContext, db: DB) {
 					const cachedMarks = await db.query.results.findMany({
 						where: eq(results.userId, ctx.auth.user.id),
 					});
-					console.log(cachedMarks);
 					btns = InlineKeyboard.from([...cachedMarks.map((m) => [InlineKeyboard.text(m.semDesc, `#result ${m.sem}`)])]);
 				}
 			} else {

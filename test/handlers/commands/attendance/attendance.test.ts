@@ -49,9 +49,9 @@ describe("attendance command (getAttendance callback)", () => {
 		await getAttendance(ctx, db);
 
 		expect(ctx.answerCallbackQuery).toHaveBeenCalledOnce();
-		expect(ctx.reply).toHaveBeenCalledOnce();
+		expect(ctx.editMessageText).toHaveBeenCalledOnce();
 
-		const replyArgs = vi.mocked(ctx.reply).mock.calls[0];
+		const replyArgs = vi.mocked(ctx.editMessageText).mock.calls[0];
 		expect(replyArgs[0]).toContain("Mathmatics (MATH101)");
 		expect(replyArgs[0]).toContain("90%");
 	});

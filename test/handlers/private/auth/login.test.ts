@@ -99,7 +99,7 @@ describe("login handler", () => {
 		await handler(ctx);
 
 		expect(userUtils.createUser).toHaveBeenCalled();
-		expect(ctx.reply).toHaveBeenCalledWith("✅ Done");
+		expect(ctx.api.editMessageText).toHaveBeenCalledWith(ctx.chat.id, 123, "✅ Done", {});
 	});
 
 	it("should handle existing user login (credential update)", async () => {
@@ -130,7 +130,7 @@ describe("login handler", () => {
 
 		expect(userUtils.updateUserCreds).toHaveBeenCalled();
 		expect(userUtils.createPlatformUser).toHaveBeenCalled();
-		expect(ctx.reply).toHaveBeenCalledWith("✅ Done");
+		expect(ctx.api.editMessageText).toHaveBeenCalledWith(ctx.chat.id, 123, "✅ Done", {});
 	});
 
 	it("should handle invalid credentials from external service", async () => {

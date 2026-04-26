@@ -15,7 +15,7 @@ export async function admitcard(ctx: BotContext) {
 
 		await ctx.replyWithChatAction("typing");
 
-		const soaPortalService = new SoaPService(ctx.auth.user.password);
+		const soaPortalService = new SoaPService(ctx.auth.user.password || "");
 		const metaDataRes = await soaPortalService.getAdmitCardMetaData(ctx.auth.token);
 
 		if (metaDataRes.status.responseStatus !== "Success") {
@@ -48,7 +48,7 @@ export async function listExamTypes(ctx: BotContext) {
 		await ctx.answerCallbackQuery();
 		await ctx.replyWithChatAction("typing");
 
-		const soaPortalService = new SoaPService(ctx.auth.user.password);
+		const soaPortalService = new SoaPService(ctx.auth.user.password || "");
 		const metaDataRes = await soaPortalService.getAdmitCardMetaData(ctx.auth.token);
 
 		if (metaDataRes.status.responseStatus !== "Success") {
@@ -84,7 +84,7 @@ export async function listExamCodes(ctx: BotContext) {
 		await ctx.answerCallbackQuery();
 		await ctx.replyWithChatAction("typing");
 
-		const soaPortalService = new SoaPService(ctx.auth.user.password);
+		const soaPortalService = new SoaPService(ctx.auth.user.password || "");
 		const examCodesRes = await soaPortalService.getAdmitCardExamCodes(ctx.auth.token, regId, examTypeId);
 
 		if (examCodesRes.status.responseStatus !== "Success") {

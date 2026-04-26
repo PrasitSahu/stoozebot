@@ -46,6 +46,8 @@ export const ResultRegex = /^#result\s+(\d+)(?:\s+(r))?$/;
 export const AdmitCardRegRegex = /^#admitcard_reg\s+(.+)$/;
 export const AdmitCardExamTypeRegex = /^#admitcard_exam\s+(.+?)_(.+)$/;
 export const AdmitCardDnRegex = /^#admitcard_dn\s+(.+?)_(.+)$/;
+export const AcceptPrivacyToSRegex = /^#accept privacy_tos_(.*)$/;
+export const CancelPrivacyToSRegex = /^#cancel privacy_tos_(.*)$/;
 
 export const AcceptPrivacyToS = "#accept privacy_tos";
 export const CancelPrivacyToS = "#cancel privacy_tos";

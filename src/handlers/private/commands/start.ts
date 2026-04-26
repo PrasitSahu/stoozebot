@@ -52,8 +52,8 @@ Hello ${name} 👋,
 🛡️ *Security & Privacy:*
 
 The bot supports two security modes:
-• *Privacy Mode* (Default): Your password is never stored. Re-login is required when your session expires.
-• *Convenience Mode*: Your password is encrypted and stored for automatic re-authentication.
+• *Privacy Mode*: Your password is never stored. Re-login is required when your session expires.
+• *Convenience Mode* (Default): Your password is encrypted and stored for automatic re-authentication.
 
 Manage your settings with */security_mode*.
 

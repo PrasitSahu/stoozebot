@@ -20,7 +20,7 @@ export async function downloadAdmitCard(ctx: BotContext) {
 		await ctx.editMessageText("Downloading your admit card PDF...");
 		await ctx.replyWithChatAction("upload_document");
 
-		const soaPortalService = new SoaPService(ctx.auth.user.password);
+		const soaPortalService = new SoaPService(ctx.auth.user.password || "");
 		const metaDataRes = await soaPortalService.getAdmitCardMetaData(ctx.auth.token);
 
 		if (metaDataRes.status.responseStatus !== "Success") {

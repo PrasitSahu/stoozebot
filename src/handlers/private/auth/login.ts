@@ -58,6 +58,7 @@ export function login(bot: Composer<BotContext>, db: DB) {
 				return;
 			}
 
+			const msg = await ctx.reply("⏳ Verifying credentials...");
 			const regNoInp = match[1].toUpperCase();
 			const password = match[2];
 
@@ -101,7 +102,7 @@ export function login(bot: Composer<BotContext>, db: DB) {
 
 				const studentInfo = await soaPortalService.getPersonalInfo(regdata.token);
 				if (studentInfo.status.responseStatus !== "Success") {
-					await ctx.reply("failed to fetch user data.");
+					await ctx.api.editMessageText(ctx.chat.id, msg.message_id, "failed to fetch user data.", {});
 					return;
 				}
 
@@ -140,7 +141,7 @@ export function login(bot: Composer<BotContext>, db: DB) {
 				await updateUserCreds(db, user.id, storagePassword, regdata.token);
 				await createPlatformUser(db, user.id, ctx.chat.id.toString());
 			}
-			await ctx.reply(ReplyDone);
+			await ctx.api.editMessageText(ctx.chat.id, msg.message_id, ReplyDone, {});
 		} catch (error: unknown) {
 			await handleErrors(ctx, error as Error);
 		}

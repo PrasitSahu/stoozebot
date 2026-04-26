@@ -8,6 +8,8 @@ import {
 	AdmitCardRegRegex,
 	AdmitCardExamTypeRegex,
 	AdmitCardDnRegex,
+	AcceptPrivacyToSRegex,
+	CancelPrivacyToSRegex,
 } from "../../constants";
 import { auth, filterNAuth } from "../../middlewares/auth";
 import { privacyTOS } from "../../middlewares/privayToS";
@@ -42,6 +44,13 @@ export const privateComposer = (db: DB) => {
 	login(composer, db);
 	updateCreds(composer, db);
 
+	composer.callbackQuery("#cancel", async (ctx) => {
+		try {
+			await ctx.answerCallbackQuery();
+			await ctx.deleteMessage();
+		} catch (error) {}
+	});
+
 	// commands
 	composer.command(Commands.Start, (ctx) => start(ctx, db));
 	composer.command(Commands.Help, (ctx) => help(ctx));
@@ -70,14 +79,8 @@ export const privateComposer = (db: DB) => {
 	authGroup.callbackQuery(AdmitCardExamTypeRegex, (ctx) => listExamCodes(ctx));
 	authGroup.callbackQuery(AdmitCardDnRegex, (ctx) => downloadAdmitCard(ctx));
 
-	composer.callbackQuery("#cancel", async (ctx) => {
-		try {
-			await ctx.deleteMessage();
-		} catch (error) {}
-	});
-
-	composer.callbackQuery(AcceptPrivacyToS, (ctx) => acceptPrivacyToS(ctx, db));
-	composer.callbackQuery(CancelPrivacyToS, (ctx) => cancelPrivacyToS(ctx, db));
+	composer.callbackQuery(AcceptPrivacyToSRegex, (ctx) => acceptPrivacyToS(ctx, db));
+	composer.callbackQuery(CancelPrivacyToSRegex, (ctx) => cancelPrivacyToS(ctx, db));
 
 	return composer;
 };

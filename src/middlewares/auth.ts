@@ -83,6 +83,10 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 
 export async function filterNAuth(ctx: BotContext, next: NextFunction) {
 	if (!ctx.auth || !ctx.auth.user) {
+		if (ctx.hasCallbackQuery(/.*/)) {
+			await ctx.answerCallbackQuery();
+		}
+
 		await ctx.reply(ReplyNoAuth, {
 			parse_mode: "Markdown",
 		});

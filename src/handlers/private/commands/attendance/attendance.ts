@@ -49,7 +49,7 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 
 		await ctx.replyWithChatAction("typing");
 
-		const soaPortalService = new SoaPService(user.password);
+		const soaPortalService = new SoaPService(user.password || "");
 		let attendancesRes: Response<AttendanceResponse>;
 		let attendances: Attendance[] = [];
 		let fromSource: boolean = true;
@@ -152,7 +152,7 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 				throw error;
 			}
 		} else {
-			await ctx.reply(reply, {
+			await ctx.editMessageText(reply, {
 				parse_mode: "Markdown",
 				reply_markup: inlineKeyboard,
 			});

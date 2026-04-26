@@ -1,5 +1,5 @@
 import { BotContext } from "@/config";
-import { AcceptPrivacyToS, CancelPrivacyToS } from "@/constants";
+import { AcceptPrivacyToS, AcceptPrivacyToSRegex, CancelPrivacyToS, CancelPrivacyToSRegex } from "@/constants";
 import { InlineKeyboard, NextFunction } from "grammy";
 
 export async function privacyTOS(ctx: BotContext, next: NextFunction) {
@@ -8,14 +8,21 @@ export async function privacyTOS(ctx: BotContext, next: NextFunction) {
 		return;
 	}
 
-	if (ctx.hasCallbackQuery(AcceptPrivacyToS) || ctx.hasCallbackQuery(CancelPrivacyToS)) {
+	// console.log(ctx.message?.text)
+	// console.log(ctx.update)
+	if (ctx.auth.user.privacyToS) {
+		await next();
+		return;
+	}
+
+	if (ctx.hasCallbackQuery(AcceptPrivacyToSRegex) || ctx.hasCallbackQuery(CancelPrivacyToSRegex)) {
 		await next();
 		return;
 	}
 
 	const keyboard = new InlineKeyboard()
-		.text("✅ Accept", AcceptPrivacyToS)
-		.text("Cancel", CancelPrivacyToS)
+		.text("✅ Accept", ctx.message?.text ? `${AcceptPrivacyToS}_${ctx.message.text}` : AcceptPrivacyToS)
+		.text("Cancel", ctx.message?.text ? `${CancelPrivacyToS}_${ctx.message.text}` : CancelPrivacyToS)
 		.row()
 		.webApp("Privacy Policy", `${process.env.PAGES_URL}/privacyPolicy`)
 		.row()

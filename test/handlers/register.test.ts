@@ -1,9 +1,8 @@
-import { env } from "cloudflare:test";
-import { drizzle } from "drizzle-orm/d1";
 import { Bot } from "grammy";
-import { BotContext, DB } from "../../src/config";
-import { registerCommands } from "../../src/handlers/register";
+import { createMockDB } from "test/utils/mockDB";
 import { describe, test } from "vitest";
+import { BotContext } from "../../src/config";
+import { registerCommands } from "../../src/handlers/register";
 
 export const bot = new Bot<BotContext>("testToken", {
 	botInfo: {
@@ -20,7 +19,7 @@ export const bot = new Bot<BotContext>("testToken", {
 		first_name: "",
 	},
 });
-const db: DB = drizzle(env.DB);
+const db = createMockDB();
 
 registerCommands(bot, db);
 
