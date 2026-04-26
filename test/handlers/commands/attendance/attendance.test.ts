@@ -52,7 +52,7 @@ describe("attendance command (getAttendance callback)", () => {
 		expect(ctx.editMessageText).toHaveBeenCalledOnce();
 
 		const replyArgs = vi.mocked(ctx.editMessageText).mock.calls[0];
-		expect(replyArgs[0]).toContain("Mathmatics (MATH101)");
+		expect(replyArgs[0]).toContain("*Mathmatics* (MATH101)");
 		expect(replyArgs[0]).toContain("90%");
 	});
 });
