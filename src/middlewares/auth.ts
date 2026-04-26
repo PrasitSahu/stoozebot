@@ -93,7 +93,7 @@ export async function filterNAuth(ctx: BotContext, next: NextFunction) {
 		return;
 	}
 
-	if (ctx.auth.securityMode == SecurityMode.Privacy && !ctx.auth.token) {
+	if (!ctx.auth.token) {
 		if (ctx.hasCallbackQuery(/.*/)) {
 			await ctx.answerCallbackQuery();
 		}

@@ -41,6 +41,7 @@ describe("attendance command (getAttendance callback)", () => {
 				token: "fake-token",
 				user: { id: "user1", password: "password", username: "test", name: "test", regno: "123" } as any,
 				reqs: 0,
+				securityMode: "",
 			},
 			match: ["#attendance 123-SEM1", "123", "SEM1"],
 		});
