@@ -8,7 +8,7 @@ export const users = sqliteTable("users", {
 		.$defaultFn(() => createId()),
 	name: text("name").notNull(),
 	regNo: text("reg_no").notNull().unique(),
-	password: text("password").notNull(),
+	password: text("password"),
 	gender: text("gender").notNull(),
 	dob: text("dob").notNull(),
 	program: text("program").notNull(),

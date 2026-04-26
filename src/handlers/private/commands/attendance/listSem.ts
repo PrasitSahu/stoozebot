@@ -22,7 +22,7 @@ export async function attendance(ctx: BotContext, db: DB) {
 
 		await ctx.replyWithChatAction("typing");
 
-		const soaPortalService = new SoaPService(ctx.auth.user.password);
+		const soaPortalService = new SoaPService(ctx.auth.user.password || "");
 
 		let attendanceSemList: Response<SemListResponse>;
 		let semList: Sem[] = [];

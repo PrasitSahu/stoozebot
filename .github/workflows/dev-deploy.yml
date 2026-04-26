@@ -36,6 +36,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           environment: dev
           secrets: |
             APP_URL
@@ -67,3 +68,10 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           INSTITUTE_ID: ${{ secrets.INSTITUTE_ID }}
           LIMIT_PER_DAY: ${{ secrets.LIMIT_PER_DAY }}
+
+      - name: Deploy Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name=stoozebot-dev --branch=main

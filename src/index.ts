@@ -45,6 +45,8 @@ function verifyBot(secret: string) {
 	return secret === process.env.BOT_SECRET;
 }
 
+export const bot = new Bot<BotContext>(process.env.BOT_TOKEN!);
+
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
 		checkEnv();
@@ -53,7 +55,6 @@ export default {
 			return new Response("Bad Request", { status: 400 });
 		}
 
-		const bot = new Bot<BotContext>(env.BOT_TOKEN);
 		if (isCold) {
 			try {
 				await bot.init();

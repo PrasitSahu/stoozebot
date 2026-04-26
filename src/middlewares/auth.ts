@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 import { NextFunction } from "grammy";
 import { Auth, BotContext, DB } from "@/config";
-import { Err, Platform, ReplyNoAuth } from "@/constants";
+import { Err, Platform, ReplyNoAuth, SecurityMode } from "@/constants";
 import { platformUsers } from "@/db/schema/platformUsers";
 
 export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<void> {
@@ -65,6 +65,7 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 				// Fix: if no reqs, set to max
 				reqs: reqs.length ? reqs[0].reqs : 1,
 				token: platformUserWithuser.user?.authToken?.token || null,
+				securityMode: platformUserWithuser.securityMode,
 			};
 			ctx.auth = auth;
 		} catch (error) {
@@ -82,7 +83,21 @@ export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<v
 
 export async function filterNAuth(ctx: BotContext, next: NextFunction) {
 	if (!ctx.auth || !ctx.auth.user) {
+		if (ctx.hasCallbackQuery(/.*/)) {
+			await ctx.answerCallbackQuery();
+		}
+
 		await ctx.reply(ReplyNoAuth, {
+			parse_mode: "Markdown",
+		});
+		return;
+	}
+
+	if (ctx.auth.securityMode == SecurityMode.Privacy && !ctx.auth.token) {
+		if (ctx.hasCallbackQuery(/.*/)) {
+			await ctx.answerCallbackQuery();
+		}
+		await ctx.reply(`⚠️ Session expired, please login again using \`#login ${ctx.auth.user.regNo}_PASSWORD\``, {
 			parse_mode: "Markdown",
 		});
 		return;

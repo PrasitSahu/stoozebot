@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stoozebot | Your SOA University Companion</title>
+    <meta name="description" content="The ultimate Telegram bot for SOA University students. Track attendance, check results, and download admit cards instantly.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/atropos@2.0.2/atropos.min.css">
+    <link rel="stylesheet" href="landing.css">
+    <link rel="icon" href="assets/icon.png">
+    
+    <!-- Mobile App-like Experience -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#050505">
+    <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav>
+        <div class="container nav-content">
+            <div class="logo">
+                <img src="assets/stoozebot.png" alt="Stoozebot Logo" class="logo-img">
+                <span class="logo-text">Stooze<span>bot</span></span>
+            </div>
+            <div class="nav-links" id="nav-links">
+                <a href="#features">Features</a>
+                <a href="#security">Security</a>
+                <a href="https://t.me/stoozebot" class="btn btn-primary">Open Telegram</a>
+            </div>
+            <button class="mobile-toggle" id="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="fade-in">The Ultimate Companion for <span>ITER Students</span></h1>
+                <p class="fade-in-delayed">Track your attendance, check SGPA/CGPA, and download admit cards—all without leaving Telegram. Fast, secure, and built for students.</p>
+                <div class="hero-btns fade-in-delayed">
+                    <a href="https://t.me/stoozebot" class="btn btn-lg btn-primary">Start Chatting</a>
+                    <a href="#features" class="btn btn-lg btn-outline">Explore Features</a>
+                </div>
+            </div>
+            <div class="hero-mockup fade-in-up">
+                <div class="mockup-phone">
+                    <div class="mockup-header">
+                        <div class="back-btn">←</div>
+                        <img src="assets/stoozebot.png" alt="Bot" class="bot-avatar">
+                        <div class="bot-info">
+                            <h4>Stooze Bot</h4>
+                        </div>
+                        <div class="menu-dots">⋮</div>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="date-divider" id="chat-date">April 26</div>
+
+                        <div class="message user">
+                            /start
+                            <span class="msg-meta"><span class="chat-time">13:39</span> ✓✓</span>
+                        </div>
+
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+
+                        <div class="message bot">
+                            Hello Vicky 👋,<br><br>
+                            <b>Here's what I can help you with:</b><br><br>
+                            📅 Track attendance - /attendance<br>
+                            🎓 Check results - /result<br>
+                            🎫 Download admit card - /admitcard<br><br>
+                            For help - /help
+                            <span class="msg-meta"><span class="chat-time">13:39</span></span>
+                        </div>
+                    </div>
+                    <div class="mockup-input">
+                        <div class="menu-btn">
+                            <span class="burger">≡</span>
+                            Menu
+                        </div>
+                        <div class="input-field">
+                            <span class="emoji">☺</span>
+                            Message
+                            <span class="attach">📎</span>
+                        </div>
+                        <div class="mic-btn">🎤</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Everything You Need</h2>
+            <div class="features-grid">
+                <!-- Attendance -->
+                <div class="atropos feature-atropos">
+                    <div class="atropos-scale">
+                        <div class="atropos-rotate">
+                            <div class="atropos-inner">
+                                <div class="feature-card" data-atropos-offset="-2">
+                                    <div class="feature-icon" data-atropos-offset="3">📊</div>
+                                    <h3 data-atropos-offset="1">Attendance Tracking</h3>
+                                    <p data-atropos-offset="0">Get detailed subject-wise attendance reports in seconds. Stay on top of your classes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Results -->
+                <div class="atropos feature-atropos">
+                    <div class="atropos-scale">
+                        <div class="atropos-rotate">
+                            <div class="atropos-inner">
+                                <div class="feature-card" data-atropos-offset="-2">
+                                    <div class="feature-icon" data-atropos-offset="3">📈</div>
+                                    <h3 data-atropos-offset="1">Results & Grades</h3>
+                                    <p data-atropos-offset="0">Instant access to your SGPA and CGPA. No more navigating through slow portals.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Admit Cards -->
+                <div class="atropos feature-atropos">
+                    <div class="atropos-scale">
+                        <div class="atropos-rotate">
+                            <div class="atropos-inner">
+                                <div class="feature-card" data-atropos-offset="-2">
+                                    <div class="feature-icon" data-atropos-offset="3">🎫</div>
+                                    <h3 data-atropos-offset="1">Admit Cards</h3>
+                                    <p data-atropos-offset="0">Download your admit cards directly to your phone whenever you need them.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Updates -->
+                <div class="atropos feature-atropos">
+                    <div class="atropos-scale">
+                        <div class="atropos-rotate">
+                            <div class="atropos-inner">
+                                <div class="feature-card" data-atropos-offset="-2">
+                                    <div class="feature-icon" data-atropos-offset="3">📢</div>
+                                    <h3 data-atropos-offset="1">Latest Updates</h3>
+                                    <p data-atropos-offset="0">Receive notifications about new features and university announcements.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="security" class="security">
+        <div class="container">
+            <div class="security-flex">
+                <div class="security-content">
+                    <h2 class="section-subtitle">Security First</h2>
+                    <h2 class="section-title left">Your Data. Your <span>Choice.</span></h2>
+                    <p class="security-description">Stoozebot is engineered with a performance-first approach to security. Choose the mode that fits your lifestyle.</p>
+                    
+                    <div class="mode-grid">
+                        <div class="mode-card">
+                            <div class="mode-header">
+                                <span class="mode-badge privacy">Shielded</span>
+                                <h3>Privacy Mode</h3>
+                            </div>
+                            <p>No credentials stored on our servers. Manual login required for each session. The ultimate choice for privacy-conscious students.</p>
+                        </div>
+                        
+                        <div class="mode-card">
+                            <div class="mode-header">
+                                <span class="mode-badge convenience">Turbo</span>
+                                <h3>Convenience Mode</h3>
+                            </div>
+                            <p>Encrypted storage using AES-256 for seamless re-authentication. High-speed access to your data without the friction.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="security-visual">
+                    <div class="atropos security-atropos">
+                        <div class="atropos-scale">
+                            <div class="atropos-rotate">
+                                <div class="atropos-inner">
+                                    <div class="encryption-card" data-atropos-offset="-2">
+                                        <div class="flow-node client">USER</div>
+                                        
+                                        <div class="data-flow flow-in">
+                                            <div class="packet"></div>
+                                            <div class="packet"></div>
+                                            <div class="packet"></div>
+                                        </div>
+
+                                        <div class="lock-visual" data-atropos-offset="8">
+                                            <div class="lock-body">
+                                                <div class="lock-shackle"></div>
+                                                <div class="lock-core"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="data-flow flow-out">
+                                            <div class="packet"></div>
+                                            <div class="packet"></div>
+                                            <div class="packet"></div>
+                                        </div>
+
+                                        <div class="flow-node db">ENCRYPTED DB</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <img src="assets/stoozebot.png" alt="Stoozebot Logo" class="logo-img">
+                        <span class="logo-text">Stooze<span>bot</span></span>
+                    </div>
+                    <p class="brand-desc">Engineered for SOA University students. High-performance attendance and academic tracking.</p>
+                </div>
+                
+                <div class="footer-nav">
+                    <div class="footer-col">
+                        <h4>Legal</h4>
+                        <ul class="footer-links">
+                            <li><a href="privacyPolicy.html">Privacy Policy</a></li>
+                            <li><a href="termsOfService.html">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Connect</h4>
+                        <ul class="footer-links">
+                            <li><a href="https://t.me/stoozebot">Telegram</a></li>
+                            <li><a href="https://github.com/PrasitSahu">GitHub</a></li>
+                            <li><a href="mailto:stoozebot@gmail.com">Email</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Stoozebot. All Rights Reserved. Not affiliated with SOA University.</p>
+                <div class="footer-tagline">Made with ❤️ by a Student, For Students</div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/atropos@2.0.2/atropos.min.js"></script>
+    <script>
+        // Initialize Atropos only on desktop/tablet to prevent scroll blocking on mobile
+        if (window.innerWidth > 768) {
+            document.querySelectorAll('.atropos').forEach(el => {
+                Atropos({
+                    el: el,
+                    activeOffset: 20,
+                    shadowScale: 1.02,
+                    duration: 500
+                });
+            });
+        }
+
+        // Simple scroll animation observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.feature-atropos, .mode-item, .security-atropos, .mockup-phone').forEach(el => {
+            el.classList.add('reveal');
+            observer.observe(el);
+        });
+    </script>
+    <script>
+        // Update Mockup Date and Time
+        function updateMockupTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeStr = `${hours}:${minutes}`;
+            
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            const dateStr = `${monthNames[now.getMonth()]} ${now.getDate()}`;
+
+            document.getElementById('chat-date').textContent = dateStr;
+            document.querySelectorAll('.chat-time').forEach(el => {
+                el.textContent = timeStr;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateMockupTime();
+            
+            // Attempt to hide address bar on mobile
+            window.addEventListener("load", function() {
+                setTimeout(function() {
+                    window.scrollTo(0, 1);
+                }, 0);
+            });
+
+            // Mobile Menu Toggle
+            const toggle = document.getElementById('mobile-toggle');
+            const navLinks = document.getElementById('nav-links');
+
+            if (toggle && navLinks) {
+                toggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                    toggle.classList.toggle('active');
+                });
+
+                // Close menu on link click
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        toggle.classList.remove('active');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

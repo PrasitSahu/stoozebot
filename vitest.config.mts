@@ -8,6 +8,7 @@ export default defineWorkersConfig({
 		},
 	},
 	test: {
+		setupFiles: ["./test/setup.ts"],
 		poolOptions: {
 			workers: {
 				wrangler: { configPath: "./wrangler.jsonc" },

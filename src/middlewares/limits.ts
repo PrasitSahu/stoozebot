@@ -1,6 +1,6 @@
-import { ApiCallFn, NextFunction, RawApi } from "grammy";
 import { BotContext } from "@/config";
 import { GlobalThrottlerKey, ReplyLimitReached } from "@/constants";
+import { NextFunction } from "grammy";
 
 export async function limits(ctx: BotContext, next: NextFunction) {
 	const max = Number(process.env.LIMIT_PER_DAY);

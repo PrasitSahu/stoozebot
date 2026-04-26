@@ -3,12 +3,22 @@ import jwt from "jsonwebtoken";
 import { BotContext, DB } from "@/config";
 import { Err } from "@/constants";
 import { authTokens } from "@/db/schema/authTokens";
+import { SecurityMode } from "@/constants";
+import { z } from "zod";
 import SoaPService from "@/services/soaPortals";
-import z, { number } from "zod";
 
 const AuthToken = z.object({
-	exp: number("the expiry field of the auth token should be a number"),
+	exp: z.number("the expiry field of the auth token should be a number"),
 });
+
+function isExpired(token: string) {
+	try {
+		const p = AuthToken.parse(jwt.decode(token, { json: true }));
+		return p.exp < Date.now() / 1000;
+	} catch (error) {
+		return true;
+	}
+}
 
 export function manageToken(db: DB): (ctx: BotContext, next: NextFunction) => Promise<void> {
 	return async (ctx: BotContext, next: NextFunction) => {
@@ -20,13 +30,13 @@ export function manageToken(db: DB): (ctx: BotContext, next: NextFunction) => Pr
 
 			const userId = ctx.auth.user.id;
 			const passToken = ctx.auth.user.password;
+			const securityMode = ctx.auth.securityMode;
 
-			if (!ctx.auth.token) {
-				ctx.auth.token = await upsertNewToken(passToken, db, userId);
-			} else {
-				var p = AuthToken.parse(jwt.decode(ctx.auth.token, { json: true }));
-
-				if (p.exp < Date.now() / 1000) {
+			if (!ctx.auth.token || isExpired(ctx.auth.token)) {
+				if (securityMode === SecurityMode.Privacy || !passToken) {
+					// In privacy mode, we can't auto-refresh without the password.
+					ctx.auth.token = null;
+				} else {
 					ctx.auth.token = await upsertNewToken(passToken, db, userId);
 				}
 			}

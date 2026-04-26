@@ -5,7 +5,12 @@ import { createMockDB } from "../utils/mockDB";
 import jwt from "jsonwebtoken";
 import SoaPService from "@/services/soaPortals";
 
-vi.mock("@/services/soaPortals");
+vi.mock("@/services/soaPortals", () => {
+	return {
+		default: vi.fn(),
+	};
+});
+
 vi.mock("jsonwebtoken", () => ({
 	default: {
 		decode: vi.fn(),

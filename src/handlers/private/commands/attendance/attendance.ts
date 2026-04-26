@@ -17,13 +17,28 @@ interface ReplyAttendanceParam {
 }
 
 const imojiNums = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
-const ReplyAttendance = (param: ReplyAttendanceParam) =>
-	text(
+
+function generateProgressBar(percentage: number, length: number = 10) {
+	const filledLength = Math.round((percentage / 100) * length);
+	const filled = "▰".repeat(filledLength);
+	const empty = "▱".repeat(length - filledLength);
+	return filled + empty;
+}
+
+const ReplyAttendance = (param: ReplyAttendanceParam) => {
+	const percValue = parseFloat(param.perc);
+	const progressBar = generateProgressBar(percValue);
+	const statusEmoji = percValue >= 75 ? "🟢" : "🔴";
+
+	return text(
 		`
-        ${imojiNums.length >= param.index ? imojiNums[param.index] : param.index} ${param.sub} (${param.subCode})\n📚 Classes: ${param.totalCls}\n✅ Attendance: ${param.perc}
-    `,
+${imojiNums.length >= param.index ? imojiNums[param.index - 1] : param.index} *${param.sub}* (${param.subCode})
+*${param.perc}* ${statusEmoji}
+${progressBar}
+Classes: ${param.totalCls}
+`,
 	);
-const sep = "\n\n➖➖➖➖➖➖➖➖\n\n";
+};
 
 export async function getAttendance(ctx: BotContext, db: DB) {
 	try {
@@ -49,7 +64,7 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 
 		await ctx.replyWithChatAction("typing");
 
-		const soaPortalService = new SoaPService(user.password);
+		const soaPortalService = new SoaPService(user.password || "");
 		let attendancesRes: Response<AttendanceResponse>;
 		let attendances: Attendance[] = [];
 		let fromSource: boolean = true;
@@ -138,7 +153,7 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 		// refresh inline keyboard
 		const inlineKeyboard = new InlineKeyboard().text("🔄️ Refresh", `#attendance ${regId}-${regCode}-r`).row().text("Cancel", "#cancel");
 
-		const reply = (await Promise.all(replies)).join(sep);
+		const reply = (await Promise.all(replies)).join("\n\n");
 
 		if (refresh) {
 			if (ctx.msg?.text === reply) return;
@@ -152,7 +167,7 @@ export async function getAttendance(ctx: BotContext, db: DB) {
 				throw error;
 			}
 		} else {
-			await ctx.reply(reply, {
+			await ctx.editMessageText(reply, {
 				parse_mode: "Markdown",
 				reply_markup: inlineKeyboard,
 			});
