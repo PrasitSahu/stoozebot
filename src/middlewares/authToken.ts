@@ -1,7 +1,7 @@
 import { NextFunction } from "grammy";
 import jwt from "jsonwebtoken";
 import { BotContext, DB } from "@/config";
-import { Err } from "@/constants";
+import { DefaultPassword, Err } from "@/constants";
 import { authTokens } from "@/db/schema/authTokens";
 import { SecurityMode } from "@/constants";
 import { z } from "zod";
@@ -33,7 +33,7 @@ export function manageToken(db: DB): (ctx: BotContext, next: NextFunction) => Pr
 			const securityMode = ctx.auth.securityMode;
 
 			if (!ctx.auth.token || isExpired(ctx.auth.token)) {
-				if (securityMode === SecurityMode.Privacy || !passToken) {
+				if (securityMode === SecurityMode.Privacy || passToken === DefaultPassword) {
 					// In privacy mode, we can't auto-refresh without the password.
 					ctx.auth.token = null;
 				} else {

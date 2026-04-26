@@ -31,7 +31,7 @@ export async function createPlatformUser(db: DB, id: string, platformId: string)
 		});
 }
 
-export async function updateUserCreds(db: DB, id: string, passToken: string | null, authToken: string) {
+export async function updateUserCreds(db: DB, id: string, passToken: string, authToken: string) {
 	await db.batch([
 		db.update(users).set({ password: passToken }).where(eq(users.id, id)),
 		db.update(authTokens).set({ token: authToken }).where(eq(authTokens.userId, id)),

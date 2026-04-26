@@ -1,5 +1,5 @@
 import { BotContext, DB } from "@/config";
-import { Platform, SecurityMode } from "@/constants";
+import { DefaultPassword, Platform, SecurityMode } from "@/constants";
 import { platformUsers, users } from "@/db";
 import { and, eq } from "drizzle-orm";
 
@@ -55,7 +55,7 @@ export async function disableCMode(ctx: BotContext, db: DB) {
 		.where(and(eq(platformUsers.platformId, ctx.chat.id.toString()), eq(platformUsers.platform, Platform.Telegram)));
 
 	if (ctx.auth?.user?.id) {
-		await db.update(users).set({ password: null }).where(eq(users.id, ctx.auth.user.id));
+		await db.update(users).set({ password: DefaultPassword }).where(eq(users.id, ctx.auth.user.id));
 	}
 
 	await ctx.reply(

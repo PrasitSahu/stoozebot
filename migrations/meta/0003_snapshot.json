@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f696fef5-137f-4c3b-a15c-d4179c81d3c4",
+  "id": "ad2844a3-3f70-4112-a0a2-06dcfb042415",
   "prevId": "f1581803-155c-4d8e-b479-30ca10d3aba1",
   "tables": {
     "users": {
@@ -32,7 +32,7 @@
           "name": "password",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "gender": {
