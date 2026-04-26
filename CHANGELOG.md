@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/PrasitSahu/stoozebot/compare/v1.4.0...v2.0.0) (2026-04-26)
+
+
+### Features
+
+* security modes added ([df439a7](https://github.com/PrasitSahu/stoozebot/commit/df439a7b7d4893a876f46b2c30257a4573d6cf44))
+
+
+### BREAKING CHANGES
+
+* auth flow now uses security modes
+
 # [1.4.0](https://github.com/PrasitSahu/stoozebot/compare/v1.3.0...v1.4.0) (2026-04-26)
 
 
