@@ -1,7 +1,7 @@
 import { InferInsertModel } from "drizzle-orm";
 import { Composer } from "grammy";
 import { BotContext, DB } from "@/config";
-import { Err, Platform, ReplyDone, LoginRegex, SecurityMode } from "@/constants";
+import { Err, Platform, ReplyDone, LoginRegex, SecurityMode, DefaultPassword } from "@/constants";
 import { users } from "@/db";
 import soaPortals from "@/services/soaPortals";
 import { aesEnc } from "@/utils";
@@ -23,7 +23,7 @@ export function login(bot: Composer<BotContext>, db: DB) {
 
 		try {
 			if (!!ctx.auth?.user) {
-				if (ctx.auth.user.password) {
+				if (ctx.auth.user.password !== DefaultPassword) {
 					await ctx.reply("✅ Already logged in");
 					return;
 				} else {
@@ -84,7 +84,7 @@ export function login(bot: Composer<BotContext>, db: DB) {
 				Modulename: "STUDENTMODULE",
 			});
 
-			const storagePassword = securityMode === SecurityMode.Privacy ? null : passToken;
+			const storagePassword = securityMode === SecurityMode.Privacy ? DefaultPassword : passToken;
 
 			const soaPortalService = new soaPortals(passToken);
 

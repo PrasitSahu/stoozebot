@@ -21,6 +21,8 @@ export const enum Err {
 	ErrAuth = "UNAUTHORIZED",
 }
 
+export const DefaultPassword = "@";
+
 // replies
 export const ReplyDone = text("✅ Done");
 export const ReplyInvalidFormat = text("portal provided unexpected data. Please have patience fix is on the way 🙂");
