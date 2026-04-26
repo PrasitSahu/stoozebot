@@ -36,8 +36,8 @@ export async function enableCMode(ctx: BotContext, db: DB) {
 		.where(and(eq(platformUsers.platformId, ctx.chat.id.toString()), eq(platformUsers.platform, Platform.Telegram)));
 
 	await ctx.reply(
-		`✅ *Convenience Mode Enabled!*\n\nBot remembers your credentials for automatic re-authentication when your session expires.`,
-		{ parse_mode: "Markdown" },
+		`✅ <b>Convenience Mode Enabled!</b>\n\nBot remembers your credentials for automatic re-authentication when your session expires.\n\n<blockquote expandable>you can login now or you will get a prompt once when your current session expires.</blockquote>`,
+		{ parse_mode: "HTML" },
 	);
 }
 
