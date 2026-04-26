@@ -1,3 +1,16 @@
+# [1.4.0](https://github.com/PrasitSahu/stoozebot/compare/v1.3.0...v1.4.0) (2026-04-26)
+
+
+### Bug Fixes
+
+* check token expiry and add btns to start msg ([ee3d44c](https://github.com/PrasitSahu/stoozebot/commit/ee3d44c9861df4702509471207e76bf3e2b9eba7))
+
+
+### Features
+
+* add landing web page ([efa178f](https://github.com/PrasitSahu/stoozebot/commit/efa178f7bc15d37db39dc96ea7bccf962eaafd21))
+* add progess bar to attendance message ([f46e494](https://github.com/PrasitSahu/stoozebot/commit/f46e4948e06ffaaa13c52875cf62efc6f0e6474e))
+
 # [1.3.0](https://github.com/PrasitSahu/stoozebot/compare/v1.2.3...v1.3.0) (2026-04-19)
 
 
