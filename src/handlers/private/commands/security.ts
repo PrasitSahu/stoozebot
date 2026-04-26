@@ -10,10 +10,10 @@ export async function securityMode(ctx: BotContext) {
 
 	if (mode === SecurityMode.Privacy) {
 		message +=
-			"✅ <b>Privacy Mode Active</b>\nYour password is never stored. You will need to log in manually whenever your session expires.";
+			"✅ <b>Privacy Mode Active</b>\nBot do not remember your credentials. You will need to log in manually when your current session expires.";
 	} else {
 		message +=
-			"🚀 <b>Convenience Mode Active</b>\nYour password is stored securely (encrypted) to allow automatic re-authentication when your session expires.";
+			"🚀 <b>Convenience Mode Active</b>\nBot remembers your credentials securely to allow automatic re-authentication when your session expires.";
 	}
 
 	message +=
@@ -36,7 +36,7 @@ export async function enableCMode(ctx: BotContext, db: DB) {
 		.where(and(eq(platformUsers.platformId, ctx.chat.id.toString()), eq(platformUsers.platform, Platform.Telegram)));
 
 	await ctx.reply(
-		`✅ *Convenience Mode Enabled!*\n\nBot remembers your credentials for automatic re-authentication when your session expires. Use \`#login ${ctx.auth?.user?.regNo || "REGNO"}_PASSWORD\` again to save it.`,
+		`✅ *Convenience Mode Enabled!*\n\nBot remembers your credentials for automatic re-authentication when your session expires.`,
 		{ parse_mode: "Markdown" },
 	);
 }

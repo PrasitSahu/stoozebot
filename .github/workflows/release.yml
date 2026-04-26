@@ -120,7 +120,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy public --project-name=stoozebot-dev
+          command: pages deploy public --project-name=stoozebot-dev --branch=main
 
   deploy-prod:
     needs: [release, deploy-dev]
@@ -188,4 +188,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy public --project-name=stoozebot
+          command: pages deploy public --project-name=stoozebot --branch main
