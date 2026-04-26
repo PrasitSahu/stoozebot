@@ -1,6 +1,6 @@
 import { InlineKeyboard } from "grammy";
 import { BotContext, DB } from "@/config";
-import { NewsChannel } from "@/constants";
+import { NewsChannel, privacyTOSKeyboard } from "@/constants";
 import { text } from "@/utils";
 
 export async function start(ctx: BotContext, db: DB) {
@@ -23,14 +23,14 @@ export async function start(ctx: BotContext, db: DB) {
 				await ctx.reply(
 					`${greet(ctx.chat.first_name)}\n\nJoin our channel to stay updated with the latest features and news about the bot! 📢`,
 					{
-						reply_markup: new InlineKeyboard().url("Join Channel", `https://t.me/${channelLink}`),
+						reply_markup: privacyTOSKeyboard(ctx).row().url("Join Channel", `https://t.me/${channelLink}`),
 						parse_mode: "Markdown",
 					},
 				);
 				return;
 			}
 
-			await ctx.reply(greet(ctx.chat.first_name), { parse_mode: "Markdown" });
+			await ctx.reply(greet(ctx.chat.first_name), { parse_mode: "Markdown", reply_markup: privacyTOSKeyboard(ctx) });
 		} catch (error) {
 			console.log(error);
 		}

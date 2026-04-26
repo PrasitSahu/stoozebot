@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { privacyTOS } from "../../src/middlewares/privayToS";
 import { createMockContext } from "../utils/mockContext";
-import { AcceptPrivacyToS, CancelPrivacyToS } from "../../src/constants";
+import { AcceptPrivacyToS, CancelPrivacyToS, SecurityMode } from "../../src/constants";
 
 describe("privacyTOS middleware", () => {
 	it("should reply with Privacy Policy/ToS when user has not accepted it", async () => {
@@ -28,6 +28,7 @@ describe("privacyTOS middleware", () => {
 				},
 				reqs: 0,
 				token: "mock_token",
+				securityMode: "",
 			},
 		});
 
@@ -42,14 +43,12 @@ describe("privacyTOS middleware", () => {
 				reply_markup: expect.objectContaining({
 					inline_keyboard: expect.arrayContaining([
 						expect.arrayContaining([
-							expect.objectContaining({ text: "✅ Accept", callback_data: AcceptPrivacyToS }),
-							expect.objectContaining({ text: "Cancel", callback_data: CancelPrivacyToS }),
+							expect.objectContaining({ text: "✅ Accept", callback_data: expect.stringContaining(AcceptPrivacyToS) }),
+							expect.objectContaining({ text: "Cancel", callback_data: expect.stringContaining(CancelPrivacyToS) }),
 						]),
+						expect.arrayContaining([expect.objectContaining({ text: "Privacy Policy", url: expect.stringContaining("/privacyPolicy") })]),
 						expect.arrayContaining([
-							expect.objectContaining({ text: "Privacy Policy", web_app: { url: expect.stringContaining("/privacyPolicy") } }),
-						]),
-						expect.arrayContaining([
-							expect.objectContaining({ text: "Terms of Service", web_app: { url: expect.stringContaining("/termsOfService") } }),
+							expect.objectContaining({ text: "Terms of Service", url: expect.stringContaining("/termsOfService") }),
 						]),
 					]),
 				}),
@@ -82,6 +81,7 @@ describe("privacyTOS middleware", () => {
 				},
 				reqs: 0,
 				token: "mock_token",
+				securityMode: SecurityMode.Privacy,
 			},
 		});
 

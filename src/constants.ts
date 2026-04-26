@@ -1,4 +1,6 @@
 import { text } from "@/utils";
+import { InlineKeyboard } from "grammy";
+import { BotContext } from "./config";
 
 export const enum Platform {
 	Telegram = "telegram",
@@ -52,5 +54,18 @@ export const CancelPrivacyToSRegex = /^#cancel privacy_tos_(.*)$/;
 export const AcceptPrivacyToS = "#accept privacy_tos";
 export const CancelPrivacyToS = "#cancel privacy_tos";
 
+// keys
 export const GlobalThrottlerKey = "global_bot_throttler";
 export const NewsChannel = process.env.BOT_NEWS_CHANNEL;
+
+// keyboards
+export const privacyTOSKeyboard = (ctx: BotContext, rows = 1) => {
+	const url = new URL(process.env.PAGES_URL || "https://stoozebot.pages.dev");
+	if (rows > 1) {
+		return new InlineKeyboard()
+			.url("Privacy Policy", `${url.href}privacyPolicy`)
+			.row()
+			.url("Terms of Service", `${url.href}termsOfService`);
+	}
+	return new InlineKeyboard().url("Privacy Policy", `${url.href}privacyPolicy`).url("Terms of Service", `${url.href}termsOfService`);
+};

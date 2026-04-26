@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 import { NextFunction } from "grammy";
 import { Auth, BotContext, DB } from "@/config";
-import { Err, Platform, ReplyNoAuth } from "@/constants";
+import { Err, Platform, ReplyNoAuth, SecurityMode } from "@/constants";
 import { platformUsers } from "@/db/schema/platformUsers";
 
 export function auth(db: DB): (ctx: BotContext, next: NextFunction) => Promise<void> {
@@ -88,6 +88,16 @@ export async function filterNAuth(ctx: BotContext, next: NextFunction) {
 		}
 
 		await ctx.reply(ReplyNoAuth, {
+			parse_mode: "Markdown",
+		});
+		return;
+	}
+
+	if (ctx.auth.securityMode == SecurityMode.Privacy && !ctx.auth.token) {
+		if (ctx.hasCallbackQuery(/.*/)) {
+			await ctx.answerCallbackQuery();
+		}
+		await ctx.reply(`⚠️ Session expired, please login again using \`#login ${ctx.auth.user.regNo}_PASSWORD\``, {
 			parse_mode: "Markdown",
 		});
 		return;

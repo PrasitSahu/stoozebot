@@ -36,7 +36,7 @@ export async function enableCMode(ctx: BotContext, db: DB) {
 		.where(and(eq(platformUsers.platformId, ctx.chat.id.toString()), eq(platformUsers.platform, Platform.Telegram)));
 
 	await ctx.reply(
-		"✅ *Convenience Mode Enabled!*\n\nYour password will be stored securely from your *next* login. If you are currently logged in with Privacy Mode, your password is still not stored. Use `#login REGNO_PASSWORD` again to save it.",
+		`✅ *Convenience Mode Enabled!*\n\nBot remembers your credentials for automatic re-authentication when your session expires. Use \`#login ${ctx.auth?.user?.regNo || "REGNO"}_PASSWORD\` again to save it.`,
 		{ parse_mode: "Markdown" },
 	);
 }
@@ -59,7 +59,7 @@ export async function disableCMode(ctx: BotContext, db: DB) {
 	}
 
 	await ctx.reply(
-		"✅ *Privacy Mode Enabled!*\n\nYour saved credentials have been deleted. You will need to log in manually when your current session expires.",
+		"✅ *Privacy Mode Enabled!*\n\nBot do not remember your credentials anymore. You will need to log in manually when your current session expires.",
 		{ parse_mode: "Markdown" },
 	);
 }
