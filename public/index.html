@@ -89,16 +89,59 @@
                         </div>
                     </div>
                     <div class="mockup-input">
-                        <div class="menu-btn">
-                            <span class="burger">≡</span>
+                        <div class="menu-btn" id="demo-menu-btn">
+                            <span class="btn-icon">≡</span>
                             Menu
                         </div>
-                        <div class="input-field">
-                            <span class="emoji">☺</span>
-                            Message
-                            <span class="attach">📎</span>
+                        <div class="input-area">
+                            <span class="smiley-icon">😊</span>
+                            <span id="demo-input-text">Message</span>
+                            <span class="attach-icon">📎</span>
                         </div>
-                        <div class="mic-btn">🎤</div>
+                        <div class="mic-btn">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+                        </div>
+                        
+                        <!-- Demo Commands Menu -->
+                        <div class="demo-commands-menu" id="demo-commands-menu">
+                            <div class="menu-grabber"></div>
+                            <div class="demo-command-item" data-command="/start">
+                                <div class="cmd-main">
+                                    <span class="cmd-emoji">🚀</span>
+                                    <span class="cmd-text">Start the bot</span>
+                                </div>
+                                <span class="cmd-alias">/start</span>
+                            </div>
+                            <div class="demo-command-item" data-command="/attendance">
+                                <div class="cmd-main">
+                                    <span class="cmd-emoji">📋</span>
+                                    <span class="cmd-text">View your attendance</span>
+                                </div>
+                                <span class="cmd-alias">/attendance</span>
+                            </div>
+                            <div class="demo-command-item" data-command="/result">
+                                <div class="cmd-main">
+                                    <span class="cmd-emoji">📊</span>
+                                    <span class="cmd-text">View your SGPA/CGPA</span>
+                                </div>
+                                <span class="cmd-alias">/result</span>
+                            </div>
+                            <div class="demo-command-item" data-command="/timetable">
+                                <div class="cmd-main">
+                                    <span class="cmd-emoji">🕒</span>
+                                    <span class="cmd-text">View your timetable</span>
+                                </div>
+                                <span class="cmd-alias">/timetable</span>
+                            </div>
+                            <div class="demo-command-item" data-command="/admitcard">
+                                <div class="cmd-main">
+                                    <span class="cmd-emoji">🎫</span>
+                                    <span class="cmd-text">Download your Admit Card</span>
+                                </div>
+                                <span class="cmd-alias">/admitcard</span>
+                            </div>
+                        </div>
+                        <div class="system-nav-line"></div>
                     </div>
                 </div>
             </div>
@@ -347,6 +390,90 @@
                     });
                 });
             }
+
+            // Demo Simulation Logic
+            const demoMenuBtn = document.getElementById('demo-menu-btn');
+            const demoMenu = document.getElementById('demo-commands-menu');
+            const mockupBody = document.querySelector('.mockup-body');
+            const typingIndicator = document.querySelector('.typing-indicator');
+
+            const responses = {
+                '/start': `Hello Vicky 👋,<br><br><b>Here's what I can help you with:</b><br><br>📅 Track attendance - /attendance<br>🕒 View timetable - /timetable<br>🎓 Check results - /result<br>🎫 Download admit card - /admitcard<br><br>For help - /help`,
+                '/attendance': `<b>Select from your sem list</b><br><br><div class="demo-inline-kb"><div class="kb-btn" data-day="mon">ODD SEM 2024-25</div><div class="kb-btn" data-day="tue">EVEN SEM 2023-24</div></div>`,
+                '/result': `<b>Select from your sem list</b><br><br><div class="demo-inline-kb"><div class="kb-btn">ODD SEM 2024-25</div><div class="kb-btn">EVEN SEM 2023-24</div></div>`,
+                '/timetable': `<b>Select the semester for your timetable</b><br><br><div class="demo-inline-kb"><div class="kb-btn">ODD SEM 2024-25</div><div class="kb-btn">EVEN SEM 2023-24</div></div>`,
+                '/admitcard': `<b>Select the semester for your admit card</b><br><br><div class="demo-inline-kb"><div class="kb-btn">ODD SEM 2024-25</div><div class="kb-btn">EVEN SEM 2023-24</div></div>`,
+                '/help': `Welcome! Here are the commands you can use:<br><br>📌 Available Commands<br><br>/start — Start the bot<br>/attendance — View your semester attendance<br>/timetable — View your weekly timetable<br>/admitcard — Download your admit card<br>/result — Check your semester results<br>/logout — Remove saved credentials<br>/help — Show this help message`
+            };
+
+            function addMessage(text, isUser = false) {
+                const msg = document.createElement('div');
+                msg.className = `message ${isUser ? 'user' : 'bot'} demo-msg-animate`;
+                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                
+                msg.innerHTML = `
+                    ${text}
+                    <span class="msg-meta"><span class="chat-time">${time}</span>${isUser ? ' ✓✓' : ''}</span>
+                `;
+                
+                mockupBody.appendChild(msg);
+                mockupBody.scrollTop = mockupBody.scrollHeight;
+                
+                // If bot message, move typing indicator to bottom
+                if (!isUser) {
+                    mockupBody.appendChild(typingIndicator);
+                }
+            }
+
+            function simulateBot(command) {
+                typingIndicator.classList.add('active');
+                mockupBody.appendChild(typingIndicator);
+                mockupBody.scrollTop = mockupBody.scrollHeight;
+
+                setTimeout(() => {
+                    typingIndicator.classList.remove('active');
+                    const response = responses[command] || "I don't recognize that command in this demo.";
+                    addMessage(response);
+                }, 800 + Math.random() * 1000);
+            }
+
+            if (demoMenuBtn) {
+                const btnIcon = demoMenuBtn.querySelector('.btn-icon');
+                demoMenuBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isActive = demoMenu.classList.toggle('active');
+                    btnIcon.textContent = isActive ? '✕' : '≡';
+                });
+            }
+
+            document.addEventListener('click', () => {
+                if (demoMenu && demoMenu.classList.contains('active')) {
+                    demoMenu.classList.remove('active');
+                    demoMenuBtn.querySelector('.btn-icon').textContent = '≡';
+                }
+            });
+
+            document.querySelectorAll('.demo-command-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const cmd = item.getAttribute('data-command');
+                    addMessage(cmd, true);
+                    simulateBot(cmd);
+                });
+            });
+
+            // Handle inline buttons in demo
+            mockupBody.addEventListener('click', (e) => {
+                if (e.target.classList.contains('kb-btn')) {
+                    const btnText = e.target.textContent;
+                    addMessage(btnText, true);
+                    
+                    typingIndicator.classList.add('active');
+                    setTimeout(() => {
+                        typingIndicator.classList.remove('active');
+                        addMessage(`Displaying data for <b>${btnText}</b>... (Simulation)`);
+                    }, 1000);
+                }
+            });
         });
     </script>
 </body>

@@ -40,6 +40,12 @@ body {
     color: var(--text-main);
     line-height: 1.6;
     scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 body::after {
@@ -331,9 +337,9 @@ nav .btn-primary:hover {
     min-height: 100vh;
     position: relative;
     background: 
-        radial-gradient(circle at center, transparent 0%, var(--background) 90%),
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    radial-gradient(circle at center, transparent 0%, var(--background) 90%),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 100% 100%, 50px 50px, 50px 50px;
     background-position: center center;
 }
@@ -480,28 +486,6 @@ nav .btn-primary:hover {
     background: var(--white);
     color: var(--background);
     transform: skew(-5deg) translateY(-2px);
-}
-
-/* Phone Mockup */
-.phone-frame {
-    width: 340px;
-    height: 680px;
-    background: #020617;
-    border: 12px solid #1e293b;
-    border-radius: 48px;
-    overflow: hidden;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(99, 102, 241, 0.1);
-}
-
-.phone-screen {
-    width: 100%;
-    height: 100%;
-    background: #0f172a;
-    display: flex;
-    flex-direction: column;
 }
 
 .section-title {
@@ -782,7 +766,6 @@ nav .btn-primary:hover {
     pointer-events: none;
 }
 
-
 .card-glow {
     position: absolute;
     top: 50%;
@@ -904,10 +887,6 @@ nav .btn-primary:hover {
 .packet:nth-child(1) { animation-delay: 0s; }
 .packet:nth-child(2) { animation-delay: 0.6s; }
 .packet:nth-child(3) { animation-delay: 1.2s; }
-
-.lock-visual {
-    margin: 1rem 0;
-}
 
 .c-line {
     height: 4px;
@@ -1067,15 +1046,6 @@ nav .btn-primary:hover {
     }
 }
 
-/* Mobile Responsive Adjustments */
-@media (max-width: 768px) {
-    .hero-content h1 { font-size: 3.5rem; }
-    .features-grid { grid-template-columns: 1fr; }
-    .section-title { font-size: 2.8rem; }
-    .hero { padding: 4rem 0; }
-    .hero .container { gap: 3rem; }
-}
-
 /* Animations */
 .fade-in { animation: fadeIn 1s ease-out; }
 .fade-in-delayed { animation: fadeIn 1s ease-out 0.3s both; }
@@ -1103,41 +1073,6 @@ nav .btn-primary:hover {
 }
 
 /* Telegram Specific Styles for Mockup */
-.telegram-header {
-    height: 64px;
-    background: #1e293b;
-    display: flex;
-    align-items: center;
-    padding: 0 1.25rem;
-    gap: 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
-.bot-info {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-}
-
-.bot-info img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-.bot-name {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--white);
-}
-
-.bot-status {
-    font-size: 0.75rem;
-    color: var(--primary);
-}
-
-/* Phone Mockup / Telegram Chat */
 .mockup-phone {
     width: 100%;
     max-width: 380px;
@@ -1263,24 +1198,7 @@ nav .btn-primary:hover {
     font-size: 0.85rem;
     line-height: 1.4;
     position: relative;
-    opacity: 0;
-    animation-duration: 0.4s;
-    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
-    animation-fill-mode: forwards;
-}
-
-.animate .message.user {
-    animation-name: slideInRight;
-    animation-delay: 0.5s;
-}
-
-.animate .message.bot {
-    animation-name: slideInLeft;
-    animation-delay: 2.5s;
-}
-
-.animate .typing-indicator {
-    animation: typingReveal 1.5s linear 1s forwards;
+    opacity: 1; /* Ensure visibility for JS-added messages */
 }
 
 .message.user {
@@ -1303,9 +1221,12 @@ nav .btn-primary:hover {
     border-radius: 12px;
     border-bottom-left-radius: 2px;
     align-self: flex-start;
-    display: flex;
+    display: none;
     gap: 4px;
-    opacity: 0;
+}
+
+.typing-indicator.active {
+    display: flex;
 }
 
 .typing-dot {
@@ -1318,23 +1239,6 @@ nav .btn-primary:hover {
 
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes slideInRight {
-    from { opacity: 0; transform: translateX(20px) translateY(10px); }
-    to { opacity: 1; transform: translateX(0) translateY(0); }
-}
-
-@keyframes slideInLeft {
-    from { opacity: 0; transform: translateX(-20px) translateY(10px); }
-    to { opacity: 1; transform: translateX(0) translateY(0); }
-}
-
-@keyframes typingReveal {
-    0% { opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { opacity: 0; display: none; }
-}
 
 @keyframes dotPulse {
     0%, 100% { opacity: 0.3; transform: scale(0.8); }
@@ -1354,8 +1258,6 @@ nav .btn-primary:hover {
 .message.user .msg-meta {
     color: #78a2c0;
 }
-
-/* Removed messageReveal as we use specific slides now */
 
 /* Message tails */
 .message.bot::before {
@@ -1380,48 +1282,192 @@ nav .btn-primary:hover {
     clip-path: polygon(0 0, 0 100%, 100% 100%);
 }
 
-/* Mockup Input */
+/* Compact Strict Mockup Styles */
 .mockup-input {
-    background: #17212b;
-    padding: 0.5rem 0.75rem 1.5rem; /* Added bottom padding for safe area */
+    background: #0e1621;
+    padding: 0.6rem 0.6rem 2.2rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    border-top: 1px solid rgba(0,0,0,0.1);
+    position: relative;
+    bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.system-nav-line {
+    width: 35%;
+    height: 4px;
+    background: #ffffff;
+    opacity: 0.6;
+    border-radius: 2px;
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
 }
 
 .menu-btn {
-    background: #2b5278;
+    background: #2481cc;
     color: #fff;
-    padding: 0.4rem 0.75rem;
+    padding: 0.35rem 0.8rem;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
     gap: 0.4rem;
     font-weight: 600;
+    cursor: pointer;
 }
 
-.input-field {
+.btn-icon {
+    font-size: 0.9rem;
+}
+
+.input-area {
     flex: 1;
-    background: #182533;
+    background: #17212b;
     border-radius: 20px;
-    padding: 0.4rem 0.75rem;
-    font-size: 0.85rem;
-    color: #6c7883;
+    padding: 0.35rem 0.8rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    color: #6c7883;
+    font-size: 0.9rem;
+    gap: 0.5rem;
+}
+
+.smiley-icon, .attach-icon {
+    font-size: 1.1rem;
+    opacity: 0.6;
 }
 
 .mic-btn {
-    width: 36px;
-    height: 36px;
-    background: #2b5278;
+    width: 34px;
+    height: 34px;
+    background: #2481cc;
     color: #fff;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.mic-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Glassmorphic Menu Compact */
+.demo-commands-menu {
+    position: absolute;
+    bottom: 110%;
+    left: 8px;
+    right: 8px;
+    background: rgba(23, 33, 43, 0.85);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0 0 6px 0;
+    display: none;
+    flex-direction: column;
+    z-index: 3000;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    overflow: hidden;
+}
+
+.demo-commands-menu.active {
+    display: flex;
+    animation: menuSlideUpCompact 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@keyframes menuSlideUpCompact {
+    from { opacity: 0; transform: translateY(15px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.menu-grabber {
+    width: 30px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1.5px;
+    margin: 10px auto;
+}
+
+.demo-command-item {
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.demo-command-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.cmd-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cmd-emoji {
+    font-size: 1.2rem;
+}
+
+.cmd-text {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.cmd-alias {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.8rem;
+}
+
+.demo-inline-kb {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.kb-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 8px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.kb-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.demo-msg-animate {
+    animation: demoMsgSlide 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes demoMsgSlide {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.mockup-body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.mockup-body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
