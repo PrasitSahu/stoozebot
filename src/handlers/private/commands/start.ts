@@ -1,4 +1,3 @@
-import { InlineKeyboard } from "grammy";
 import { BotContext, DB } from "@/config";
 import { NewsChannel, privacyTOSKeyboard } from "@/constants";
 import { text } from "@/utils";
@@ -46,6 +45,7 @@ Hello ${name} 👋,
 *Here's what I can help you with:*
 
 📅 Track attendance - /attendance
+🕒 View timetable - /timetable
 🎓 Check results - /result
 🎫 Download admit card - /admitcard
 

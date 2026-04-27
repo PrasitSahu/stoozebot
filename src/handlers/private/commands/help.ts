@@ -9,6 +9,7 @@ Welcome! Here are the commands you can use:
 
 /start — Start the bot
 /attendance — View your semester attendance
+/timetable — View your weekly timetable
 /admitcard — Download your admit card
 /result — Check your semester results
 /logout — Remove saved credentials

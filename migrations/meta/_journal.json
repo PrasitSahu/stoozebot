@@ -29,6 +29,13 @@
       "when": 1777224369498,
       "tag": "0003_stoozebot",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1777307696516,
+      "tag": "0004_stoozebot",
+      "breakpoints": true
     }
   ]
 }
