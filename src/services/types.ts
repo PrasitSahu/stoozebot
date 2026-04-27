@@ -201,6 +201,44 @@ export const AdmitCardExamCodeResponse = z.object({
 	}),
 });
 
+export const TimetableReg = z.object({
+	registrationid: z.string(),
+	registrationdatefrom: z.number(),
+	registrationdateto: z.number(),
+	registrationcode: z.string(),
+	registrationdesc: z.string(),
+});
+
+export const TimetableRegListResponse = z.object({
+	regList: z.array(TimetableReg),
+});
+
+export const TimetableEntry = z.object({
+	Time: z.string().optional(),
+	Subject: z.string().optional(),
+	Faculty: z.string().optional(),
+	Room: z.string().optional(),
+});
+
+export const DayTimetable = z.array(TimetableEntry);
+
+export const Timetable = z.object({
+	mon: DayTimetable.optional(),
+	tue: DayTimetable.optional(),
+	wed: DayTimetable.optional(),
+	thu: DayTimetable.optional(),
+	fri: DayTimetable.optional(),
+	sat: DayTimetable.optional(),
+	sun: DayTimetable.optional(),
+	slno: z.string(),
+});
+
+export const TimetableResponse = z.object({
+	timeTableinfo: z.object({
+		TimetableList: z.array(Timetable),
+	}),
+});
+
 export const Creds = z.object({
 	otppwd: z.string(),
 	username: z.string(),

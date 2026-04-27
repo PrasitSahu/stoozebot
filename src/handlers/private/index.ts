@@ -5,6 +5,7 @@ import {
 	attendanceRegex,
 	CancelPrivacyToS,
 	ResultRegex,
+	TimetableRegex,
 	AdmitCardRegRegex,
 	AdmitCardExamTypeRegex,
 	AdmitCardDnRegex,
@@ -24,6 +25,8 @@ import { help } from "./commands/help";
 import { logout } from "./commands/logout";
 import { downloadResult } from "./commands/result/downloadResult";
 import { result } from "./commands/result/result";
+import { getTimetable } from "./commands/timetable/timetable";
+import { timetable } from "./commands/timetable/listSem";
 import { start } from "./commands/start";
 import { securityMode, enableCMode, disableCMode } from "./commands/security";
 import { admitcard, listExamTypes, listExamCodes } from "./commands/admitcard/admitcard";
@@ -72,6 +75,10 @@ export const privateComposer = (db: DB) => {
 	// result commands
 	authGroup.command(Commands.Result, (ctx) => result(ctx, db));
 	authGroup.callbackQuery(ResultRegex, (ctx) => downloadResult(ctx, db));
+
+	// timetable commands
+	authGroup.command(Commands.Timetable, (ctx) => timetable(ctx, db));
+	authGroup.callbackQuery(TimetableRegex, (ctx) => getTimetable(ctx, db));
 
 	// admitcard commands
 	authGroup.command(Commands.AdmitCard, (ctx) => admitcard(ctx));

@@ -44,6 +44,7 @@ export const ReplyFailRes = text(`⚠️ Received a failed response from the sit
 
 // regex
 export const attendanceRegex = /#attendance\s+([A-Z0-9]+)-(.+?)(?:-(r))?$/;
+export const TimetableRegex = /#timetable\s+([A-Z0-9]+)-(.+?)(?:-(mon|tue|wed|thu|fri|sat|sun))?(?:-(r))?$/;
 export const UpdateCredsRegex = /#updatecreds\s+([A-Z0-9]+)_([^\s]+)/;
 export const LoginRegex = /#login\s+([A-Z0-9]+)_([^\s]+)/;
 export const ResultRegex = /^#result\s+(\d+)(?:\s+(r))?$/;

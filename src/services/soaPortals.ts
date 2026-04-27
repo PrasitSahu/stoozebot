@@ -2,7 +2,7 @@ import z from "zod";
 import { Err } from "@/constants";
 import { aesDec, aesEnc } from "@/utils";
 import { Method } from "./service";
-import { resolveTypeIssues } from "./types";
+import { DayTimetable, resolveTypeIssues, Timetable } from "./types";
 import {
 	Attendance,
 	AttendanceResponse,
@@ -24,6 +24,9 @@ import {
 	AdmitCardMetaDataResponse,
 	AdmitCardPayload,
 	AdmitCardExamCodeResponse,
+	TimetableReg,
+	TimetableRegListResponse,
+	TimetableResponse,
 } from "./types";
 
 export type Response<T> = z.infer<ReturnType<typeof Response<z.ZodType<T>>>>;
@@ -46,6 +49,11 @@ export type AdmitCardExamType = z.infer<typeof AdmitCardExamType>;
 export type AdmitCardMetaDataResponse = z.infer<typeof AdmitCardMetaDataResponse>;
 export type AdmitCardPayload = z.infer<typeof AdmitCardPayload>;
 export type AdmitCardExamCodeResponse = z.infer<typeof AdmitCardExamCodeResponse>;
+export type TimetableReg = z.infer<typeof TimetableReg>;
+export type TimetableRegListResponse = z.infer<typeof TimetableRegListResponse>;
+export type TimetableResponse = z.infer<typeof TimetableResponse>;
+export type DayTimetable = z.infer<typeof DayTimetable>;
+export type Timetable = z.infer<typeof Timetable>;
 
 export default class SoaPService {
 	proxyOrigin = new URL(process.env.PROXY);
@@ -217,6 +225,45 @@ export default class SoaPService {
 
 		const res = await fetch(req);
 		return await this.setReturn(res, AdmitCardMetaDataResponse);
+	}
+
+	async getTimetableSemList(token: string): Promise<Response<TimetableRegListResponse>> {
+		const url = new URL(this.rootUrl.href + "/studentstaffView/getRegCode");
+
+		const req = new Request(this.getProxyUrl(url), {
+			method: Method.Post,
+			headers: {
+				"Content-Type": "application/json",
+				Signature: process.env.PROXY_SIGNATURE,
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({
+				instituteid: process.env.INSTITUTE_ID,
+			}),
+		});
+
+		const res = await fetch(req);
+		return await this.setReturn(res, TimetableRegListResponse);
+	}
+
+	async getTimetable(token: string, regId: string): Promise<Response<TimetableResponse>> {
+		const url = new URL(this.rootUrl.href + "/studentstaffView/getstudent-timetable");
+
+		const req = new Request(this.getProxyUrl(url), {
+			method: Method.Post,
+			headers: {
+				"Content-Type": "application/json",
+				Signature: process.env.PROXY_SIGNATURE,
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({
+				instituteid: process.env.INSTITUTE_ID,
+				registrationid: regId,
+			}),
+		});
+
+		const res = await fetch(req);
+		return await this.setReturn(res, TimetableResponse);
 	}
 
 	async getAdmitCardExamCodes(token: string, regId: string, examTypeId: string): Promise<Response<AdmitCardExamCodeResponse>> {
