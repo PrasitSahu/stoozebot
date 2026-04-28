@@ -66,26 +66,10 @@
                     </div>
                     <div class="mockup-body">
                         <div class="date-divider" id="chat-date">April 26</div>
-
-                        <div class="message user">
-                            /start
-                            <span class="msg-meta"><span class="chat-time">13:39</span> ✓✓</span>
-                        </div>
-
                         <div class="typing-indicator">
                             <div class="typing-dot"></div>
                             <div class="typing-dot"></div>
                             <div class="typing-dot"></div>
-                        </div>
-
-                        <div class="message bot">
-                            Hello Vicky 👋,<br><br>
-                            <b>Here's what I can help you with:</b><br><br>
-                            📅 Track attendance - /attendance<br>
-                            🎓 Check results - /result<br>
-                            🎫 Download admit card - /admitcard<br><br>
-                            For help - /help
-                            <span class="msg-meta"><span class="chat-time">13:39</span></span>
                         </div>
                     </div>
                     <div class="mockup-input">
@@ -436,6 +420,12 @@
                     addMessage(response);
                 }, 800 + Math.random() * 1000);
             }
+
+            // Initial welcome message animation
+            setTimeout(() => {
+                addMessage('/start', true)
+                simulateBot("/start");
+            }, 500)
 
             if (demoMenuBtn) {
                 const btnIcon = demoMenuBtn.querySelector('.btn-icon');

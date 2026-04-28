@@ -26,7 +26,7 @@ export const CommandsDesc: Record<Commands, string> = {
 	[Commands.AdmitCard]: "🎫 Download your Admit Card",
 	[Commands.SecurityMode]: "🛡️ Manage security mode",
 	[Commands.EnableCMode]: "🔓 Enable convenience mode",
-	[Commands.DisableCMode]: "🔒 Disable convenience mode",
+	[Commands.DisableCMode]: "🔒 Enable privacy mode",
 	[Commands.Help]: "❓ Get help and usage instructions",
 	[Commands.Logout]: "👋 Logout",
 };

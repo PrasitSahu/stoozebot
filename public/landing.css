@@ -1318,10 +1318,14 @@ nav .btn-primary:hover {
     gap: 0.4rem;
     font-weight: 600;
     cursor: pointer;
+    user-select: none;
 }
 
 .btn-icon {
     font-size: 0.9rem;
+    min-width: 10px;
+    max-width: 10px;
+    margin-bottom: 2px;
 }
 
 .input-area {
