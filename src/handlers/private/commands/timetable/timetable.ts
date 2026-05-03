@@ -16,6 +16,15 @@ const dayMap: Record<string, string> = {
 	sun: "Sunday",
 };
 
+function parseTimeToMinutes(timeStr: string): number {
+	const timePart = timeStr.split("-")[0].trim();
+	const [time, modifier] = timePart.split(/(?=[AP]M)/i);
+	let [hours, minutes] = time.split(":").map(Number);
+	if (modifier?.toUpperCase() === "PM" && hours !== 12) hours += 12;
+	if (modifier?.toUpperCase() === "AM" && hours === 12) hours = 0;
+	return hours * 60 + (minutes || 0);
+}
+
 function formatDayTimetable(day: string, slots: DayTimetable[]) {
 	if (slots.length === 0) return "";
 
@@ -131,6 +140,15 @@ export async function getTimetable(ctx: BotContext, db: DB) {
 				if (item[day] && Array.isArray(item[day]) && item[day].length > 0) {
 					timetableByDay[day].push(item[day]);
 				}
+			});
+		});
+
+		// Sort each day's classes by start time
+		Object.keys(timetableByDay).forEach((day) => {
+			timetableByDay[day].sort((a, b) => {
+				const timeA = a.find((s) => s.Time)?.Time || "";
+				const timeB = b.find((s) => s.Time)?.Time || "";
+				return parseTimeToMinutes(timeA) - parseTimeToMinutes(timeB);
 			});
 		});
 
