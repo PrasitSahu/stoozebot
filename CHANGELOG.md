@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/PrasitSahu/stoozebot/compare/v2.1.0...v2.1.1) (2026-05-03)
+
+
+### Bug Fixes
+
+* sort classes according to time per day ([ae71aa5](https://github.com/PrasitSahu/stoozebot/commit/ae71aa5fa41c469d579901712ba2b17b1dcd6385))
+
 # [2.1.0](https://github.com/PrasitSahu/stoozebot/compare/v2.0.0...v2.1.0) (2026-04-27)
 
 
