@@ -18,15 +18,13 @@ export const enum Commands {
 	DisableCMode = "disable_cmode",
 }
 
-export const CommandsDesc: Record<Commands, string> = {
+export const CommandsDesc: Partial<Record<Commands, string>> = {
 	[Commands.Start]: "🚀 Start the bot",
 	[Commands.Attendance]: "📋 View your attendance",
 	[Commands.Result]: "📊 View your SGPA/CGPA",
 	[Commands.Timetable]: "🕒 View your Timetable",
 	[Commands.AdmitCard]: "🎫 Download your Admit Card",
 	[Commands.SecurityMode]: "🛡️ Manage security mode",
-	[Commands.EnableCMode]: "🔓 Enable convenience mode",
-	[Commands.DisableCMode]: "🔒 Enable privacy mode",
 	[Commands.Help]: "❓ Get help and usage instructions",
 	[Commands.Logout]: "👋 Logout",
 };
