@@ -388,8 +388,7 @@ export default class SoaPService {
 				}
 
 				if (error instanceof SyntaxError) {
-					console.error("failed to parse json for request: ", type.meta());
-					console.error(error);
+					throw new Error(Err.ErrReqFail);
 				}
 			}
 			throw error;
