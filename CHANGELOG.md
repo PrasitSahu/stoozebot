@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/PrasitSahu/stoozebot/compare/v2.1.1...v2.1.2) (2026-07-07)
+
+
+### Bug Fixes
+
+* handle json parsing error ([7f37a17](https://github.com/PrasitSahu/stoozebot/commit/7f37a17d1b90df1bf002a8c90e683cdddc22f84d))
+
 ## [2.1.1](https://github.com/PrasitSahu/stoozebot/compare/v2.1.0...v2.1.1) (2026-05-03)
 
 
